@@ -1,0 +1,1 @@
+pandoc main_poly_v2.tex --verbose -f latex -t html -s -o index.html --self-contained --mathml --toc -M nocite='@*' --biblatex --bibliography=references.bib
