@@ -26,7 +26,7 @@ Nous allons donc nous pencher sur son fonctionnement.
 
 Comme nous l’avons vu dans la partie de Dirb, il existe une différence entre une attaque par dictionnaire et une attaque par bruteforce. Ici, John a la possibilité de faire 4 différents types d’attaques que nous allons détailler.\\
 
-\noindent \textbf{Attaque via single mode}\\
+ \textbf{Attaque via single mode}\\
 
 Ce mode est le mode par défaut de cassage de mot de passe sur John. Cette attaque va tester tous les mots de passe basiques que nous avons l’habitude d’utiliser en fonction du nom d’utilisateur. Regardons un exemple très simple.
 Nous allons hasher le mot de passe ‘ user1999 ‘ et ‘ salon ‘ pour les utilisateurs respectifs ‘ user1 ‘ et ‘ user2 ‘ via un site web.
@@ -57,7 +57,7 @@ Il va alors essayer de reconnaître des mots de passe qu’il avait déjà trouv
 Puis dans une seconde partie, John n’a pas su trouver le mot de passe ‘salon’ associé à user2. Il a dû donc procéder à une attaque par mode incrémental. Pour éviter cela, on aurait pu forcer John à rester sur le single mode avec l'option ' --single '.\\
 
 
-\noindent \textbf{Attaque par dictionnaire}\\
+ \textbf{Attaque par dictionnaire}\\
 
 Comme nous l’avons vu avec l’outil Dirb, qui fait une attaque par dictionnaire, le principe sera ici le même. John va se baser sur un dictionnaire afin de trouver le mot de passe. En effet, le dictionnaire va être utilisé en fonction des règles que John aura reçues. Ainsi, si le mot de passe correspond aux règles combinées au dictionnaire, John pourra nous donner le mot de passe.
 Nous allons essayer ce concept avec le dictionnaire ‘rockyou.txt’ fourni par Kali :
@@ -76,7 +76,7 @@ Nous allons essayer ce concept avec le dictionnaire ‘rockyou.txt’ fourni par
 L’attaque a été très rapide car le dictionnaire fourni par Kali est très complet.
 Nous pouvons maintenant voir l’attaque via le mode incrémental.\\
 
-\noindent \textbf{Attaque via le mode incrémental}\\
+ \textbf{Attaque via le mode incrémental}\\
 
 Le mode incrémental est un mode permettant de tester toutes les combinaisons possibles afin d'arriver à nos fins. C’est le moyen ultime pour obtenir un mot de passe car il fonctionnera toujours. Mais il ne faudra pas être pressé car, plus le mot de passe sera long, plus ce mode prendra du temps.
 Nous allons rajouter un ‘ user3 ‘ avec pour mot de passe ‘ velizy78 ’ pour que le mode simple soit incapable de le trouver. Nous allons juste indiquer à John d’utiliser directement le mode incrémental sans option.
@@ -214,11 +214,11 @@ Maintenant que nous avons introduit le concept du reverse-shell, il est venu le 
 
 \subsubsection{Fonctionnement}
 
-\noindent \textbf{Les étapes d'un reverse-shell}\\
+ \textbf{Les étapes d'un reverse-shell}\\
 
 Lors d’une attaque sur CTF ou lors d’une réelle séance de hacking, il existe plusieurs grandes étapes obligatoires à passer comme vous l’avez vu lors des chapitres précédents. La détection et l’exploitation d’une faille va en général nous permettre d’écrire dans le langage informatique exploité. Il est important de savoir que tous les langages informatiques se doivent de parler avec le kernel afin de fonctionner. Il est donc essentiel à un langage de pouvoir exploiter des lignes de commandes. Nous passerons donc principalement par cette voie pour ouvrir notre port TCP ou UDP sur la machine cible. Cependant, pour qu’une connexion se mette en place et que le socket fonctionne, il est important que notre machine écoute sur le port que nous allons ouvrir. Ce pourquoi nous allons introduire le logiciel Netcat.\\
 
-\noindent \textbf{Netcat}\\
+ \textbf{Netcat}\\
 
 Netcat est un logiciel réseau permettant l’ouverture de ports et le scan de ports en TCP et UDP. Surnommé “Le couteau suisse TCP”,  cet utilitaire polyvalent et discret est utilisé en arrière plan d’autres applications afin d’effectuer des recherches de ports par exemple. Cependant, son  principale rôle est l’ouverture de socket entre un client et un serveur.
 Un socket est la combinaison de l’adresse IP et du port permettant à un programme de communiquer avec autre un programme, distant, sur une machine spécifique. 
@@ -247,7 +247,7 @@ Comme nous l’avons vu précédemment, il faut avoir trouvé une faille pour me
 
 \subsubsection{Différents types de reverse-shell}
 
-\noindent \textbf{Netcat-reverse}\\
+ \textbf{Netcat-reverse}\\
 
 Imaginons qu’une faille nous permet d’utiliser un ‘ echo ‘ dans le terminal cible, nous pourrons alors appliquer netcat en ouverture de port comme ci-dessous :\\
 
@@ -276,7 +276,7 @@ Pour remédier à ce problème, nous avons importer des commandes shell grâce �
 Nous obtenons à partir de ce point un bash-shell qui correspond au terminal de la cible.
 Nous nous sommes, à partir de ce moment précis, introduits pour la première fois au sein d’une machine cible !\\
 
-\noindent \textbf{Bash TCP}\\
+ \textbf{Bash TCP}\\
 
 Au sein de cette partie, nous allons utiliser du bash avec une ouverture de port sur un serveur TCP comme ceci :
 
@@ -306,7 +306,7 @@ L’option ‘-i>\&’ va nous permettre de retourner un bash interactif soit ê
 Nous nous sommes ainsi introduits via le protocole TCP en bash dans la machine cible.
 Le protocole TCP est souvent associé au protocole UDP car ils sont presque similaires. La plus grosse différence, qui est majeure, est que TCP est en mode connecté et UDP en mode non connecté. Le mode connecté est un mode d'envoi et de réception de fichier qui a un " accusé-réception". Ceci signifie que le message est éparpillé dans le réseau en plusieurs paquets, avec un numéro qui leur est propre, et arrive chez le destinataire dans un ordre non défini. Cette méthode nécessite donc au destinataire de recomposer le message et de vérifier que tous les paquets sont bien arrivés. Si ce n'est pas le cas, ce dernier va pouvoir demander à l'envoyeur de lui renvoyer le ou les paquets manquants. C'est ce que l'on nomme le mode connecté. Le protocole UDP va se baser sur le mode non connecté. Cette méthode est l'équivalent du temps réel et se doit donc d'avoir une interaction directe entre les deux machines. Le message ne pourra donc pas être découpé ce qui implique un renvoi complet de ce dernier s'il est incomplet à la réception. Le protocole UDP est principalement utilisé dans les applications en temps réels car son faible temps de latence permet d'accéder aux contenus rapidement. Cependant, en ce qui concerne le reverse-shell, UDP n'est vraiment pas conseillé car ce protocole, ne vérifiant pas l'intégrité des trames, pourrait nous faire penser que nous nous sommes trompés alors que c'est UDP qui n'est pas fiable. C'est pour cette raison que TCP sera utilisé en reverse-shell.\\
 
-\noindent \textbf{PHP}\\
+ \textbf{PHP}\\
 
 Le PHP est un langage de programmation Web couramment utilisé pour dialoguer avec la base de données ainsi que pour sécuriser les sites. A titre d'exemple, le HTML va permettre de créer un formulaire que l'utilisateur va remplir. Le PHP sera présent pour vérifier que toutes les conditions ont été respectées afin de valider le formulaire. On s'aperçoit donc que l'utilisateur communique directement avec le PHP. Il y donc des possibilités de réaliser des reverse-shell dans ce langage.\\
 Nous pouvons tester le code PHP en localhost sur la \textbf{figure \ref{fig:phpreverse}}.
@@ -337,7 +337,7 @@ Regardons ensemble cette commande afin de la comprendre :
 
 Il est donc assez facile de réaliser un reverse-shell en PHP si l'administrateur web n'a pas réaliser correctement son travail au niveau des failles XSS.\\
 
-\noindent \textbf{Python}\\
+ \textbf{Python}\\
 
 Au cours de cette partie, nous allons nous pencher sur le reverse-shell via le langage Python. Ce langage, basé principalement sur le C, se démocratise de plus en plus aujourd'hui. Certes, ce langage est lent, mais il va nous permettre grâce à sa grande ouverture d'exploiter toutes les failles informatiques.\\
 
@@ -381,7 +381,7 @@ Meterpreter est un outil dépendant de Metasploit ayant pour but de créer des p
 Les fichier DLL (Dynamic Link Library) sont comme des fonctions utilisées par un programme principal. Lors de son exécution, seul le programme principal est visible dans le gestionnaire des tâches ce qui rend sa détection presque impossible. De cette manière, nous allons même pouvoir appliquer un DLL à un programme existant et ayant les droits administrateur. Ainsi, le retour de ce payload à notre écran nous fournira l'accès administrateur de la cible.\\
 Nous allons donc vous montrer la conception d'une injection DLL.\\
 
-\noindent \textbf{Mise en place d'une injection DLL}\\
+ \textbf{Mise en place d'une injection DLL}\\
 
 Meterpreter va donc nous permettre la création de ces fichiers malicieux. Il faut cependant utiliser Msfvenom qui contient Meterpreter. Nous allons réaliser un reverse-shell sur un Windows server 2019 au cours de cette partie. Commençons par créer le fichier .dll:
 
@@ -454,7 +454,7 @@ Les stager payload sont des payload à étages comme son nom l'indique. En effet
 
 
 
-\noindent Voici un schéma du fonctionnement:
+ Voici un schéma du fonctionnement:
 
 \begin{figure}[htp!]
   \centering
@@ -484,7 +484,7 @@ Voici un bref schéma de fonctionnement de ce payload:
   \label{fig:courbe-tikz}
 \end{figure}
 
-\noindent Avec cette catégorie de payload, le code malveillant est envoyé entièrement sur la machine de la victime.
+ Avec cette catégorie de payload, le code malveillant est envoyé entièrement sur la machine de la victime.
 Le chiffrement du trafic entre la victime et l’attaquant est lancé dès la première connexion.
 Les stageless payloads peuvent être utiles notamment dans des situations où la cible se trouve derrière un proxy qui bloque le téléchargement de fichiers exécutables.\\
 Nous allons à présent comparer les payloads exploités par Meterpreter et les reverse-shell que nous vous avons présentés plus haut.

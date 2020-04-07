@@ -7,19 +7,19 @@ Lors du début de chaque CTF ou de pentesting en général, il y a une phase tr�
   \item Collecte d'informations active 
 \end{itemize}
 
-\noindent Nous verrons dans un premier temps la collecte d'informations passive d'une cible puis la collecte d'informations active.
+ Nous verrons dans un premier temps la collecte d'informations passive d'une cible puis la collecte d'informations active.
 
 \section{Collecte d'informations passive}
 
 La collecte d'informations passive est le moyen par lequel un attaquant peut récupérer des informations sur une entreprise ou une machine, sans entrer directement en contact avec cette dernière. En effet, ces informations sont la plupart du temps trouvable sur internet.
 
-\noident Par exemple, à partir de recherches sur internet, on peut trouver des adresses IP ou encore des emails ou des noms de domaines. Toutes ces informations peuvent être d'ordre publique. Une simple commande \lstinline{ping} sur un site internet permet de récupérer une adresse IP. Imaginez par exemple, une attaque contre \url{http://rt.iut-velizy.uvsq.fr/}. Il va falloir dans un premier temps déterminer quels systèmes sont utilisés par la société et quels sont les systèmes que nous pouvons attaquer. De plus, certains systèmes peuvent ne pas appartenir à la société cible et pourraient alors être considérés comme hors de portée de l'attaque.
+Par exemple, à partir de recherches sur internet, on peut trouver des adresses IP ou encore des emails ou des noms de domaines. Toutes ces informations peuvent être d'ordre publique. Une simple commande \lstinline{ping} sur un site internet permet de récupérer une adresse IP. Imaginez par exemple, une attaque contre \url{http://rt.iut-velizy.uvsq.fr/}. Il va falloir dans un premier temps déterminer quels systèmes sont utilisés par la société et quels sont les systèmes que nous pouvons attaquer. De plus, certains systèmes peuvent ne pas appartenir à la société cible et pourraient alors être considérés comme hors de portée de l'attaque.
 
 \subsection{Whois}
 
 Whois ("Qui est" en francais)  est un outil permettant d'interroger des bases d'informations (registres) concernant les noms de domaines et adresses IP. Les données contenues dans ces bases ne comportent aucune forme de garantie mais permettent généralement de retrouver le propriétaire d'un domaine ou d'une machine.
 
-\noindent Il existe plusieurs bases de données connues:
+ Il existe plusieurs bases de données connues:
 
 \begin{itemize}
     \item RIPE NCC (Réseaux IP Européens, whois.ripe.net) pour l'Europe
@@ -29,9 +29,9 @@ Whois ("Qui est" en francais)  est un outil permettant d'interroger des bases d'
     \item  INTERNIC (whois.internic.net) pour les autres parties du globe
 \end{itemize}
 
-\noindent Il existe des sites sur internet permettant d'utiliser cet outil. Il est également présent sous Kali linux.\\
+ Il existe des sites sur internet permettant d'utiliser cet outil. Il est également présent sous Kali linux.\\
 
-\noindent \textbf{Utilisation de la commande whois avec Kali linux:}\\
+ \textbf{Utilisation de la commande whois avec Kali linux:}\\
 Nous allons utiliser whois sur le site \url{uvsq.fr} dans \textbf{figure \ref{fig:whois}}.\\
 
 \begin{figure}[htp!]
@@ -43,7 +43,7 @@ Nous allons utiliser whois sur le site \url{uvsq.fr} dans \textbf{figure \ref{fi
   \label{fig:whois}
 \end{figure}
 
-\noindent La commande whois nous donne des informations sur le nom de domaine \url{uvsq.fr}. On apprend ici les différents serveurs DNS qui gèrent ce domaine dans la  \textbf{figure \ref{fig:whoisdns}}.
+ La commande whois nous donne des informations sur le nom de domaine \url{uvsq.fr}. On apprend ici les différents serveurs DNS qui gèrent ce domaine dans la  \textbf{figure \ref{fig:whoisdns}}.
 
 \begin{figure}[htp!]
   \centering
@@ -54,7 +54,7 @@ Nous allons utiliser whois sur le site \url{uvsq.fr} dans \textbf{figure \ref{fi
   \label{fig:whoisdns}
 \end{figure}
 
-\noindent Whois est capable de récupérer l'email de l'administateur qui gère le domaine \url{uvsq.fr}. Ces informations peuvent être plus ou moins utiles lors d'une attaque.
+ Whois est capable de récupérer l'email de l'administateur qui gère le domaine \url{uvsq.fr}. Ces informations peuvent être plus ou moins utiles lors d'une attaque.
 
 Il est également possible de spécifier l'adresse IP de \url{www.uvsq.fr} pour récupérer des informations relatives à l'adresse IP comme vous pouvez voir en \textbf{figure \ref{fig:whoisip}}.
 
@@ -67,7 +67,7 @@ Il est également possible de spécifier l'adresse IP de \url{www.uvsq.fr} pour 
   \label{fig:whoisip}
 \end{figure}
 %parler du champ inetnum et qu'on a la range d'IP pour uvsq.fr https://www.apnic.net/manage-ip/using-whois/guide/inetnum/ https://www.ripe.net/manage-ips-and-asns/db/support/documentation/ripe-database-documentation/rpsl-object-types/4-2-descriptions-of-primary-objects/4-2-4-description-of-the-inetnum-object
-\noindent --- Le champ \textbf{inetnum} correspond à une plage d'adresse IP détenue par le domaine en question. Par exemple, pour le domaine \url{uvsq.fr} sa plage d'IP sera comprise entre \textbf{193.51.33.0} et \textbf{193.51.33.255}.\\
+ --- Le champ \textbf{inetnum} correspond à une plage d'adresse IP détenue par le domaine en question. Par exemple, pour le domaine \url{uvsq.fr} sa plage d'IP sera comprise entre \textbf{193.51.33.0} et \textbf{193.51.33.255}.\\
 
 Un simple script en python permet de vérifer cela et d'obtenir un résultat visible en \textbf{figure \ref{fig:resultatprogpy}}.  (Script en annexe \ref{fig:nslookup})
 
@@ -80,21 +80,21 @@ Un simple script en python permet de vérifer cela et d'obtenir un résultat vis
   \label{fig:resultatprogpy}
 \end{figure}
 
-\noindent On constate à travers cette capture que les IP de la plage pointent vers le nom de domaine \url{uvsq.fr}. Cela peut être très utile pour cibler des services à attaquer avec leur IP public. Par exemple, l'IP \textbf{193.51.33.3} semble correspondre à un potentiel serveur mysql à en croire son nom. On remarque également que l'autorité de \textbf{uvsq.com} a créé un alias de l'enregistrement \textbf{www} vers \textbf{preprod.uvsq.com}, puisque ces noms ont les même IP et qu'ils redirigent tous deux vers le site internet de l'uvsq.\\
+ On constate à travers cette capture que les IP de la plage pointent vers le nom de domaine \url{uvsq.fr}. Cela peut être très utile pour cibler des services à attaquer avec leur IP public. Par exemple, l'IP \textbf{193.51.33.3} semble correspondre à un potentiel serveur mysql à en croire son nom. On remarque également que l'autorité de \textbf{uvsq.com} a créé un alias de l'enregistrement \textbf{www} vers \textbf{preprod.uvsq.com}, puisque ces noms ont les même IP et qu'ils redirigent tous deux vers le site internet de l'uvsq.\\
 
-\noindent --- Le champ \textbf{netname} correspond au nom donné à une plage d'adresses IP. Un nom de réseau est composé de lettres, de chiffres, du caractère de soulignement et du trait d'union. Le premier caractère d'un nom doit être une lettre, et le dernier caractère d'un nom doit être une lettre ou un chiffre.\\
+ --- Le champ \textbf{netname} correspond au nom donné à une plage d'adresses IP. Un nom de réseau est composé de lettres, de chiffres, du caractère de soulignement et du trait d'union. Le premier caractère d'un nom doit être une lettre, et le dernier caractère d'un nom doit être une lettre ou un chiffre.\\
 
 \subsection{Nslookup}
 
 L'outil Nslookup est un outil implanté sur beaucoup de systèmes d'exploitation (OS) tel que Windows ou Linux. Cet outil permet de faire des résolutions DNS à partir d'un nom de domaine. En effet, cela est très pratique lorsqu'on veut récupérer une IP à partir d'un nom tel que \textbf{www.uvsq.fr}.\\
 
-\noindent \textbf{Fonctionnement requête DNS}\\
+ \textbf{Fonctionnement requête DNS}\\
 
 Nous allons ici présenter le bref fonctionnement d'une requête DNS puisque cette partie a déjà été expliqué dans d'autres modules auparavant. En premier lieu, le DNS permet d'associer un nom à une IP ce qui est très utile pour l'être humain.\\
 
-\noindent Le protocole DNS est un protocole UDP avec comme numéro de port 53. Le DNS est un modèle réparti hiérarchisé, sa mise en œuvre requiert plusieurs serveurs qui prennent en charge individuellement la traduction de parties complémentaires de l’espace des noms afin de rendre plus souple le traitement des sollicitations. Ces parties appelées "zones" sont en fait des domaines de noms dont l’administration est définie et attribuée à un ou plusieurs serveurs.
+ Le protocole DNS est un protocole UDP avec comme numéro de port 53. Le DNS est un modèle réparti hiérarchisé, sa mise en œuvre requiert plusieurs serveurs qui prennent en charge individuellement la traduction de parties complémentaires de l’espace des noms afin de rendre plus souple le traitement des sollicitations. Ces parties appelées "zones" sont en fait des domaines de noms dont l’administration est définie et attribuée à un ou plusieurs serveurs.
 
-\noindent La \textbf{figure \ref{fig:repartitiondns}} nous présente un schéma de la répartition des zones DNS.
+ La \textbf{figure \ref{fig:repartitiondns}} nous présente un schéma de la répartition des zones DNS.
 
 \begin{figure}[htp!]
   \centering
@@ -105,7 +105,7 @@ Nous allons ici présenter le bref fonctionnement d'une requête DNS puisque cet
   \label{fig:repartitiondns}
 \end{figure}
 
-\noindent Le domaine Racine est géré par les 13 serveurs DNS nommés \lstinline{<x>.root-servers.net}, où \lstinline{<x>} est une lettre comprise entre ‘a’ à ‘m’. Ces serveurs racines sont gérés par des organisations différentes nommées par l’ICANN. Les domaines enfants sont dits les domaines de premier niveau ou TLD (Top Level Domain). On y retrouve le domaine .com, .fr etc...\\
+ Le domaine Racine est géré par les 13 serveurs DNS nommés \lstinline{<x>.root-servers.net}, où \lstinline{<x>} est une lettre comprise entre ‘a’ à ‘m’. Ces serveurs racines sont gérés par des organisations différentes nommées par l’ICANN. Les domaines enfants sont dits les domaines de premier niveau ou TLD (Top Level Domain). On y retrouve le domaine .com, .fr etc...\\
 
 \newpage
 
@@ -127,10 +127,10 @@ Il existe deux types de requête DNS. Les requêtes itératives, et récursives.
     \item Ce dernier contacte le serveur qui fait autorité sur la zone oktey.fr pour récupérer l'ip associé à l'enregistrement mx de mail.okley.fr.
 \end{enumerate}
 
-\noindent On constate qu'avec l'utilisation des requête récursives, c'est le serveur DNS local qui s'occupe de faire toutes les requêtes.\\
-\noindent Avec l'outil \textbf{Nslookup}, il est également possible d'effectuer une résolution inverse. En effet, cette dernière permet de récupérer le nom associé à une adresse IP. Pour ce faire, on utilise le domaine \textbf{in-addr.arpa} (RFC 1035) pour retrouver le nom associé.
+ On constate qu'avec l'utilisation des requête récursives, c'est le serveur DNS local qui s'occupe de faire toutes les requêtes.\\
+ Avec l'outil \textbf{Nslookup}, il est également possible d'effectuer une résolution inverse. En effet, cette dernière permet de récupérer le nom associé à une adresse IP. Pour ce faire, on utilise le domaine \textbf{in-addr.arpa} (RFC 1035) pour retrouver le nom associé.
 
-\noindent La technique de résolution inverse a été utilisée dans la figure 2.4. En effet, à partir de la plage d'IP récupéré avec l'outil \textbf{whois}, on peut effectuer des résolutions inverses pour tenter de récupérer le nom derrière ces IP. Ainsi, cela peut nous indiquer un service qui serait hébergé par cette IP. A partir de là, il sera plus facile d'orienter nos recherches pour continuer l'attaque.
+ La technique de résolution inverse a été utilisée dans la figure 2.4. En effet, à partir de la plage d'IP récupéré avec l'outil \textbf{whois}, on peut effectuer des résolutions inverses pour tenter de récupérer le nom derrière ces IP. Ainsi, cela peut nous indiquer un service qui serait hébergé par cette IP. A partir de là, il sera plus facile d'orienter nos recherches pour continuer l'attaque.
 
 
 \subsection{Maltego}
@@ -179,7 +179,7 @@ Arp-scan est un utilitaire qui permet  d’obtenir les adresses IP d’un résea
 
 La couche 2 est la couche de liaison de données. Cette dernière correspond à l’adressage physique des machines, soit l’adresse MAC. L’adresse MAC est l’adresse unique d’une interface réseau d’un équipement. Cette adresse est codée en hexadécimal en 6 octets.\\
 
-\noindent \textbf{Fonctionnement d'Arp-scan}\\
+ \textbf{Fonctionnement d'Arp-scan}\\
 
 Cet outil va envoyer une requête ARP en broadcast sur le réseau et afficher l’IP, l'adresse MAC ainsi que, si possible, l'origine de chaque hôte. Si un hôte ne répond pas, le paquet ARP sera envoyé à nouveau. Le nombre maximum de tentatives peut être modifié avec l'option --retry. Cependant, si l'on réduit le nombre de tentatives, alors cela réduira le temps du scan mais engendrera le risque de perdre certains résultats en raison de la perte de paquets.
 Comme vous pouvez le voir sur la \textbf{figure \ref{fig:arpscanwireshark}}, la capture Wireshark effectuée après un "arp-scan" se présente de la même manière qu’une requête ARP.
@@ -213,7 +213,7 @@ Une fois l'IP cible récupérée, nous allons pouvoir analyser ses ports avec Nm
 
 Nmap est un utilitaire permettant de scanner les ports ouverts d’une machine ou d’un ensemble de machines présentes dans un même réseau. Les ports (logiciels) d'une machine permettent de distinguer les différents programmes qui écoutent et transmettent des informations sur cette machine. En effet, chaque programme ou service se verra atribuer un numéro de port qui servira à identifer le processus associé. En trouvant ces ports, Nmap se rend comme l’élément essentiel d’une attaque réseau. En effet, sans cette analyse, nous serions incapable de trouver un chemin d’attaque à moins d’avoir une chance inouïe. C’est pourquoi nous allons utiliser cet utilitaire pour résoudre nos CTFs.\\
 
-\noindent \textbf{Fonctionnement de Nmap}\\
+ \textbf{Fonctionnement de Nmap}\\
 
 Pour comprendre comment fonctionne Nmap, il va falloir revoir les bases du protocole TCP grâce à la \textbf{figure \ref{fig:3way}}.
 
@@ -251,14 +251,14 @@ A la suite de cette étape, le protocole de plus haut niveau faisant les requêt
 Sur l'exemple ci-dessus, on peut voir dans la section "Info" de Wireshark que les ports sont indiqués. On comprend alors que TCP ne cible pas une IP mais un socket. Un socket est l'ensemble de l'adresse IP et du port utilisé. Il est souvent représenté sous la forme suivante : \verb+192.168.1.200:80+. C'est donc en faisant varier le port du socket que Nmap pourra détecter si un port est ouvert ou non. Ainsi, si Nmap reçoit une réponse que de la machine cible à la suite d'un SYN TCP, cela voudra dire que le port est ouvert.\\
 Maintenant que nous avons compris comment Nmap détecte si un port est ouvert ou non, nous allons nous intéresser à la détection du service associer à ce port. En effet, Nmap peut fournir le nom et même la version d'un service déployé sur un port d'une machine cible.\\
 
-\noindent Pour cela, l'outil se base sur deux fichiers qu'il utilise comme dictionnaire. Ces deux documents se situent dans son dossier d'éxécution et sur internet :
+ Pour cela, l'outil se base sur deux fichiers qu'il utilise comme dictionnaire. Ces deux documents se situent dans son dossier d'éxécution et sur internet :
 
 \begin{itemize}
     \item \textbf{nmap-services: https://svn.nmap.org/nmap/nmap-services}
     \item \textbf{nmap-services-probes: https://svn.nmap.org/nmap/nmap-service-probes}
 \end{itemize}
 
-\noindent Le fichier nmap-services contient une association de nom de service en fonction du port. En effet, il existe trois catégories de ports :
+ Le fichier nmap-services contient une association de nom de service en fonction du port. En effet, il existe trois catégories de ports :
 
 \begin{itemize}
     \item \textbf{1-1023 : Well-known ports}
@@ -266,7 +266,7 @@ Maintenant que nous avons compris comment Nmap détecte si un port est ouvert ou
     \item \textbf{49152-65535 : Dynamic ports}
 \end{itemize}
 
-\noindent Les "Well-kown ports" sont des ports attitrés à des service par l'IANA (Internet Assigned Numbers Authority). Ces services sont les plus connus du monde des réseaux et doivent être éxécutés en tant qu'administrateur. Les "Registered ports" sont eux aussi attribués par l'IANA mais ne nécessitent pas d'une éxecution en tant qu'administrateur. Les "Dynamic ports" ou ports dits "éphémères", comme le nom l'indique, sont distribués de manière dynamique par le système d'exploitation afin de pouvoir rentrer en contact avec un service. C'est donc en fontion de ce recensement que Nmap met à jour sa liste nmap-services. La question la plus légitime à la suite de cette explication est la suivante :\\
+ Les "Well-kown ports" sont des ports attitrés à des service par l'IANA (Internet Assigned Numbers Authority). Ces services sont les plus connus du monde des réseaux et doivent être éxécutés en tant qu'administrateur. Les "Registered ports" sont eux aussi attribués par l'IANA mais ne nécessitent pas d'une éxecution en tant qu'administrateur. Les "Dynamic ports" ou ports dits "éphémères", comme le nom l'indique, sont distribués de manière dynamique par le système d'exploitation afin de pouvoir rentrer en contact avec un service. C'est donc en fontion de ce recensement que Nmap met à jour sa liste nmap-services. La question la plus légitime à la suite de cette explication est la suivante :\\
 "Comment Nmap peut récupérer le nom d'un service déployé sur un port n'ayant pas été répertorié ?"\\
 Nmap vous répondra en fonction de votre requête. En effet, si vous n'effectuez qu'un simple scan, l'outil ne va s'appuyer que sur nmap-services pour détecter le service. Cependant, si vous vous voulez avoir de plus amples informations sur le port, il vous faudra effectuer un scan de version. Ce scan se base sur le fichier "nmap-service-probes". Ce dernier contient des requêtes à effectuer en fonction des ports ouverts et des expressions régulières à tester avec la réponse du services. Si le test est positif, Nmap pourra afficher les informations présentes à la suite de l'expression régulière. Ce type de scan est donc beaucoup plus précis. La \textbf{figure \ref{fig:fonctionnementnmap}} représente donc le fonctionnement de base de Nmap.
 
@@ -281,11 +281,11 @@ Nmap vous répondra en fonction de votre requête. En effet, si vous n'effectuez
 
 Nous allons voir maintenant comment appliquer ce fonctionnement à un CTF.
 
-\noindent \textbf{Application de Nmap}\\
+ \textbf{Application de Nmap}\\
 
 Dans cette partie, nous allons voir comment utiliser Nmap en ligne de commandes (CLI) en fonction des informations que l'on souhaite récupérer.\\
 
-\noindent \textbf{Mode basique}\\
+ \textbf{Mode basique}\\
 
 Si vous souhaitez ne faire qu'un scan rapide sans option, la \textbf{figure \ref{fig:scanbasique}} présente la commande à effectuer.
 
@@ -313,7 +313,7 @@ Du côté de Wireshark, nous pouvons observer, en \textbf{figure \ref{fig:wireba
 Dans le cas ci-dessus, l'attaquant est en 10.0.2.15 et la cible en 10.0.2.8. On se rend compte Nmap ne complète pas le Three-way Handshake et coupe brutalement la connexion via un RST TCP.
 Ce scan est très rapide mais manque d'informations et est très visible sur le réseau... Il n'est pas forcément à privilégier.\\
 
-\noindent \textbf{Scan de version}\\
+ \textbf{Scan de version}\\
 
 Si vous souhaitez obtenir des informations concerant le serveur de déployement du service afin de trouver des failles associées, il vous faudra utiliser l'option -sV de Nmap visualisable en \textbf{figure \ref{fig:sv}}.
 
@@ -340,7 +340,7 @@ Ce scan affiche une nouvelle colonne qui contient les informations du service. R
 
 Dans un premier temps, nous retrouvons bien la demi-ouverture de port puis Nmap effectue le 3-way Handshake afin de se connecter au service qui est ici HTTP. Il va ensuite aller chercher dans son dictionnaire nmap-service-probes les requêtes à effectuer afin d'obtenir des informations. Dans notre cas, il va commencer par effectuer un GET et obtenir une réponse dans le HTTP/1.1 200 OK. Cela signifie que la page existe et que son retour est positif. Par exemple, si nous avions ouvert la réponse envoyée par la cible, nous aurions vu tout le contenu HTML de la page. Cette réponse est donc comparée à des expressions régulières présentes dans le fichier nmap-service-probes. Ce type de scan est donc plus approprié afin de trouver des failles. Cependant, il existe un moyen beaucoup plus complexe et complet qui est le scan via script.\\
 
-\noindent \textbf{Scan par script}\\
+ \textbf{Scan par script}\\
 
 Dans le but d'obtenir des informations très précises, Nmap peut aussi s'éxecuter avec l'aide de scripts. Cette méthode s'appelle "Nmap Scripting Engine" ou NSE et s'appuie donc sur les mécanismes de Nmap et sur la légèreté des scripts Lua. Le langage Lua est très présent dans le monde du réseau comme par exemple dans Wireshark, dans les routeurs Cisco et d'autres. Nmap contient dans son répertoire près de 601 scripts regroupés sous 139 catégories. Il est donc tout à fait possible de créer un script et de l'excécuter avec Nmap. Cependant, nous allons nous baser sur un script déjà fait et qui exécute plusieurs scripts de différentes catégories afin d'obtenir des réponses précises et variées. Ce script est l'option par défault choisi par Nmap lors de la présence de l'argument -sC comme indiqué sur la \textbf{figure \ref{fig:nse}}.\\
 
@@ -357,7 +357,7 @@ On s'aperçoit que la quantité d'informations est très importante. Ce type de 
 
 \newpage
 
-\noindent \textbf{Devenir invisible}\\
+ \textbf{Devenir invisible}\\
 
 Avoir des informations, c'est bien, mais les récupérer en étant discret, c'est mieux. En effet, si la machine cible n'était pas un CTF mais un cas réel d'attaque, il nous faudrait apprendre à ne pas être détécté. Il existe de multiples moyens que nous allons voir ici. Dans un premier temps, il faut savoir que Nmap utilise l'option -sS par défaut. Ce mode permet à Nmap de ne réaliser qu'une demi-ouverture de porte. Cet option est essentielle afin de ne pas être détecté trop vite. Ensuite, nous avons la possiblité d'usurper notre identité via un spoof MAC et IP comme on peut le voir sur la \textbf{figure \ref{fig:spoofip}}\\
 
@@ -421,7 +421,7 @@ Comme on peut le voir, le schéma sur la \textbf{figure \ref{fig:webdiag}}. ains
 \end{figure}
 
 
-\noindent Lors du scan, Nikto est capable de :\\
+ Lors du scan, Nikto est capable de :\\
 \textbf{- Vérifier} si la version du serveur est obsolète ainsi que les logiciels et     modules qui sont utilisés par ce dernier. \\   
 \textbf{- Scanner} les répertoires, qui peuvent contenir des informations sensibles.\\
 \textbf{- Tester} près de 6000 fichiers potentiellement vulnérables.\\
@@ -432,7 +432,7 @@ De plus, Nikto supporte les connexions SSL.
 
 \subsection{Utilisation de Nikto}
 
-\noindent Pour lancer un simple scan, il suffit de taper la commande :
+ Pour lancer un simple scan, il suffit de taper la commande :
 
 \begin{figure}[htp!]
   \centering
@@ -499,7 +499,7 @@ A partir de ces captures, on peut en déduire que Nikto est capable de nous four
   \label{fig:courbe-tikz}
 \end{figure}
 
-\noindent On comprend à travers cette capture que le paramètre \textbf{Disallow} empêche le scan de ce répertoire.\\
+ On comprend à travers cette capture que le paramètre \textbf{Disallow} empêche le scan de ce répertoire.\\
 
 \subsection{Gagner en discrétion pendant les scans}
 Une méthode pour gagner en discrétion pendant l'attaque serait d'effectuer un scan par intervalle. En effet, si on effectue un scan toutes les 10 secondes, cela paraîtra moins suspect qu'un scan toutes les 1ms. Cela est possible en ajoutant l'option \textbf{-Pause 10} en argument :
@@ -524,7 +524,7 @@ Voici une capture wireshark de ce scan avec l'ajout de l'argument :
   \label{fig:courbe-tikz}
 \end{figure}
 
-\noindent On remarque l'utilisation du protocole NTP (Network Time Protocol) qui permet ici de mettre en place le temps de pause.
+ On remarque l'utilisation du protocole NTP (Network Time Protocol) qui permet ici de mettre en place le temps de pause.
 \newpage
 
 \section{Dirb/Dirbuster}
@@ -548,7 +548,7 @@ Comme nous l'avons plus haut, Dirb se base sur un dicitonnaire afin de réaliser
     \item \textbf{Utiliser un dictionnaire présent dans le répertoire de Dirb}\\
 \end{itemize}
 
-\noindent \textbf{Créer un dictionnaire à partir d'une page Web}\\
+ \textbf{Créer un dictionnaire à partir d'une page Web}\\
 
 Cette méthode est plus utilisée avec l'outil John que Dirb mais il est important de l'expliquer ici. En effet, utiliser des mots présents sur une page Web peut être intéressant dans le cas où nous avons un mot de passe hasher à découvrir. Il vous faudra donc télécharger la page Web en question via un wget et réaliser la commande suivante :
 
@@ -564,7 +564,7 @@ Cette méthode est plus utilisée avec l'outil John que Dirb mais il est importa
 \newpage
 C'est ainsi que nous pouvons créer un premier dictionnaire assez rapidement.\\
 
-\noindent \textbf{Créer un dictionnaire sous forme de pattern}\\
+ \textbf{Créer un dictionnaire sous forme de pattern}\\
 
 Lorsque que l'on connaît une partie du mot ou page que l'on recherche, utiliser un pattern peut être la solution. Un pattern est une forme commune qui va varier sur une partie pré-définie. Gendict est l'outil de création de dictionnaire avec pattern que nous allons utiliser ici. Il vous faudra cependant l'installer via le paquet "icu-devtools". Voici son utilisation :
 
@@ -597,7 +597,7 @@ L'option -s permet d'obtenir aussi les majuscules. Les deux principaux défauts 
 
 C'est pour cette raison qu'il existe un autre outil spécialisé dans la conception de dictionnaires aléatoires.\\
 
-\noindent \textbf{Créer un dictionnaire aléatoire}\\
+ \textbf{Créer un dictionnaire aléatoire}\\
 
 L'outil que nous considérons comme le plus efficace en terme de création de dictionnaires aléatoires est l'outil Crunch. Ce dernier, en plus de réaliser du pattern, complète les défauts de Gendict. Nous allons vous présenter la manière pour réaliser le dictionnaire le plus complet possible de manière aléatoire. Tout d'abord, Crunch se base sur un dictionnaire se nommant "charset.lst". Vous y retrouverez les séries de caractères que vous pouvez choisir pour réaliser votre dictionnaire. Dans notre cas, nous avons choisis d'utiliser la série mixalpha-numeric-all-space et nous l'avons enregistré dans un fichier dico.txt comme ci-dessous :
 
@@ -623,7 +623,7 @@ Comme vous pouvez le voir au début de la commande, nous avons spécifié que le
 
 Il est donc certain que cet outil vous permettra d'avoir un dictionnaire le plus complet au monde à la seule condition d'avoir une très grosse station de stockage... Heureusement que les concepteurs de Dirb ont pensé à ce détail et nous ont fourni des dictionnaires par défaut.\\
 
-\noindent \textbf{Utiliser un dictionnaire présent dans le répertoire de Dirb}\\
+ \textbf{Utiliser un dictionnaire présent dans le répertoire de Dirb}\\
 
 Comme nous l'avons vu précedemment, créer un dictionnaire peut vite devenir fastidieux. C'est pour cette raison que nous allons nous baser sur les dictionnaires présents dans le répertoire de Dirb. Il en existe plusieurs mais ici, nous allons utiliser le dictionnaire common.txt :
 
@@ -668,7 +668,7 @@ La différence entre single et multi est qu’en single, on ne peut exécuter le
 \end{figure} 
 \end{center}
 
-\noindent Alors que le multi-threading, lui, permet de faire plusieurs tâches en même temps en ordonnant les tâches en plusieurs threads, de la manière suivante : 
+ Alors que le multi-threading, lui, permet de faire plusieurs tâches en même temps en ordonnant les tâches en plusieurs threads, de la manière suivante : 
 \begin{center}
     \textbf{Thread1}:\\
        \begin{figure}[htp!]

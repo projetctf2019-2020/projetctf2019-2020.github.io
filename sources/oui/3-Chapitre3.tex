@@ -105,14 +105,14 @@ Par conséquent, la sécurisation du vol de cookies est essentiellement à la ch
 
 Une faille XSS est une faille présente sur un site web qui permet l'exécution de code HTML ou JavaScript dans des variables mal protégées. Il ne faut pas confondre les failles XSS avec les failles SQL. En effet, la faille XSS s'exécute côté client sur le navigateur et non pas côté serveur sur une base de données par exemple.\\
 
-\noindent Il existe deux types de failles XSS:
+ Il existe deux types de failles XSS:
 
 \begin{itemize}
     \item \textbf{Failles XSS réfléchies (non permanentes)}
     \item \textbf{Failles XSS stockées (permanentes)}
 \end{itemize}
 
-\noindent Nous verrons au cours de cette section ces deux types de failles, la structure d'une faille XSS ainsi que son utilisation par un pirate.
+ Nous verrons au cours de cette section ces deux types de failles, la structure d'une faille XSS ainsi que son utilisation par un pirate.
 
 \subsection{XSS Reflected (réfléchies) }
 
@@ -166,7 +166,7 @@ Jusque-là, nous avons seulement affiché une pop-up dans la navigateur de la vi
     \textbf{document.cookie}
 \end{center}
 
-\noindent En effet, si on exécute le code \lstinline{<script>alert(document.cookie);</script>} dans la barre de recherche du site on obtient la chose suivante:
+ En effet, si on exécute le code \lstinline{<script>alert(document.cookie);</script>} dans la barre de recherche du site on obtient la chose suivante:
 
 \begin{figure}[htp!]
   \centering
@@ -216,7 +216,7 @@ Afin de savoir si le site web est vulnérable aux attaques XSS, il suffit donc d
 
 La solution permettant de se protéger face à une attaque XSS est de convertir les données. Pour ce qui est du langage PHP, il est courant d’avoir recours aux fonctions htmlentities() et htmlspecialchars() qui permettent de convertir les caractères spéciaux en entités HTML. De ce fait, les données ne seront plus interprétées par le navigateur, mais simplement affichées.\\
 
-\noindent \textbf{Conclusion : }\\
+ \textbf{Conclusion : }\\
 
 La faille XSS est l’une des failles qu’on retrouve le plus couramment sur le web. Cela est expliqué par le fait que cette faille permet un grand nombre d’attaques. On peut par exemple grâce à cette faille détourner un formulaire afin de rediriger l’utilisateur vers un site malveillant. Cela permet en autres de voler les cookies d’un utilisateur et donc par la même occasion d’obtenir son login et son mot de passe.
 Heureusement, cette faille peut être aisément évitée en prenant la peine de traiter correctement les données en entrée.
@@ -400,7 +400,7 @@ Il est utile de camoufler les messages d’erreurs qui peuvent s’afficher sur 
 Afin d’éviter les caractères spéciaux, il est pratique d’utiliser la fonction :\\ mysqli\_real\_escape\_string()\\
 Enfin, il est préférable d’utiliser des comptes utilisateurs qui ont des droits limités. Cela permet d’empêcher l'éventuel hacker de modifier ou supprimer des éléments de la base de données.\\
 
-\noindent \textbf{Conclusion}
+ \textbf{Conclusion}
 
 Environ un site sur cinq est vulnérable aux injections SQL. Cela est dû au fait qu’une simple erreur peut compromettre la sécurité de la base, des utilisateurs et même du serveur. Pour cette raison, c’est l’une des failles les plus dangereuses pour les applications ayant recours à une base de données. Plus inquiétant encore, les injections SQL sont en augmentation depuis qu'il existe des programmes d'injections SQL automatisés, qui permettent aux hackers de prendre possession d’encore plus de données que par le passé. Heureusement, de simples techniques permettent se protéger de ce type de faille.
 
@@ -435,22 +435,22 @@ Burpsuite se présente sous la forme d’une interface graphique:
   \label{fig:courbe-tikz}
 \end{figure}
 
-\noindent Nous avons 3 types d’outils dans Burpsuite:\\
+ Nous avons 3 types d’outils dans Burpsuite:\\
 
-\noindent Les outils centraux:\\
+ Les outils centraux:\\
 - \textbf{Proxy} : Permet de configurer un proxy dans le but d’intercepter des requêtes web ou de les modifier avant de les transmettre au serveur web.\\
 - \textbf{Site map} : Permet d’avoir une vue arborescente du trafic observé.\\
 
 
-\noindent Les outils manuels:\\
+ Les outils manuels:\\
 - \textbf{Intruder}: Émission en masse de requêtes HTTP/HTTPS.\\
 - \textbf{Repeater}: Permet la modification avant l’envoi de nos requêtes.\\
 
-\noindent Les outils automatiques:\\
+ Les outils automatiques:\\
 - \textbf{Spider}: Cet outil permet la récolte d’informations passives comme la détection de ressources et la collecte active.\\
 - \textbf{Scanner}: Il va rechercher automatiquement des vulnérabilités (via le mode passif ou actif).\\
 
-\noindent Les autres outils:\\
+ Les autres outils:\\
 - \textbf{Sequencer}: Permet de  tester l'existence aléatoire des sessions avec jetons (token).\\
 - \textbf{Decoder}: Conversion URL/HTML/Base64/Hexa/Octal/Binaire/GZip + hashes.\\
 
@@ -460,7 +460,7 @@ Ainsi, dans le cas d’un audit de sécurité ou d’un CTF, nous pouvons utilis
 
 \subsubsection{Exemple d’utilisation sur un CTF:}
 
-\noindent Dans le cas où nous avons un formulaire de connexion, nous pouvons utiliser le mode Intercept de Burpsuite pour tester la sécurité de ce dernier, et ainsi injecter ou non du code malveillant comme le montre ce schéma :
+ Dans le cas où nous avons un formulaire de connexion, nous pouvons utiliser le mode Intercept de Burpsuite pour tester la sécurité de ce dernier, et ainsi injecter ou non du code malveillant comme le montre ce schéma :
 
 \begin{figure}[htp!]
   \centering
@@ -472,7 +472,7 @@ Ainsi, dans le cas d’un audit de sécurité ou d’un CTF, nous pouvons utilis
 \end{figure}
 
 \newpage
-\noindent Pour cela, il faut aller dans la catégorie proxy et choisir l’adresse IP du proxy à utiliser:
+ Pour cela, il faut aller dans la catégorie proxy et choisir l’adresse IP du proxy à utiliser:
 
 \begin{figure}[htp!]
   \centering
@@ -494,7 +494,7 @@ Dans notre cas, nous prendrons toutes les adresses IP de notre interface web (d�
 On peut donc commencer les tests. Il faudra mettre Burpsuite sur le mode “intercept on” pour intercepter toutes les requêtes.\\
 
 \newpage
-\noindent Prenons le cas de ce formulaire en HTTP :
+ Prenons le cas de ce formulaire en HTTP :
 \begin{figure}[htp!]
   \centering
   \setlength\figureheight{7cm}
@@ -503,7 +503,7 @@ On peut donc commencer les tests. Il faudra mettre Burpsuite sur le mode “inte
   \caption{Formulaire Web}
   \label{fig:courbe-tikz}
 \end{figure}\\
-\noindent Par exemple, nous allons entrer un username et un password :
+ Par exemple, nous allons entrer un username et un password :
 \begin{figure}[htp!]
   \centering
   \setlength\figureheight{7cm}
@@ -523,7 +523,7 @@ Comme nous pouvons le voir sur Burpsuite, on récupère la requête envoyée au 
   \label{fig:courbe-tikz}
 \end{figure}
 
-\noindent On peut alors la modifier avant de la transmettre au serveur :
+ On peut alors la modifier avant de la transmettre au serveur :
 \begin{figure}[htp!]
   \centering
   \setlength\figureheight{7cm}
@@ -536,7 +536,7 @@ Dans notre cas, nous allons essayer d’injecter la commande "ping" pour tester 
 
 \newpage
 
-\noindent Si on scrute le réseau avec Wireshark:
+ Si on scrute le réseau avec Wireshark:
 \begin{figure}[htp!]
   \centering
   \setlength\figureheight{7cm}
@@ -581,19 +581,19 @@ Comme nous l’avons dit précédemment, Metasploit possède un Framework ce qui
 
 La particularité de Metasploit est qu’il possède une architecture modulaire, ce qui permet un développement plus facile, une amélioration progressive du programme. De plus, les modules peuvent être rechargés sans redémarrage de l’application, ce qui est très pratique pour le développement.\\
 Comme nous pouvons le constater sur ce schéma, il y 3 grandes parties qui composent Metasploit. La première est la librairie. Cette dernière permet de regrouper un grand nombre de fonctions et de programmes dans le but de constituer une API. Ainsi, lors de l’écriture d’un exploit ou d’un payload, le développeur n’aura qu'à connaître l’API de Metasploit pour son développement.\\
-\noindent Metasploit utilise un système de librairie pour stocker ses fichiers.
-\noindent La librairie est composée de :\\
+ Metasploit utilise un système de librairie pour stocker ses fichiers.
+ La librairie est composée de :\\
 - \textbf{Rex} – C’est la librairie principale regroupant la gestion des sockets, protocoles, encodeurs, SSL, SMB, HTTP, XOR, Base64, Unicode.\\
 - \textbf{MSF::Core} – Cela permet de fournir l’API basique.\\
 - \textbf{MSF::Base} Fournit l'API " amicale "et il fournit des API simplifiées à utiliser dans le framework.\\
 
-\noindent Metasploit peut s’utiliser sur plusieurs interfaces:\\
+ Metasploit peut s’utiliser sur plusieurs interfaces:\\
 - \textbf{Msfconsole} : Permet d’avoir une console Metasploit au sein d’un shell, elle est considérée comme l’interface la plus puissante et la plus complète.\\
 - \textbf{MsfCli :} Permet d’utiliser Metasploit en ligne de commande ce qui peut être très pratique pour l’intégrer dans un script.\\
 - \textbf{Msfweb:} Permet d’accéder à l’ensemble des outils de Metasploit sur une interface web. Facile d’utilisation.\\
 - \textbf{Armitage:} Interface GUI de Metasploit. Cet outil est développé par Raphel Mudge et il regroupe tous les outils de Metasploit sous forme d’interface graphique. De plus, il supporte msfcli ainsi que msfconsole.\\
 
-\noindent L’architecture de Metasploit peut également être représentée en modèle objet : 
+ L’architecture de Metasploit peut également être représentée en modèle objet : 
 \begin{figure}[htp!]
   \centering
   \setlength\figureheight{7cm}
@@ -615,11 +615,11 @@ D'autres part, on peut accéder aux modules depuis le terminal avec la commande 
 \end{figure}
 
 \subsection{Base de données de Metasploit}
-\noindent Le Framework Metasploit fournit un support des bases de données utilisant  PostgreSQL. Cette dernière stocke des informations, telles que les données de l'hôte, les résultats de scans comme nmap et les résultats d'exploitation. Cela peut être très utile si on fait beaucoup d'exploits ou de tests d'intrusions sur des machines.
+ Le Framework Metasploit fournit un support des bases de données utilisant  PostgreSQL. Cette dernière stocke des informations, telles que les données de l'hôte, les résultats de scans comme nmap et les résultats d'exploitation. Cela peut être très utile si on fait beaucoup d'exploits ou de tests d'intrusions sur des machines.
 
-\noindent Cependant, cette base de données n'a pas besoin d'être lancée pour exécuter Metasploit mais elle est très utile pour stocker des logs de scan ou d'exploit.\\
+ Cependant, cette base de données n'a pas besoin d'être lancée pour exécuter Metasploit mais elle est très utile pour stocker des logs de scan ou d'exploit.\\
 
-\noindent Pour lancer PostgreSQL sous Kali linux, on utilise la commande suivante:
+ Pour lancer PostgreSQL sous Kali linux, on utilise la commande suivante:
 \begin{figure}[htp!]
   \centering
   \setlength\figureheight{7cm}
@@ -629,7 +629,7 @@ D'autres part, on peut accéder aux modules depuis le terminal avec la commande 
   \label{fig:courbe-tikz}
 \end{figure}
 
-\noindent On peut si on le souhaite, créer une base de données en local pour Metasploit. Pour initialiser une base de données, on utilise la commande suivante:
+ On peut si on le souhaite, créer une base de données en local pour Metasploit. Pour initialiser une base de données, on utilise la commande suivante:
 
 \begin{figure}[htp!]
   \centering
@@ -654,7 +654,7 @@ Ainsi, cette commande va créer plusieurs utilisateurs avec des mots de passes e
 \end{figure}
 
 
-\noindent On peut voir que la base de données a bien été lancée :
+ On peut voir que la base de données a bien été lancée :
 
 \begin{figure}[htp!]
   \centering
@@ -665,9 +665,9 @@ Ainsi, cette commande va créer plusieurs utilisateurs avec des mots de passes e
   \label{fig:courbe-tikz}
 \end{figure}
 
-\noindent On peut voir qu'il y a 1'utilisateur qui a été créé msf" ainsi que 3 catégories "development" , "production" et "test". Ce fichier permet de récupérer les informations de connexion pour se connecter à la base de données.\\
+ On peut voir qu'il y a 1'utilisateur qui a été créé msf" ainsi que 3 catégories "development" , "production" et "test". Ce fichier permet de récupérer les informations de connexion pour se connecter à la base de données.\\
 
-\noindent En lançant Metasploit, on peut utiliser la commande \textbf{db\_connect} pour se connecter à notre base de données :
+ En lançant Metasploit, on peut utiliser la commande \textbf{db\_connect} pour se connecter à notre base de données :
 
 \begin{figure}[htp!]
   \centering
@@ -677,9 +677,9 @@ Ainsi, cette commande va créer plusieurs utilisateurs avec des mots de passes e
   \caption{Connexion à la base de données}
   \label{fig:courbe-tikz}
 \end{figure}
-\noindent Cette commande nous indique que nous pouvons nous connecter soit en rentrant directement l'utilisateur, le mot de passe, l'adresse IP et la base de données, soit en renseignant un fichier de connexion à utiliser comme le fichier \textbf{database.yml}.\\
+ Cette commande nous indique que nous pouvons nous connecter soit en rentrant directement l'utilisateur, le mot de passe, l'adresse IP et la base de données, soit en renseignant un fichier de connexion à utiliser comme le fichier \textbf{database.yml}.\\
 
-\noindent Nous allons par exemple renseigner la méthode avec le fichier :
+ Nous allons par exemple renseigner la méthode avec le fichier :
 
 \begin{figure}[htp!]
   \centering
@@ -690,7 +690,7 @@ Ainsi, cette commande va créer plusieurs utilisateurs avec des mots de passes e
   \label{fig:courbe-tikz}
 \end{figure}
 
-\noindent On vérifie qu'on est bien connecté à la base de données :
+ On vérifie qu'on est bien connecté à la base de données :
 
 \begin{figure}[htp!]
   \centering
@@ -766,9 +766,9 @@ Sous Kali Linux, si on veut exploiter cette base de données pour chercher un ex
   \label{fig:exploit-db}
 \end{figure}
 
-\noindent Cette commande nous retourne une liste des exploits disponible pour le service FTP. On remarque également que ces exploits sont stockés dans le répertoire \textbf{/usr/share/exploitdb/plateforms}.
+ Cette commande nous retourne une liste des exploits disponible pour le service FTP. On remarque également que ces exploits sont stockés dans le répertoire \textbf{/usr/share/exploitdb/plateforms}.
 
-\noindent Si on le souhaite, on peut faire une recherche en fonction de la version du service :
+ Si on le souhaite, on peut faire une recherche en fonction de la version du service :
 \begin{figure}[htp!]
   \centering
   \setlength\figureheight{7cm}
@@ -778,7 +778,7 @@ Sous Kali Linux, si on veut exploiter cette base de données pour chercher un ex
   \label{fig:courbe-tikz}
 \end{figure}
 
-    \noindent Cela permettra de cibler plus facilement l'exploit à utiliser. Enfin, il faut savoir que tous les exploits présentés avec la commande \textbf{searchsploit} ne sont pas tous des exploits utilisables avec Metasploit. En effet, tous les exploits codés n'ont pas été faits pour Metasploit. On peut y retrouver des exploit en python ou encore en C. Cependant, tous les exploits compatibles avec metasploit auront la mention \textbf{(metapsloit)} dans leur nom lors de la recherche avec \textbf{searchsploit}. 
+     Cela permettra de cibler plus facilement l'exploit à utiliser. Enfin, il faut savoir que tous les exploits présentés avec la commande \textbf{searchsploit} ne sont pas tous des exploits utilisables avec Metasploit. En effet, tous les exploits codés n'ont pas été faits pour Metasploit. On peut y retrouver des exploit en python ou encore en C. Cependant, tous les exploits compatibles avec metasploit auront la mention \textbf{(metapsloit)} dans leur nom lors de la recherche avec \textbf{searchsploit}. 
 
 \subsection{Utilisation des modules et des exploits}
 
@@ -798,7 +798,7 @@ Ce qui peut être très intéressant avec cet outil, c'est de combiner l'utilisa
 
 Pour rechercher un exploit directement dans metasploit afin de l'utiliser, on utilise la commande \textbf{search}. Cette commande va chercher tous les exploits disponibles dans Metasploit pour l'argument passé en paramètre.\\ 
 
-\noindent On reprenant l'exemple de la section précédente, on aurait pu faire ceci:
+ On reprenant l'exemple de la section précédente, on aurait pu faire ceci:
 
 \begin{figure}[htp!]
   \centering
@@ -859,7 +859,7 @@ On constate qu'il existe un exploit pour effectuer un reverse shell sur la machi
   \label{fig:courbe-tikz}
 \end{figure}
 
-\noindent On peut utiliser la commande \textbf{show options} pour voir les options de cet exploit:
+ On peut utiliser la commande \textbf{show options} pour voir les options de cet exploit:
 
 \begin{figure}[htp!]
   \centering
