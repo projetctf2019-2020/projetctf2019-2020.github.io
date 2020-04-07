@@ -1,0 +1,93 @@
+\chapter{TP}
+
+\section{TP 1}
+
+\noindent\textbf{Objectif :} découverte des outils de pentest via des exercices, réalisation d’un CTF.\\
+\textbf{Durée :} 3H\\
+
+Au cours de ce TP, vous allez découvrir certains outils présents sur la distribution Kali Linux ainsi que les bons gestes à avoir lors de la réalisation d’un CTF. Dans un premier temps, vous allez réaliser trois exercices présents sur la machine TP1\_CTF puis vous allez affronter le CTF Bulldog. \\
+\noindent Voici ce dont vous aurez besoin :
+
+\begin{itemize}
+    \item \textbf{Le cours}
+    \item \textbf{VM Kali.OVA sur le FTP  de l’IUT}
+    \item \textbf{VM Bulldog.OVA sur le FTP de l’IUT}
+\end{itemize}
+
+\noindent Kali linux est une distribution qui nécessite des ressources surtout lors de gros calculs. N’hésitez pas à lui fournir 4Go de RAM et 3 cœurs de processeurs si cela est possible.
+
+\subsection{Introduction}
+
+
+\begin{enumerate}
+    \item Veuillez installer et allumer Kali et TP1\_CTF sous Virtualbox en réseau NAT. Kali possède le login « root » et le mot de passe « root ».
+    \item Vous êtes à présent dans un terminal sous Kali. Il vous faut dans un premier temps analyser votre réseau pour trouver votre cible. En effet, il est possible que vous n’ayez pas l’IP du CTF. La méthode la plus simple est de réaliser un : arp-scan  - -localnet.\\
+    Indiquez le fonctionnement de ce type de requête.
+    \item Nous sommes dans l’étape de recherche active d’informations.\\
+    Lancez un scan Nmap et donner les ports et les services ouverts.
+    \item Réalisez un Dirb sur notre cible afin de trouver une piste d’attaque.\\ 
+    Donnez les dossiers présents sur la cible.
+\end{enumerate}
+
+Une fois que vous avez trouvé ces dossiers, veuillez lancer l’exercice 1 via l’url.
+
+\subsection{Exercice 1 : Les bonnes habitudes}
+
+\begin{enumerate}
+    \item Vous voilà sur une page de connexion. Trouvez un moyen de trouver le login et le mot de passe afin de vous enregistrer.\\
+    Aide : John The Ripper est l’outil idéal à utiliser si vous avez un mot de passe hashé.
+\end{enumerate}
+
+Une fois que vous vous êtes enregistrés, vous pouvez passer à l’exercice 2.
+
+\subsection{Exercice 2 : Les failles}
+
+\begin{enumerate}
+    \item Le formulaire est l’endroit qui contient le plus de failles. En effet, il permet à l’utilisateur de rentrer des informations et de communiquer avec le serveur Web.\\
+    Quelle est l’information qui vous permettra de vous enregistrer ?
+    \item Comme vu dans le cours, mettez en place le proxy afin que Burpsuite puisse intercepter les requêtes du formulaire et ainsi vous permettre de vous enregistrer.
+    \item Voici un nouveau formulaire avec une autre faille à exploiter. En autonomie, trouvez un moyen d’obtenir le flag de cet exercice.\\
+    Donner le nom de la faille ainsi que l’outil utilisé.
+\end{enumerate}
+
+Vous pouvez à présent passer à l'exercice suivant.
+
+\subsection{Exercice 3 : Le web-shell}
+
+\begin{enumerate}
+    \item Avec l’aide donnée par la page de l’exercice 3 ainsi que du cours, réalisez un reverse-shell sur la cible afin de trouver le flag.
+    \item Connectez vous en SSH avec les informations obtenues dans le flag.\\
+    Donnez la commande pour se connecter en SSH.
+    \item Trouvez le flag dans /home/<USER>.
+\end{enumerate}
+
+\subsection{Exercice 4 : Si il vous reste du temps}
+
+Dans cet exercice, vous allez réaliser le CTF Bulldog. Comme pour les autres machines, mettez-là en réseau NAT et essayez en autonomie de le réaliser. SI vous avez la moindre question, n’hésitez pas à appeler un encadrant afin qu’il puisse vous aider.
+
+\newpage
+
+\section{TP 2}
+
+\noindent\textbf{Objectif :} exploitation des outils de scans, étude de documents, reverse-shell, python.\\
+\textbf{Durée :} 3H\\
+
+Lors de ce TP, vous allez devoir résoudre le CTF View2aKill présent au format OVA sur le FTP de l’IUT. Vous pouvez augmenter la quantité de RAM et de CPU de votre Kali en fonction de votre machine hôte.
+
+\begin{enumerate}
+    \item Veuillez télécharger ce CTF et l’installer sous Virtualbox.
+    \item Allumez le CTF et Kali en réseau NAT et obtenez l’IP de la cible.
+    \item Commencez à faire une recherche d’informations active via Nmap et Dirb. N’hésitez pas à utiliser un scan avec le script par défaut afin d’obtenir un maximum d’informations.\\
+    Indiquez les ports et les services ouverts.
+    \item A la suite de Dirb et de Nmap, observez toutes les pages trouvées afin d’obtenir un fichier et une page exploitables.\\
+    Donnez l’url et le fichier.
+    \item Avec cette recherche active d’informations, vous devez avoir obtenu une page de connexion, un mail et un mot de passe associé. Si ce n’est pas le cas, n’hésitez pas à appeler l’encadrant ou à chercher plus longtemps.
+    \item Une fois connecté sur le site, à l’aide votre cours et des anciens TP, essayez de trouver une faille afin de mettre en place un reverse-shell.\\
+    Aide : Burpsuite peut être d’une grande aide.
+    \item Le reverse-shell est lancé et vous êtes entré dans la machine cible.\\
+    Quelle est l’utilisateur dont vous avez pris le contrôle ?\\
+    Avec les conseils vus en cours et en fonction de vos droits sur la machine, cherchez un moyen d’établir une connexion SSH avec un utilisateur ayant plus de droits.
+    \item Vous avez donc plus de droits grâce à ce nouvel utilisateur et vous pouvez accéder aux dossiers d’autres utilisateurs. L’un d’eux contient un fichier .txt qui renferme d’importantes informations et consignes à suivre.\\
+    Aide : le python vous permettra de résoudre rapidement l’énigme.
+    \item Si vous avez suivi les consignes et compris les concepts des CTFs, vous êtes censés avoir obtenu le flag et ainsi gagné la partie. Si ce n’est pas le cas, n’hésitez pas à contacter l’encadrant où à chercher plus longtemps.
+\end{enumerate}

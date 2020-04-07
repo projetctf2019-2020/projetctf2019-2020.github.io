@@ -1,0 +1,300 @@
+ 
+
+  \definecolor{colbg}{rgb}{0.8,0.8,0.8} %  {0.8,1.0,1.0}
+   \definecolor{colKeys}{rgb}{0,0,1} 
+   \definecolor{colIdentifier}{rgb}{0,0.4,0.2} 
+   \definecolor{colComments}{rgb}{0.5,0.5,0.5} 
+   \definecolor{colString}{rgb}{0.6,0.1,0.1} 
+   \definecolor{shbg}{rgb}{0.85,0.85,0.85} 
+   \definecolor{shgrey}{rgb}{0.1,0.1,0.1} 
+   \definecolor{lightgrey}{rgb}{0.7,0.7,0.7} 
+   \definecolor{black}{rgb}{0.0,0.0,0.0} 
+   \definecolor{white}{rgb}{1.0,1.0,1.0} 
+   \definecolor{maroon}{cmyk}{0, 0.87, 0.68, 0.32}
+\definecolor{halfgray}{gray}{0.55}
+\definecolor{ipython_frame}{RGB}{207, 207, 207}
+\definecolor{ipython_bg}{RGB}{247, 247, 247}
+\definecolor{ipython_red}{RGB}{186, 33, 33}
+\definecolor{ipython_green}{RGB}{0, 128, 0}
+\definecolor{ipython_cyan}{RGB}{64, 128, 128}
+\definecolor{ipython_purple}{RGB}{170, 34, 255}
+
+
+\lstset{
+     literate=%
+         {á}{{\'a}}1
+         {í}{{\'i}}1
+         {é}{{\'e}}1
+         {ý}{{\'y}}1
+         {ú}{{\'u}}1
+         {ó}{{\'o}}1
+         {ě}{{\v{e}}}1
+         {š}{{\v{s}}}1
+         {č}{{\v{c}}}1
+         {ř}{{\v{r}}}1
+         {ž}{{\v{z}}}1
+         {ď}{{\v{d}}}1
+         {ť}{{\v{t}}}1
+         {ň}{{\v{n}}}1                
+         {ů}{{\r{u}}}1
+         {Á}{{\'A}}1
+         {Í}{{\'I}}1
+         {É}{{\'E}}1
+         {Ý}{{\'Y}}1
+         {Ú}{{\'U}}1
+         {Ó}{{\'O}}1
+         {Ě}{{\v{E}}}1
+         {Š}{{\v{S}}}1
+         {Č}{{\v{C}}}1
+         {Ř}{{\v{R}}}1
+         {Ž}{{\v{Z}}}1
+         {Ď}{{\v{D}}}1
+         {Ť}{{\v{T}}}1
+         {Ň}{{\v{N}}}1                
+         {Ů}{{\r{U}}}1    
+}
+
+   \newcommand{\setlstc}{
+   \lstset{% general command to set parameter(s)
+     float=hbp,language=c,tabsize=3,extendedchars=false,
+     basicstyle=\ttfamily\small, % print whole listing small
+     keywordstyle=\color{blue}\bfseries,
+     identifierstyle=\color{colIdentifier}, % nothing happens
+     commentstyle=\color{colComments}, % grey comments
+     stringstyle=\color{blue}, % typewriter type for strings
+     xrightmargin=-2cm, % 
+     xleftmargin=-2cm,
+     backgroundcolor=\color{colbg},
+     frame=single, % 
+     framerule=0pt, % 
+     xrightmargin=1cm, % 
+     xleftmargin=1cm, 
+     showstringspaces=false % no special string spaces
+   } }
+
+   \newcommand{\setlstbash}{
+   \lstset{% general command to set parameter(s)
+     float=hbp,language=bash,tabsize=3,extendedchars=false,
+     basicstyle=\ttfamily\small, % print whole listing small
+     keywordstyle=\color{blue}\bfseries,
+     identifierstyle=\color{colIdentifier}, % nothing happens
+     commentstyle=\color{colComments}, % grey comments
+     stringstyle=\color{blue}, % typewriter type for strings
+     xrightmargin=-2cm, % 
+     xleftmargin=-2cm,
+     backgroundcolor=\color{colbg},
+     frame=single, % 
+     framerule=0pt, % 
+     xrightmargin=1cm, % 
+     xleftmargin=1cm, 
+     showstringspaces=false % no special string spaces
+   } }
+
+
+   \newcommand{\setlstmake}{
+   \lstset{% general command to set parameter(s)
+     float=hbp,language=make,
+     basicstyle=\ttfamily\small, % print whole listing small
+     keywordstyle=\color{blue}\bfseries,
+     identifierstyle=\color{colIdentifier}, % nothing happens
+     commentstyle=\color{colComments}, % grey comments
+     stringstyle=\color{blue}, % typewriter type for strings
+     backgroundcolor=\color{colbg},
+     frame=single, % 
+     framerule=0pt, % 
+     showstringspaces=false % no special string spaces
+   } }
+
+ \newcommand{\setlstcsh}{
+   \lstset{language=csh,
+     backgroundcolor=\color{shbg},
+     basicstyle=\ttfamily\color{shgrey},
+     identifierstyle=\color{shgrey},
+     commentstyle=\color{shgrey},
+     identifierstyle=\color{shgrey},
+     stringstyle=\color{shgrey},
+     frame=single, % 
+     framerule=0pt, % 
+     keywordstyle=\color{shgrey}
+   }
+ }
+
+
+ \newcommand{\setlstscreen}{
+   \lstset{language=csh,
+     backgroundcolor=\color{black},
+     basicstyle=\sffamily\color{lightgrey},
+     identifierstyle=\color{lightgrey},
+     commentstyle=\color{lightgrey},
+     identifierstyle=\color{lightgrey},
+     stringstyle=\color{lightgrey},
+     frame=single, % 
+     framerule=0pt, % 
+     keywordstyle=\color{lightgrey}
+   }
+ }
+
+
+   \newcommand{\setlstgeneralform}{
+   \lstset{% general command to set parameter(s)
+     float=hbp,language=C,
+     basicstyle=\ttfamily\small, % print whole listing small
+     keywordstyle=\color{black}\bfseries,
+     identifierstyle=\color{black}, % nothing happens
+     commentstyle=\color{black}, % grey comments
+     stringstyle=\color{shgrey}, % typewriter type for strings
+     backgroundcolor=\color{white},
+     frame=single, % 
+     framerule=1pt, % 
+     showstringspaces=false % no special string spaces
+   } 
+   }
+
+\newcommand{\setlstjava}{
+  \lstset{
+    xrightmargin=1cm, % 
+    xleftmargin=1cm, 
+    language=Java,
+    basicstyle=\ttfamily\small, 
+    upquote=true,
+    aboveskip={1.5\baselineskip},
+    columns=fullflexible,
+    showstringspaces=false,
+    extendedchars=true,
+    breaklines=true,
+    showtabs=false,
+    showspaces=false,
+    showstringspaces=false,
+    identifierstyle=\ttfamily,
+    keywordstyle=\color[rgb]{0,0,1}\bfseries,
+    commentstyle=\color[rgb]{0.133,0.545,0.133},
+    stringstyle=\color[rgb]{0.627,0.126,0.941},
+    backgroundcolor=\color{colbg},
+  }
+}
+
+
+\lstdefinelanguage{algo}{%
+  morekeywords={algorithme, programme, classe, 
+                fonction, procedure, methode, constructeur,
+                declaration, declarations, 
+                debut,fin, 
+                variable, variables, parametre, parametres, attribut, attributs,
+                si,alors,sinon,finsi,
+                selon, cas, 
+                tantque,faire,fintantque,repeter,retourner,tant,que,pour,
+                ecrire, lire
+  },
+  sensitive=false,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[s]{"}{"},
+ % numbers=left,
+ % frame=single,
+  literate=%
+  {::}{{$\leftrightarrow$}}{2}
+  {:=}{{$\leftarrow$}}{2}
+  {<=}{{$\le$}}{2}
+  {>=}{{$\ge$}}{2}
+  {é}{{\'e}}{1}
+}
+
+
+
+\newcommand{\setlstalgo}{
+  \lstset{
+    xrightmargin=1cm, % 
+    xleftmargin=1cm, 
+    language=algo,
+    basicstyle=\ttfamily\small, 
+    upquote=true,
+    aboveskip={1.5\baselineskip},
+    columns=fullflexible,
+    showstringspaces=false,
+    extendedchars=true,
+    breaklines=true,
+    showtabs=false,
+    showspaces=false,
+    showstringspaces=false,
+    identifierstyle=\ttfamily,
+    keywordstyle=\color[rgb]{0,0,1}\bfseries,
+    commentstyle=\color[rgb]{0.133,0.545,0.133},
+    stringstyle=\color[rgb]{0.627,0.126,0.941},
+    backgroundcolor=\color{colbg},
+  }
+}
+
+\lstdefinelanguage{iPython}{
+    morekeywords={access,and,break,class,continue,def,del,elif,else,except,exec,finally,for,from,global,if,import,in,is,lambda,not,or,pass,print,raise,return,try,while},%
+    %
+    % Built-ins
+    morekeywords=[2]{abs,all,any,basestring,bin,bool,bytearray,callable,chr,classmethod,cmp,compile,complex,delattr,dict,dir,divmod,enumerate,eval,execfile,file,filter,float,format,frozenset,getattr,globals,hasattr,hash,help,hex,id,input,int,isinstance,issubclass,iter,len,list,locals,long,map,max,memoryview,min,next,object,oct,open,ord,pow,property,range,raw_input,reduce,reload,repr,reversed,round,set,setattr,slice,sorted,staticmethod,str,sum,super,tuple,type,unichr,unicode,vars,xrange,zip,apply,buffer,coerce,intern},%
+    %
+    sensitive=true,%
+    morecomment=[l]\#,%
+    morestring=[b]',%
+    morestring=[b]",%
+    %
+    morestring=[s]{'''}{'''},% used for documentation text (mulitiline strings)
+    morestring=[s]{"""}{"""},% added by Philipp Matthias Hahn
+    %
+    morestring=[s]{r'}{'},% `raw' strings
+    morestring=[s]{r"}{"},%
+    morestring=[s]{r'''}{'''},%
+    morestring=[s]{r"""}{"""},%
+    morestring=[s]{u'}{'},% unicode strings
+    morestring=[s]{u"}{"},%
+    morestring=[s]{u'''}{'''},%
+    morestring=[s]{u"""}{"""},%
+    %
+    % {replace}{replacement}{lenght of replace}
+    % *{-}{-}{1} will not replace in comments and so on
+    literate=
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+    {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+    {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+    {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+    {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+    {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+    {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+    {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1
+    {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+    {€}{{\EUR}}1 {£}{{\pounds}}1
+    {’}{\textquoteright}1 {ʹ}{\textquoteright}1
+}    
+%    {^}{{{\color{ipython_purple}\^{}}}}1
+%    {=}{{{\color{ipython_purple}=}}}1
+%    {+}{{{\color{ipython_purple}+}}}1
+%    {*}{{{\color{ipython_purple}$^\ast$}}}1
+%    {/}{{{\color{ipython_purple}/}}}1
+%    {+=}{{{+=}}}1
+%    {-=}{{{-=}}}1
+%    {*=}{{{$^\ast$=}}}1
+%    {/=}{{{/=}}}1
+%    *{-}{{{\color{ipython_purple}-}}}1
+%     {?}{{{\color{ipython_purple}?}}}1
+
+\newcommand{\setlstipython}{
+  \lstset{
+    identifierstyle=\color{black}\ttfamily,
+    commentstyle=\color{ipython_cyan}\ttfamily,
+    stringstyle=\color{ipython_red}\ttfamily,
+    keepspaces=true,
+    showspaces=false,
+    showstringspaces=false,
+    language=iPython,
+    rulecolor=\color{ipython_frame},
+    frame=single,
+    frameround={t}{t}{t}{t},
+    framexleftmargin=6mm,
+    numbers=left,
+    numberstyle=\tiny\color{halfgray},
+    %
+    %
+    backgroundcolor=\color{ipython_bg},
+    %   extendedchars=true,
+    basicstyle=\scriptsize,
+    keywordstyle=\color{ipython_green}\ttfamily
+  }
+}

@@ -1,0 +1,206 @@
+\documentclass[11pt,fleqn]{book} % Default font size and left-justified equations
+
+
+
+\input{structure.tex} % Insert the commands.tex file which contains the majority of the structure behind the template
+\usepackage{pdfpages}
+\usepackage{adjustbox}
+\usepackage{textcomp}
+
+\usepackage[backend=biber,citestyle=numeric,sorting=none]{biblatex} % style=alphabetic,
+\defbibheading{bibempty}{}
+\addbibresource{references.bib}
+
+
+\begin{document}
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+\includepdf{oui/title.pdf}
+
+%\begingroup
+%\thispagestyle{empty} % Suppress headers and footers on the title page
+%\begin{center}
+
+%\includegraphics[width=0.6\textwidth]{oui/logo_uvsq.jpg}\\[1cm]
+
+%{\large 2ème année DUT Réseaux et Télécoms}\\[0.5cm]
+
+%{\large Cours CTF}\\[0.5cm]
+
+% Title
+%\rule{\linewidth}{0.5mm} \\[0.4cm]
+%{ \huge \bfseries Cours CTF \\[0.4cm] }
+%\rule{\linewidth}{0.5mm} \\[1.5cm]
+
+% Author and supervisor
+%\noindent
+%\begin{minipage}{0.4\textwidth}
+%  \begin{flushleft} \large
+%    \emph{Auteurs :}\\
+%    M. Olivier \textsc{Vincent}\\
+%    M. Matthieu \textsc{Gouyen}\\
+%    M. Douglas \textsc{Belpaume}\\
+%    M. Erwan \textsc{Crand}\\
+%    M. Laurent \textsc{Salespara}\\
+%  \end{flushleft}
+%\end{minipage}%
+%\begin{minipage}{0.4\textwidth}
+%  \begin{flushright} \large
+%    \emph{Encadrants :} \\
+%    M. Guillemin\\
+%    M. Chevallier
+%  \end{flushright}
+%\end{minipage}
+
+%\vfill
+
+% Bottom of the page
+%{\large Version 1 du\\ \today}
+
+%\end{center}
+%\endgroup
+
+%----------------------------------------------------------------------------------------
+%	COPYRIGHT PAGE
+%----------------------------------------------------------------------------------------
+
+\newpage
+~\vfill
+\thispagestyle{empty}
+
+\noindent Copyright \copyright\ 2020 Vincent, Gouyen, Belpaume, Crand, Salespara, Chevallier, Guillemin\\ % Copyright notice
+
+%\noindent \textsc{Published by Publisher}\\ % Publisher
+
+%\noindent \textsc{book-website.com}\\ % URL
+
+\noindent Licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License (the ``License''). You may not use this file except in compliance with the License. You may obtain a copy of the License at \url{http://creativecommons.org/licenses/by-nc/3.0}. Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \textsc{``as is'' basis, without warranties or conditions of any kind}, either express or implied. See the License for the specific language governing permissions and limitations under the License.\\ % License information, replace this with your own license (if any)
+
+%\noindent \textit{First printing, March 2019} % Printing/edition date
+
+%----------------------------------------------------------------------------------------
+%	Preambule
+%----------------------------------------------------------------------------------------
+\includepdf[page=-]{oui/pream.pdf}
+
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%----------------------------------------------------------------------------------------
+%\usechapterimagefalse
+%\chapterimage{chapter_head_1.pdf} % Table of contents heading image
+\chapterimage{oui/images/illustrations/chap_flagsa.jpg}
+
+\pagestyle{empty} % Disable headers and footers for the following pages
+
+\tableofcontents % Print the table of contents itself
+
+\cleardoublepage % Forces the first chapter to start on an odd page so it's on the right side of the book
+
+\pagestyle{fancy} % Enable headers and footers again
+
+\part{Première partie}
+
+%\chapterimage{chapter_head_2.pdf} % Chapter heading image
+\chapterimage{oui/images/illustrations/chap_cablea.jpg}
+\include{oui/competences}
+\chapterimage{oui/images/illustrations/chap_flagsc.jpg}
+\include{oui/planning}
+\chapterimage{oui/images/illustrations/chap_cableb.jpg}
+\include{oui/Introduction}
+
+
+\part{Deuxième partie}
+
+\chapterimage{oui/images/illustrations/chap_flagsb.jpg}
+\include{oui/1-Chapitre1}
+\chapterimage{oui/images/illustrations/chap_keyboarda.jpg}
+\include{oui/2-Chapitre2}
+
+
+\part{Troisième partie}
+
+\chapterimage{oui/images/illustrations/chap_flagsa.jpg}
+\include{oui/3-Chapitre3}
+
+
+\part{Quatrième partie}
+
+\chapterimage{oui/images/illustrations/chap_shella.jpg}
+\include{oui/4-Chapitre4}
+\chapterimage{oui/images/illustrations/chap_flagsc.jpg}
+\include{oui/5-Chapitre5}
+
+
+\part{Cinquième partie}
+
+\chapterimage{oui/images/illustrations/chap_cookiea.jpg}
+\include{oui/6-Chapitre6}
+%\include{oui/TP3/TP3-chap1}
+%\include{oui/TP3/TP3-chap2}
+\chapterimage{oui/images/illustrations/chap_flagsa.jpg}
+\include{oui/DM}
+\chapterimage{oui/images/illustrations/chap_keyboarda.jpg}
+\include{oui/conclusion}
+
+%----------------------------------------------------------------------------------------
+%	GLOSSAIRE
+%----------------------------------------------------------------------------------------
+\part{Sixième partie}
+\chapterimage{oui/images/illustrations/chap_cableb.jpg}
+\include{oui/glossaire}
+
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+%\addcontentsline{toc}{chapter}{Bibliographie}
+\chapterimage{oui/images/illustrations/chap_flagsb.jpg}
+\chapter{Bibliographie}
+\nocite{*}
+
+% "Edit Keyboards" by camknows is licensed under CC BY-NC-SA 2.0 
+% "Network Rack" by one individual is licensed under CC BY-SA 2.0
+% "Switch and network cables" by Christiaan Colen is licensed under CC BY-SA 2.0
+% "htop" by aerissecure is licensed under CC BY 2.0 
+% "Saturday Night Cookies" by Martin Cathrae is licensed under CC BY-SA 2.0
+
+%\bibliographystyle{annotate} %{unsrt}
+%\bibliographystyle{unsrt}
+%\bibliography{references}
+
+\printbibliography[keyword={recherche},heading=subbibintoc,title={Recherche d'informations active}]
+\printbibliography[keyword={exploitation},heading=subbibintoc,title={Exploitations des informations}]
+\printbibliography[keyword={intrusion},heading=subbibintoc,title={Intrusion système}]
+%----------------------------------------------------------------------------------------
+%   ANNEXE
+%----------------------------------------------------------------------------------------
+
+\include{oui/annexe}
+
+%------------------------------------------------
+
+%\section*{Articles}
+%\addcontentsline{toc}{section}{Articles}
+%\printbibliography[heading=bibempty,type=article]
+
+%------------------------------------------------
+
+%\section*{Books}
+%\addcontentsline{toc}{section}{Books}
+%\printbibliography[heading=bibempty,type=book]
+
+%----------------------------------------------------------------------------------------
+%	INDEX
+%----------------------------------------------------------------------------------------
+
+\cleardoublepage % Make sure the index starts on an odd (right side) page
+\phantomsection
+\setlength{\columnsep}{0.75cm} % Space between the 2 columns of the index
+\addcontentsline{toc}{chapter}{\textcolor{ocre}{Index}} % Add an Index heading to the table of contents
+\printindex % Output the index
+
+%----------------------------------------------------------------------------------------
+
+\end{document}

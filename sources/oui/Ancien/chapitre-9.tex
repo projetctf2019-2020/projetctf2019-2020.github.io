@@ -1,0 +1,796 @@
+\chapter{CTF effectués}
+\label{chap:BDD}
+
+Durant cette partie, nous allons présenter des CTFs que nous avons réalisé afin d'avoir des exemples concrets d'applications de CTFs. Nous avons réalisé plusieurs CTFs, plus ou moins compliqués, que nous avons trié en fonction de leur difficulté.
+
+\section{CTF-Bulldog}
+\noindent \textbf{Niveau : Facile pour débutant}
+
+Au cours de ce CTF, nous allons voir les bases d’un CTF pour nous permettre de passer au niveau supérieur. Ce CTF est fait pour les débutants, c’est donc un très bon exercice. Pour commencer, nous sommes sur VirtualBox, où nous avons installé une machine virtuelle Kali linux. Cette distribution basée sur Debian est spécialisée en intrusion système afin d’effectuer des essais de sécurité. Notre machine cible est aussi sous VirtualBox et le seul indice que nous nous donnons est son adresse mac :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/Bulldog/vmnet_bull.png}
+  \caption{Configuration réseau Bulldog}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+ \newpage
+Passons maintenant sur Kali et essayons de trouver son IP :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/Bulldog/arp-scan_bull.png}
+  \caption{Arp-scan}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+Notre cible a donc pour IP : 192.168.1.51.\\
+La seconde étape d’un CTF est de regarder les ports ouverts de la cible. Sur Kali, il existe de nombreux outils, plus ou moins complets, qui permettent cette action. Ici, pour des raisons de facilité, nous allons utiliser Sparta.\\ 
+Sparta est un utilitaire graphique très complet qui utilise en background plusieurs autres outils présents sur la distribution. Ce dernier nécessite seulement l’adresse IP de la machine cible pour réaliser ses recherches :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/Bulldog/sparta_bull.png}
+  \caption{Sparta}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\newpage
+ Comme on peut le voir sur la capture d’écran ci-dessus, nous sommes en présence de beaucoup d’informations. Tout d’abord, Sparta utilise nmap pour scanner les ports de la cible. Il a découvert que le port 23 était ouvert en SSH (normalement c’est le 22…), et que le port 80 et 8080 sont ouverts en http ce qui signifie qu’un site web doit être présent avec l’adresse IP de la cible. On s’aperçoit que Sparta utilise un autre outil du nom de Nikto. Nous verrons plus tard son utilité. \\
+L’onglet Scripts étant vide, passons à l’onglet informations :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/Bulldog/sparta-onglet1_bull.png}
+  \caption{Onglet de Sparta}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+Pour nous, cet onglet ne nous apprend rien de plus. Avant de passer à l’onglet « nikto(80/tcp) », nous allons expliquer rapidement à quoi sert cet utilitaire. Nikto est un outil permettant de scanner la sécurité d’un port hébergeant un serveur web. En plus de trouver des failles, il permet aussi de trouver des répertoires cachés. Observons ce que cet outil a à nous proposer :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/Bulldog/sparta-onglet2_bull.png}
+  \caption{Onglet de Sparta}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+Nikto nous dit qu’il serait intéressant d’essayer de chercher le lien : 192.168.1.51/dev/. \\
+Nous rentrons à présent dans la troisième étape du CTF : l’inventaire. En effet, la durée d’un CTF peut être variable et nous savons à quel point notre mémoire est faillible. C’est pourquoi nous vous conseillons d’utiliser un bloc note et de recopier toutes les informations intéressantes que vous pourriez trouver.
+Il est temps de passer voir ce site web : 
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/Bulldog/web_bull.png}
+  \caption{Page d'acccueil du CTF}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\newpage
+Si l’on clique sur « Public notice » :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/Bulldog/public-notice_bull.png}
+  \caption{Public Notice}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+Tout ceci ne nous aide pas vraiment et le code source de la page non plus. Dans ce genre de cas, le bon geste est de taper : 192.168.1.51/robots.txt :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.6\textwidth]{oui/Screens/CTF/Bulldog/robots_bull.png}
+  \caption{Robots.txt}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+Donc effectivement, le groupe de hackeurs qui est passé avant nous a dévalisé le robots.txt. Ce fichier est une règle que le navigateur doit respecter. En général, on y met les liens des fichiers que l’on ne souhaite pas être visible. Ici, nous n’avons rien donc comme ça, ça règle le problème. \\
+Notre seule voie pour l’instant est donc d’utiliser l’information donnée par Nikto soit le « /dev/ » :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.6\textwidth]{oui/Screens/CTF/Bulldog/web-dev_bull.png}
+  \caption{/dev/}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\newpage
+On regarde son code source comme à chaque fois que l’on observe une page web :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/Bulldog/source-code_bull.png}
+  \caption{Code source de la page}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+Nous obtenons des adresses mails ainsi que des mots de passe. On va donc s’empresser de stocker tout ceci dans un fichier texte pour l’étudier après l’inventaire.\\
+Sur cette page, nous avons la possibilité de cliquer sur Web-Shell :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/Bulldog/web-shell_bull.png}
+  \caption{Web-sell}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\newpage
+Nous n’avons aucun formulaire pour nous identifier et pourtant, nous avons utilisé toutes les pages mises à notre disposition. \\
+Nous allons donc revenir sur Sparta pour utiliser l’utilitaire « Dirbuster ». Cet outil va nous permettre grâce à un dictionnaire de bruteforce/scanner tous les dossiers et fichiers à l’entré du site web cible :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.4\textwidth]{oui/Screens/CTF/Bulldog/sparta-dirb_bull.png}
+  \caption{Dirbuster}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/Bulldog/dirbuster_bull.png}
+  \caption{Dirbuster}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\newpage
+Et voici au bout de seulement quelques secondes, on obtient les résultats suivants :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/Bulldog/dirb-result_bull.png}
+  \caption{Dirbuster}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+Il existe donc un lien 192.168.1.51/admin/ :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.6\textwidth]{oui/Screens/CTF/Bulldog/authent_bull.png}
+  \caption{/admin/}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+Il est alors temps pour nous d’observer les logins et mots de passe que nous avons récupéré :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.7\textwidth]{oui/Screens/CTF/Bulldog/log+mdp_hash_bull.png}
+  \caption{Mots de passe hashés}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+A vu d’œil, ce hashage ressemble à du sha1. Nous allons demander à l’outil John de dé-hasher les mots de passes de ce fichier :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.7\textwidth]{oui/Screens/CTF/Bulldog/johnbulldog.PNG}
+  \caption{John}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+L’outil détecte effectivement du sha1 et trouve deux utilisateurs avec un mot de passe.
+Nous pouvons alors essayer le login et mot de passe de Nick dans le site :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.4\textwidth]{oui/Screens/CTF/Bulldog/log-fail_bull.png}
+  \caption{Authentification en admin}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+Son mail ne fonctionne pas donc nous allons essayer son prénom :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.9\textwidth]{oui/Screens/CTF/Bulldog/djangoadmin_bull.png}
+  \caption{Page d'accueil admin}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+Nous voici connectés. Ceci a permit au web-shell de se débloquer :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.7\textwidth]{oui/Screens/CTF/Bulldog/web-shell2_bull.png}
+  \caption{Web-shell}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+On voit ici qu’il est possible de rentrer que certaines commandes dans la machine cible. Le "echo" est notre clé car il va nous permettre de rentrer du bash ou n’importe quel langage afin de déployer un reverse-shell.
+Un reverse-shell, comme son nom l’indique, inverse le fonctionnement d’un shell normal.
+Avant de lancer le reverse-shell, nous allons écouter le port de notre machine où nous allons déployer le shell depuis la machine cible :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.7\textwidth]{oui/Screens/CTF/Bulldog/nc-lvp_bull.png}
+  \caption{Netcat en écoute}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\newpage
+Nous voilà en mesure de lancer un reverse-shell en bash avec un echo :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/Bulldog/bash-reverse_bull.png}
+  \caption{Bash-Reverse}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+Il nous a juste fallu indiquer notre IP et le port à ouvrir.
+Et nous voilà connecté :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/Bulldog/revers-shell_bull.png}
+  \caption{Reverse-Shell}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+Cependant, nous n’avons rien d’intéressant pour l’instant en vue. Nous pouvons alors faire un ‘cd ..’ pour trouver un dossier avec des droits root :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/Bulldog/ls-la1_bull.png}
+  \caption{Recherche de flag}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\newpage
+Le répertoire ‘bulldogadmin’ parait intéressant :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/Bulldog/ls-la2_bull.png}
+  \caption{Recherche de flag}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+Allons visiter ce répertoire ‘.hiddenadmindirectory’ :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/Bulldog/ls-la3_bull.png}
+  \caption{Recherche de flag}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+Nous pouvons essayer d’analyser ce fichier qui semblerait donner des permissions donc utiliser le mot de passe root :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/Bulldog/cat.png}
+  \caption{.hiddenadmindirectory}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+Pour des raisons de lisibilité, nous avons utilisé un "strings" plutôt qu’un "cat". On trouve un nom ‘SuperultimatePASSWORDyouCANTget’ avec les ‘H’ qui représentent les retours à la ligne.\\
+Dans la lignée des CTFs, il faut savoir que les mots de passes sont souvent donnés. Essayons de nous connecter en root :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/Bulldog/sudo-fail_bull.png}
+  \caption{sudo su}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+Il semblerait que nous ayons besoin d’un TTY. Un TTY est une console virtuelle qui permet de taper des lignes de commandes. Il va donc falloir l’importer avec un programme Python et finir le jeu :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/Bulldog/tty_bull.png}
+  \caption{Importation du TTY et résolution du CTF}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\newpage
+Au cours de ce CTF, nous avons utilisé le site : pentestmonkey\\
+-http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet\\
+-http://pentestmonkey.net/blog/post-exploitation-without-a-tty\\
+A titre informatif, voici l'inventaire réalisé durant ce CTF :
+ 
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.6\textwidth]{oui/Screens/CTF/Bulldog/inventaire_bull.png}
+  \caption{Inventaire}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+
+
+
+
+\newpage
+\section{CTF-AI:WEB 4}
+
+\noindent \textbf{Niveau : intermédiaire basé sur la vrai vie}
+
+\subsection{Réalisation du CTF}
+
+Pour trouver l'IP de la machine à attaquer, nous allons dans un premier temps scanner notre réseau à l'aide de l'outil  \textbf{net-discover:}
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/netdiscover-ai.PNG}
+  \caption{Netdiscover}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent On constate donc que l'IP à "attaquer" est 192.168.1.27.\\
+
+\noindent Ainsi, nous allons procéder à une collecte d'informations active via l'outil nmap. Etant donné qu'il n'y a pas d'IDS ou de FireWall sur notre réseau, nous n'avons pas besoin d'indiquer d'options pour bypasser ces systèmes de détection : 
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/AI/nmap-ai.PNG}
+  \caption{Nmap}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\newpage
+\noindent On constate que la machine cible héberge deux services (SSH, HTTP). Nous ne connaissons pas d'identifiants ou de mots de passe pour SSH à l'heure actuelle, nous allons donc nous pencher vers le serveur WEB.\\
+
+\noindent En ouvrant une page internet et en tappant dans l'URL : http://192.168.1.27, nous arrivons sur cette page:
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/web1-ai.PNG}
+  \caption{Index du site}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\newpage
+\noindent Il semblerait que ce soit une page de connexion. Le bouton "signup" permet de s'inscrire au site.
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/web2-ai.PNG}
+  \caption{Formulaire}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent Pour la démonstration, on s'enregistra avec le compte "test" et on s'y connecte :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/AI/web3-ai.PNG}
+  \caption{Connexion avec le compte "test"}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent Nous arrivons sur cette page:
+\newpage
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/web4-ai.PNG}
+  \caption{Username.php page}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent Les boutons ("Filename, Download, Viewing, Deleting") ne fonctionnent pas.\\
+
+\noindent Dans l'url, on constate la présence du "userpage.php". On peut tester de remplacer cette page php par "Filename.php" ou bien "Download.php".
+
+\noindent En remplacant par "Download.php", on télécharge un fichier nommé "Download.php", de même avec Viewing.php.
+
+\noindent On remarque cependant le message d'accueil "Welcome to XuezhuLi FileSharing". Le mot "FileSharing" peut faire penser un partage de fichier et " XuezhuLi" le nom du service qui héberge les fichiers.
+
+\noindent Nous allons essayer de trouver un potentiel exploit sur ce service avec les outils de Kali Linux.
+
+\noindent Via l'outil searchsploit qui permet de trouver un exploit dans le site exploit-db. On obtient :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/AI/searchsploit-ai.PNG}
+  \caption{Recherche de vulnérabilités dans la base de données exploit-db}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent Nous trouvons donc 2 exploits. Le premier permet d'obtenir le fichier /etc/passwd via une vulnérabilité dans le fichier Download.php et Viewing.php. On peut donc changer de dossier car le serveur web est installé par défaut dans /var/www/html. Avec cet exploit, on peut remonter jusqu'à /etc/passwd.
+
+\noindent Voici l'exploit de "Directory Traversal":
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.75\textwidth]{oui/Screens/CTF/AI/discovery-ai.PNG}
+  \caption{Script Directory Trasversal}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent On peut donc utiliser cet exploit via le fichier Download.php :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.7\textwidth]{oui/Screens/CTF/AI/passwd-ai.PNG}
+  \caption{Récupération du fichier /etc/passwd}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\newpage
+\noindent On télécharge ainsi le fichier /etc/passwd contenu dans la machine cible. On remarque la présence de deux utilisateurs en bas de la liste : "aiweb2" et "n0nr00tuser".  On connait donc 2 identifiants potentiels sur la machine victime.
+
+\noindent Il ne nous reste plus qu'à  trouver les mots de passe. Après quelques recherches sur le web, on obtient que dans /etc/ il y a un dossier apache2 dans lequel il y a un fichier nommé .htpasswd.
+
+\noindent Etant donné que nous sommes déjà dans /etc avec la faille, on peut accéder à apache2/.htpasswd :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/admin_id-ai.PNG}
+  \caption{Récupération du mot de passe "hashé" de l'utilisateur aiweb2admin}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent Dans ce fichier on trouve un nouvel identifiant "aiweb2admin" et un hash de mot de passe. Dans les pré-requis sur la page du CTF, il faudra utiliser un dictionnaire pour bruteforce un mot de passe.
+
+\noindent Nous décidons d'utiliser John qui est un outil sous Kali Linux pour "bruteforce" un hash de mot de passe:
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/john-ai.png}
+  \caption{Utilisation de john}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent Nous avons donc trouver le mot de passe associé à "aiweb2admin". Il y a quelques questions à se poser. La première, l'user "aiweb2admin" ne semble pas être présent dans le fichier /etc/passwd, on en conclut que cet utilisateur n'est pas présent sur la machine cible. Il s'agit peut être d'un utilisateur autorisé à se connecter à un panel admin. Cependant, sur la page d'accueil, on ne voit aucun bouton mentionnant un accès quelconque à cette page.
+
+\noindent Un outil très puissant sous Kali Linux est "dirb" ou "dirbuster" en version graphique. Cet outil permet de "bruteforce" des répertoires web via un dictionnaire. On peut donc cartographier un site web et donc, par conséquent, trouver des pages ou des répertoires cachés sur le site:
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/dirb-ai.PNG}
+  \caption{Utilisation de dirb}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent On obtient un "webadmin" sur le serveur \textbf{http://192.168.1.27/webadmin} :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.5\textwidth]{oui/Screens/CTF/AI/authen-ai.PNG}
+  \caption{Authentification}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent Le site nous demande un login et un mot de passe. Essayons ce que nous avons obtenu :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/web5-ai.PNG}
+  \caption{Recherche d'informations sur la page Admin}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent On arrive sur la page d'administration du site. On constate que l'administrateur a désactivé quelques contenus pour les robots. Cependant, le mot "robot" a une importance sur internet. 
+En effet, pour être référencé ou analysé, un site peut disposer d'un fichier robots.txt. Essayons de savoir si ce fichier existe :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.6\textwidth]{oui/Screens/CTF/AI/cred-ai.PNG}     
+  \caption{Robots.txt}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent Le nom /H05Tpin9555/ et /S0mextras/ peuvent faire penser à des répertoires.
+
+\newpage 
+\noindent Si on essaye le premier:
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/web-ping-ai.PNG}   
+  \caption{Page de ping}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent Cette page semble présenter un teste de ping. On peut donc pinger une IP depuis la machine victime :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/web-ping-2-ai.PNG}   
+  \caption{Test de ping}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\newpage
+\noindent Dans l'autre répertoire on trouve :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/web6-ai.PNG}   
+  \caption{Recherche d'informations}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent Il semblerait qu'il y ait des informations dans ce répertoire dans la machine.
+
+\noindent En réfléchissant bien, la page qui permet de ping doit sûrement utiliser la commande ping interne à Linux. Il faudrait donc trouver un moyen de s'évader de cette commande pour faire d'autres actions.
+
+\noindent Sous linux, en utilisant le "|" on peut faire une autre commande en même temps que la précédente. Par exemple, ping | ifconfig. 
+
+\noindent Si on utilise un pipe :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/web-ping-3-ai.PNG}   
+  \caption{Test d'échappement de commande avec un pipe}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\newpage
+
+\noindent Cela ne marche pas, mais en utilisant 2 pipes :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.8\textwidth]{oui/Screens/CTF/AI/web-ping-4-ai.PNG}   
+  \caption{Test d'échappement de commande avec deux pipes}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent On obtient le résultat de la commande ifconfig. Maintenant il suffit de créer une backdoor PHP, de la télécharger sur la machine avec wget et de prendre la main sur la machine cible.
+La création de la backdoor peut se faire de plusieurs manières. Nous allons utiliser un reverse shell et écouter une connexion entrante avec netcat sur le port 1234 sur notre machine attaquante :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=0.5\textwidth]{oui/Screens/CTF/AI/nc-ai.PNG}   
+  \caption{Utilisation de netcat}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\newpage
+
+\noindent Il faudra renseigner l'adresse IP de Kali linux pour que le client puisse se connecter :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/reverse_shell_config-ai.PNG}   
+  \caption{Configuration du reverse shell}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent Via l'interface de la commande ping sur le serveur, on pourra utiliser wget pour récupérer la backdoor préalablement upload sur un serveur:
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/wget-ping-ai.PNG}   
+  \caption{Récupération de la backdoor}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent Une fois que la page PHP a été lancée, on récupère un shell sur la machine attaquante :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/nc-2-ai.PNG}   
+  \caption{Récupération de la backdoor}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent Rappellons-nous que le fichier "S0mextras" contenait peut être des informations importantes. Avec la commande cd /var/www/html on peut accéder à ce fichier. Un ls -al permet de lister les fichiers cachés :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/ls-ai.PNG}   
+  \caption{Exécution de commandes dans la machine cible}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent On trouve un fichier contenant "UserCred" qui peut être intéressant. En l'affichant on obtient:
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/cat-ai.PNG}   
+  \caption{Mot de passe pour l'utilisateur n0nr00tuser}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent L'utilisateur n0nr00tuser fait partie de la liste /etc/passwd. On a donc trouvé le mot de passe associé à ce compte.
+
+\noindent Pour rappel, les services qui sont actifs sur la machine sont le HTTP et le SSH. Essayons d'utiliser ces informations pour nous connecter en SSH.
+
+\newpage
+\noindent On arrive à se connecter :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/ssh-ai.PNG}   
+  \caption{Connexion en SSH}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent Le problème est que nous ne sommes pas root :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/id-ai.PNG}   
+  \caption{Commande id}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent n0nr00tuser est utilisateur lxd qui est un conteneur pour virtualiser des applications.  Une rapide recherche sur le lxd avec "privilege escalation" permet d'obtenir un script disponible sur le site exploit-DB :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/exploit-ai.PNG}   
+  \caption{Script privilege escalation}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\newpage
+\noindent En suivant les étapes, on obtient le script à télécharger sur la machine victime :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/tar-ai.PNG}   
+  \caption{Script téléchargé en format tar.gz}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent Avec la commande wget :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/wget-ai.PNG}      
+  \caption{Téléchargement du script sur la machine cible avec wget}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent Il faut maintenant créer un script qu'on nommera exploit.sh dans lequel on va copier le script de "privilege escalation" sur lxd du site exploit-db :
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/cat2-ai.PNG}      
+  \caption{Création du script "exploit.sh"}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\newpage
+\noindent On exécute le script pour devenir root:
+
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/exploit-script-ai.PNG}      
+  \caption{Exécution de l'exploit}
+  \label{fig:courbe-tikz}
+\end{figure}
+
+\noindent En se déplaçant dans /mnt/root/root on peut voir tous les fichiers de root notamment le flag :
+
+\newpage
+\begin{figure}[htp!]
+  \centering
+  \setlength\figureheight{7cm}
+  \setlength\figurewidth{9cm}
+  \includegraphics[width=1\textwidth]{oui/Screens/CTF/AI/flag-ai.PNG}      
+  \caption{Flag}
+  \label{fig:courbe-tikz}
+\end{figure}

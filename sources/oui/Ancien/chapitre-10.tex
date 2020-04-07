@@ -1,0 +1,20 @@
+\chapter{Création d'un CTF}
+\label{chap:BDD}
+
+Après une longue période de découverte des CTFs et des différents outils utilisés pour ces derniers, nous allons désormais procéder à la création d’un CTF qui aura pour but d’initier les prochains pirates. Ils devront à l’avenir créer eux aussi leur propre CTF pour les prochaines années. \\
+
+    
+	Le CTF démarrera sous une image Debian qui sera configurée en DHCP et un accueil personnalisé. La machine contiendra un serveur Web et samba. On débute sur une page Web dans laquelle un formulaire d’accueil est à remplir. La page de l'administrateur est différente de l'utilisateur lambda ; il faudra donc utiliser dirb pour obtenir cette dernière.
+	Grâce à cet outil, une page admin.php est dévoilée. Cette dernière n'est rien d'autre qu'un leurre et le pirate devra donc suive une autre piste pour le flag à capturer. \\
+Il y aura, dans le code source de la page, un lien vers un site qui aura un nom assez compliqué pour que dirb ne le trouve pas. Ce site aura en son sein un login et un mot de passe qui permettent de remplir le formulaire de la page web initiale. 
+Après la connexion, le pirate tombera sur une page de bienvenue avec un fichier RAR téléchargeable. Ce dernier contient un mot de passe hashé en SHA1.
+Cependant, télécharger le fichier ne sera pas suffisant, car il sera protégé par un mot de passe. Il faudra donc utiliser un outil de bruteforce afin de trouver ce dernier.
+Quand ceci est fait, il n'y aura plus qu'à décrypter le hash ; ce dernier contient le login du compte administrateur du site web.\\
+
+\noindent Nous pouvons maintenant passer au deuxième flag à capturer. \\
+
+En ce qui concerne Samba, nous prendrons une version contenant des vulnérabilités permettant au pirate d’exploiter ces dernières. Par exemple, avec l’utilisation de Metasploit, il est possible de récupérer les informations d’un utilisateur pour se connecter à Samba. 
+Une fois sur le compte utilisateur dans Samba, il y aura trois images : deux seront des fausses pistes et la dernière contiendra le mot de passe de connexion en tant qu’administrateur sur le site web. Il sera également possible d'utiliser une vulnérabilité liée à la version de samba dans laquelle il sera possible d'accéder directement à la machine hôte mais, dans un utilisateur "test" qui n'aura quasiment aucun droits. Le pirate devra y récupérer une vidéo dans le dossier personnel de l'utilisateur test. Cependant, aucune élévation de privilège ne devra être possible à partir de l'utilisateur test.
+Sur le compte administrateur, il lui sera possible d’envoyer/partager un fichier pour créer un reverse-shell. \\
+	
+Pour terminer, à l’aide d’un reverse-shell, le pirate devra trouver un moyen pour monter ses droits dans le but de devenir root de la machine cible.\\
